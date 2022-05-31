@@ -12,6 +12,9 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import ModalAddKategori from '../../Component/modal/Modal-AddKategori-Component'
+import ModalUpdateKategori from '../../Component/modal/Modal-UpdateKategori-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -34,8 +37,8 @@ import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-
-
+import {alertSuccess} from '../../Component/alert/sweetalert'
+import {addKategori,getKategori,getKategoriSearch,updateKategori,deleteKategori} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -63,19 +66,15 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
+  console.log({stabilizedThis})
   return stabilizedThis.map((el) => el[0]);
 }
 
 const headCells = [
+ 
     {
-      id: "tanggal_transaksi",
-      label: "Tanggal Transaksi",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "artikel",
-      label: "Artikel",
+      id: "id",
+      label: "Kategori Id",
       disablePadding: true,
       numeric: false,
     },
@@ -86,57 +85,33 @@ const headCells = [
       numeric: false,
     },
     {
-      id: "tipe",
-      label: "Tipe",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "nama_barang",
-      label: "Nama Barang",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "kuantitas",
-      label: "Kuantitas",
-      numeric: true,
-      disablePadding: true,
-    },
-    {
-      id: "ukuran",
-      label: "Ukuran",
-      numeric: true,
-      disablePadding: true,
-    },
-    {
-      id: "hpp",
-      label: "HPP",
-      numeric: true,
-      disablePadding: true,
-    },
-    {
-      id: "total",
-      label: "Total",
-      numeric: true,
-      disablePadding: true,
-    },
-    {
       id: "aksi",
       label: "Aksi",
     }
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
+  const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
+  const checkAll =()=>{
+    checkAllList(!check)
+    setCheck(!check)
+  }
   return (
     <TableHead>
       <TableRow>
+      <TableCell
+            key={'check'}
+            // align="center"
+            // padding={'normal'}
+            // sortDirection={orderBy === headCell.id ? order : false}
+          >
+           <input type="checkbox" checked={check} onClick={()=>checkAll()} />
+          </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -165,6 +140,8 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
+  data: PropTypes.any,
+  checkAllList: PropTypes.func,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -187,9 +164,77 @@ export default function MasterKatgori() {
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
   const [cari, setCari] = React.useState();
+  const [data,setData] = React.useState([]);
+  const [modal, setModal] = React.useState();
   useEffect(()=>{
-    dispatch(getPembelian())
+    getAllKategori()
   },[])
+  const submitKategori =async(name)=>{
+    setModal(false)
+    let res = await addKategori(name)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllKategori()
+    }
+    console.log({res:res})
+  }
+  const deleteData = async ()=>{
+    let array = [...data]
+    console.log({array:array?.length})
+    for(let i = 0;i<array?.length;i++){
+      if(array[i]?.check===true){
+        
+      await deleteKategori(array[i]?.id)
+    }
+    
+    
+    }
+    getAllKategori()
+    alertSuccess('Success','Success delete data')
+  }
+  const submitUpdateKategori =async(name)=>{
+    setOpenDetail(false)
+    settoBeSelected({})
+    let res = await updateKategori(name,toBeSelected?.id)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllKategori()
+    }
+    console.log({res:res})
+  }
+  const getAllKategori =async()=>{
+    
+    let res = await getKategori()
+    setData(res?.data)
+    
+  }
+  const checkSingle=(d,i)=>{
+    let array = [...data]
+    if(!d?.check){
+      array[i]['check'] = true
+    }else{
+      array[i]['check'] = false
+    }
+    
+    setData(array)
+
+  }
+  const checkSemua=(v)=>{
+    let array = [...data]
+    array.map((d,i)=>{
+      array[i]['check'] = v
+    })
+  
+    
+    setData(array)
+
+  }
+  const searching =async()=>{
+    
+    let res = await getKategoriSearch(searched)
+    setData(res?.data)
+    
+  }
   useEffect(()=>{
     setRows(dataStore)
   },[dataStore])
@@ -213,7 +258,7 @@ export default function MasterKatgori() {
     }
     setSelected([]);
   };
-
+  
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -278,6 +323,7 @@ export default function MasterKatgori() {
                     padding:"1em",
                     borderRadius:"14px"
                 }}
+                onClick={()=>deleteData()}
                 label="Hapus"
                 startIcon={<DeleteIcon/>}
            />
@@ -293,6 +339,20 @@ export default function MasterKatgori() {
                 }}
                 label="Upload"
                 startIcon={<CloudUploadIcon/>}
+           />
+            <Button
+                style={{
+                    background: "#03fc35",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                label="Add"
+                onClick={()=>setModal(true)}
+                startIcon={<AddIcon/>}
            />
            </div>
       </div>
@@ -315,7 +375,7 @@ export default function MasterKatgori() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon/>
+                 <SearchIcon onClick={()=>searching()}/>
                 </IconButton>
               </InputAdornment>
             }
@@ -332,7 +392,9 @@ export default function MasterKatgori() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
+              checkAllList={(v)=>checkSemua(v)}
               numSelected={selected.length}
+              data={data}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
@@ -340,7 +402,7 @@ export default function MasterKatgori() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -356,19 +418,20 @@ export default function MasterKatgori() {
                       key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell align="left">{row.tanggal_transaksi}</TableCell>
-                      <TableCell align="left">{row.artikel}</TableCell>
-                      <TableCell align="left">{row.kategori}</TableCell>
-                      <TableCell align="left">{row.tipe}</TableCell>
-                      <TableCell align="left">{row.kuantitas}</TableCell>
-                      <TableCell align="left">{row.nama_barang}</TableCell>
-                      <TableCell align="left">{row.kuantitas}</TableCell>
-                      <TableCell align="left">{row.ukuran}</TableCell>
-                      <TableCell align="left">{row.hpp}</TableCell>
-                      <TableCell align="left">{row.total}</TableCell>
+                       <TableCell align="left">
+                      <input 
+                       type="checkbox" 
+                       value={row?.check} 
+                       checked={row?.check?row?.check:false} 
+                       onChange={()=>{}} 
+                       onClick={(e)=>checkSingle(row,index)}/>
+                       </TableCell>
+                      <TableCell align="left">{row.id}</TableCell>
+                      <TableCell align="left">{row.kategori_name}</TableCell>
+                      
                       <TableCell align="right">
                       <div style={{
-                        marginLeft:"-100px"
+                        
                       }}>
                       <IconButton onClick={()=>{
                         handleOpenDetail(row)
@@ -395,7 +458,7 @@ export default function MasterKatgori() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -403,12 +466,16 @@ export default function MasterKatgori() {
         />
       </Paper>
     </Box>
-    <FormPembelian
+    <ModalUpdateKategori
     open={openDetail}
     data={toBeSelected}
-    onClose={()=>{
-      setOpenDetail(false)
-    }}
+    submit ={(name)=>submitUpdateKategori(name)}
+    onClickOpen = {()=>setModal(!modal)}
+    />
+    <ModalAddKategori 
+    open={modal}
+    submit ={(name)=>submitKategori(name)}
+    onClickOpen = {()=>setModal(!modal)}
     />
     </div>
       );
