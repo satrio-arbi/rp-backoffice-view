@@ -9,6 +9,14 @@ export const addKategori = async (kategori_name) => {
     return res
     
   }
+  export const uploadKategori = async (file) => {
+    const formData = new FormData();  
+      formData.append('file',file)
+    const res = await NET("POST", `master/kategori/import`, formData, '', '',true)
+    
+    return res
+    
+  }
   export const updateKategori = async (kategori_name,id) => {
     const formData = new FormData();  
       formData.append('id',id)

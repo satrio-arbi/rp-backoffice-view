@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
 import ModalAddKategori from '../../Component/modal/Modal-AddKategori-Component'
 import ModalUpdateKategori from '../../Component/modal/Modal-UpdateKategori-Component'
+import ModalUploadKategori from '../../Component/modal/Modal-UploadKategori-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -166,6 +167,7 @@ export default function MasterKatgori() {
   const [cari, setCari] = React.useState();
   const [data,setData] = React.useState([]);
   const [modal, setModal] = React.useState();
+  const [modalUplaod, setModalUplaod] = React.useState();
   useEffect(()=>{
     getAllKategori()
   },[])
@@ -338,6 +340,7 @@ export default function MasterKatgori() {
                     borderRadius:"14px"
                 }}
                 label="Upload"
+                onClick={()=>setModalUplaod(true)}
                 startIcon={<CloudUploadIcon/>}
            />
             <Button
@@ -476,6 +479,12 @@ export default function MasterKatgori() {
     open={modal}
     submit ={(name)=>submitKategori(name)}
     onClickOpen = {()=>setModal(!modal)}
+    />
+     <ModalUploadKategori 
+    open={modalUplaod}
+    mutate={()=>getAllKategori()}
+    submit ={(name)=>submitKategori(name)}
+    onClickOpen = {()=>setModalUplaod(!modalUplaod)}
     />
     </div>
       );
