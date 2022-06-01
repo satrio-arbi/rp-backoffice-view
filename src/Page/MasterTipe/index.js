@@ -473,7 +473,7 @@ export default function MasterKatgori() {
     open={openDetail}
     data={toBeSelected}
     submit ={(name)=>submitUpdateKategori(name)}
-    onClickOpen = {()=>setModal(!modal)}
+    onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
     <ModalAddTipe
     open={modal}

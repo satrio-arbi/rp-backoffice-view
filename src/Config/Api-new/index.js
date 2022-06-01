@@ -100,3 +100,140 @@ export const getTipeSearch = async (search) => {
   return res
   
 }
+
+//karyawan
+
+export const getKaryawan = async () => {
+
+  const res = await NET("GET", `karyawan/all`, {})
+  
+  return res
+  
+}
+export const getKaryawanSearch = async (search) => {
+
+  const res = await NET("GET", `karyawan/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const getKaryawanStore = async (search) => {
+
+  const res = await NET("GET", `karyawan/allByStore?id_store=${search}`, {})
+  
+  return res
+  
+}
+export const getKaryawanSearchStore = async (search,id) => {
+
+  const res = await NET("GET", `karyawan/searchForStore?keyword=${search}&id_store=${id}`, {})
+  
+  return res
+  
+}
+export const addKaryawan = async (
+  no_hp,
+  lokasi_office,
+  tanggal_join,
+  jabatan,
+  nama_karyawan,
+  lokasi_store,
+  id_store,
+  tanggal_lahir,
+  email,
+  id_office,
+  alamat,
+  image ) => {
+  const formData = new FormData();  
+    formData.append('no_hp',no_hp)
+    formData.append('lokasi_office',lokasi_office)
+    formData.append('tanggal_join',tanggal_join)
+    formData.append('jabatan',jabatan)
+    formData.append('nama_karyawan',nama_karyawan)
+    formData.append('lokasi_store',lokasi_store)
+    formData.append('id_store',id_store)
+    formData.append('tanggal_lahir',tanggal_lahir)
+    formData.append('email',email)
+    formData.append('id_office',id_office)
+    formData.append('alamat',alamat)
+    formData.append('image',image)
+  const res = await NET("POST", `karyawan/add`, formData)
+  
+  return res
+  
+}
+export const updateKaryawan = async (
+  no_hp,
+  lokasi_office,
+  tanggal_join,
+  jabatan,
+  nama_karyawan,
+  lokasi_store,
+  id_store,
+  tanggal_lahir,
+  email,
+  id_office,
+  alamat,
+  image,total_transaksi,id ) => {
+  const formData = new FormData();  
+    formData.append('no_hp',no_hp)
+    formData.append('lokasi_office',lokasi_office)
+    formData.append('tanggal_join',tanggal_join)
+    formData.append('jabatan',jabatan)
+    formData.append('nama_karyawan',nama_karyawan)
+    formData.append('lokasi_store',lokasi_store)
+    formData.append('id_store',id_store)
+    formData.append('tanggal_lahir',tanggal_lahir)
+    formData.append('email',email)
+    formData.append('id_office',id_office)
+    formData.append('alamat',alamat)
+    formData.append('image',image)
+    formData.append('total_transaksi',total_transaksi)
+    formData.append('id',id)
+  const res = await NET("POST", `karyawan/update`, formData)
+  
+  return res
+  
+}
+export const deleteKaryawan = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `karyawan/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const pindahStoreKaryawan = async (d) => {
+  const formData = new FormData();  
+    formData.append('karyawan',d)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("POST", `karyawan/pindahStore`, {})
+  
+  return res
+  
+}
+export const uploadKaryawan= async (file) => {
+  const formData = new FormData();  
+    formData.append('file',file)
+  const res = await NET("POST", `karyawan/import`, formData, '', '',true)
+  
+  return res
+  
+}
+//store
+export const getStore = async () => {
+
+  const res = await NET("GET", `master/store/all`, {})
+  
+  return res
+  
+}
+//office
+export const getOffice = async () => {
+
+  const res = await NET("GET", `master/office/all`, {})
+  
+  return res
+  
+}

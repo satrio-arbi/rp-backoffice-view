@@ -12,11 +12,15 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import ModalAddKaryawan from '../../Component/modal/Modal-AddKaryawan-Component'
+import ModalUpdateKaryawan from '../../Component/modal/Modal-UpdateKaryawan-Component'
+import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -34,8 +38,13 @@ import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-
-
+import {alertSuccess} from '../../Component/alert/sweetalert'
+import {addKaryawan,getKaryawan,
+  getKaryawanSearch,getKaryawanStore,
+  getKaryawanSearchStore,
+  updateKaryawan,deleteKaryawan,
+getStore,
+getOffice} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -63,64 +72,97 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
+  console.log({stabilizedThis})
   return stabilizedThis.map((el) => el[0]);
 }
 
 const headCells = [
+ 
     {
-      id: "tanggal_transaksi",
-      label: "Tanggal Transaksi",
+      id: "id",
+      label: "Id",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "artikel",
-      label: "Artikel",
+      id: "nama",
+      label: "Nama",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "kategori",
-      label: "Kategori",
+      id: "no_hp",
+      label: "No Hp",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "tipe",
-      label: "Tipe",
+      id: "email",
+      label: "Nama",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "nama_barang",
-      label: "Nama Barang",
+      id: "jabatan",
+      label: "Jabatan",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "kuantitas",
-      label: "Kuantitas",
-      numeric: true,
+      id: "alamat",
+      label: "Alamat",
       disablePadding: true,
+      numeric: false,
     },
     {
-      id: "ukuran",
-      label: "Ukuran",
-      numeric: true,
+      id: "lahir",
+      label: "Tanggal Lahir",
       disablePadding: true,
+      numeric: false,
     },
     {
-      id: "hpp",
-      label: "HPP",
-      numeric: true,
+      id: "join",
+      label: "Tanggal Join",
       disablePadding: true,
+      numeric: false,
     },
     {
-      id: "total",
-      label: "Total",
-      numeric: true,
+      id: "store",
+      label: "Store",
       disablePadding: true,
+      numeric: false,
     },
+    {
+      id: "alamat_store",
+      label: "Alamat Store",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "office",
+      label: "Office",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "alamat_office",
+      label: "Alamat Office",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "tot_trx",
+      label: "Total Transaksi",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "img",
+      label: "Foto",
+      disablePadding: true,
+      numeric: false,
+    },
+    
     {
       id: "aksi",
       label: "Aksi",
@@ -128,15 +170,27 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
+  const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
+  const checkAll =()=>{
+    checkAllList(!check)
+    setCheck(!check)
+  }
   return (
     <TableHead>
       <TableRow>
+      <TableCell
+            key={'check'}
+            // align="center"
+            // padding={'normal'}
+            // sortDirection={orderBy === headCell.id ? order : false}
+          >
+           <input type="checkbox" checked={check} onClick={()=>checkAll()} />
+          </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -165,6 +219,8 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
+  data: PropTypes.any,
+  checkAllList: PropTypes.func,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -173,7 +229,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function Karyawan() {
+export default function MasterKatgori() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -185,11 +241,144 @@ export default function Karyawan() {
   const dataStore = useSelector((state)=> state.reducer.getPembelian.data)
   const [openDetail,setOpenDetail] = React.useState(false)
   const [rows, setRows] = React.useState(dataStore)
-  const [searched, setSearched] = React.useState();
-  const [cari, setCari] = React.useState();
+  const [searched, setSearched] = React.useState('');
+  const [cari, setCari] = React.useState(null);
+  const [store, setStore] = React.useState('');
+  const [data,setData] = React.useState([]);
+  const [modal, setModal] = React.useState();
+  const [modalUplaod, setModalUplaod] = React.useState();
+  const [officeOption, setOfficeOption] = React.useState(null);
+  const [storeOption, setStoreOption] = React.useState(null);
   useEffect(()=>{
-    dispatch(getPembelian())
+    getAllKategori()
   },[])
+  const submitKategori =async(no_hp,
+    lokasi_office,
+    tanggal_join,
+    jabatan,
+    nama_karyawan,
+    lokasi_store,
+    id_store,
+    tanggal_lahir,
+    email,
+    id_office,
+    alamat,
+    image)=>{
+    setModal(false)
+    let res = await addKaryawan(no_hp,
+      lokasi_office,
+      tanggal_join,
+      jabatan,
+      nama_karyawan,
+      lokasi_store,
+      id_store,
+      tanggal_lahir,
+      email,
+      id_office,
+      alamat,
+      image)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllKategori()
+    }
+    
+  }
+  const deleteData = async ()=>{
+    let array = [...data]
+    console.log({array:array?.length})
+    for(let i = 0;i<array?.length;i++){
+      if(array[i]?.check===true){
+        
+      await deleteKaryawan(array[i]?.id)
+    }
+    
+    
+    }
+    getAllKategori()
+    alertSuccess('Success','Success delete data')
+  }
+  const submitUpdateKategori =async(no_hp,
+    lokasi_office,
+    tanggal_join,
+    jabatan,
+    nama_karyawan,
+    lokasi_store,
+    id_store,
+    tanggal_lahir,
+    email,
+    id_office,
+    alamat,
+    image,trx)=>{
+    setOpenDetail(false)
+    settoBeSelected({})
+    let res = await updateKaryawan(no_hp,
+      lokasi_office,
+      tanggal_join,
+      jabatan,
+      nama_karyawan,
+      lokasi_store,
+      id_store,
+      tanggal_lahir,
+      email,
+      id_office,
+      alamat,
+      image,trx,toBeSelected?.id)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllKategori()
+    }
+    console.log({res:res})
+  }
+  const getAllKategori =async()=>{
+    
+    let res = await getKaryawan()
+    let res1 = await getStore()
+    let res2 = await getOffice()
+    setData(res?.data)
+    setStoreOption(res1?.data)
+    setOfficeOption(res2?.data)
+    
+    
+  }
+  const checkSingle=(d,i)=>{
+    let array = [...data]
+    if(!d?.check){
+      array[i]['check'] = true
+    }else{
+      array[i]['check'] = false
+    }
+    
+    setData(array)
+
+  }
+  const checkSemua=(v)=>{
+    let array = [...data]
+    array.map((d,i)=>{
+      array[i]['check'] = v
+    })
+  
+    
+    setData(array)
+
+  }
+  useEffect(()=>{
+    searching()
+  },[searched,store])
+  const searching =async()=>{
+    let res = [...data]
+    let d 
+    if(searched!=''&&store==''){
+      d = await getKaryawanSearch(searched)
+      res = d?.data
+    }else if(searched==''&&store!=''){
+      d = await getKaryawanStore(store) 
+      res = d?.data
+    }else if(searched!=''&&store!=''){
+      d = await getKaryawanSearchStore(searched,store)
+      res = d?.data
+    }
+    setData(res)
+    }
   useEffect(()=>{
     setRows(dataStore)
   },[dataStore])
@@ -213,7 +402,7 @@ export default function Karyawan() {
     }
     setSelected([]);
   };
-
+  
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -243,10 +432,18 @@ export default function Karyawan() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
+  const convertImage = (v) => {
+    
+    return 'data:image/png;base64,'+v
   };
-
+  const convertStore = (v) =>{
+    let idx = storeOption?.findIndex(a=>a.id==v)
+    return storeOption?storeOption[idx]?.store_name:''
+  }
+  const convertOffice = (v) =>{
+    let idx = officeOption?.findIndex(a=>a.id==v)
+    return officeOption?officeOption[idx]?.office_name:''
+  }
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -260,7 +457,7 @@ export default function Karyawan() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Pembelian</h1>
+      <h1>Master Karyawan</h1>
             <div
              style={{
                  position:"absolute",
@@ -278,6 +475,7 @@ export default function Karyawan() {
                     padding:"1em",
                     borderRadius:"14px"
                 }}
+                onClick={()=>deleteData()}
                 label="Hapus"
                 startIcon={<DeleteIcon/>}
            />
@@ -292,7 +490,22 @@ export default function Karyawan() {
                     borderRadius:"14px"
                 }}
                 label="Upload"
+                onClick={()=>setModalUplaod(true)}
                 startIcon={<CloudUploadIcon/>}
+           />
+            <Button
+                style={{
+                    background: "#03fc35",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                label="Add"
+                onClick={()=>setModal(true)}
+                startIcon={<AddIcon/>}
            />
            </div>
       </div>
@@ -309,19 +522,42 @@ export default function Karyawan() {
             //   dispatch(getPenjualanOffice(`/search`))
             // }}
             id="outlined-adornment-password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  edge="end"
-                >
-                 <SearchIcon/>
-                </IconButton>
-              </InputAdornment>
-            }
+            // endAdornment={
+            //   <InputAdornment position="end">
+            //     <IconButton
+            //       aria-label="toggle password visibility"
+            //       edge="end"
+            //     >
+            //      <SearchIcon onClick={()=>searching()}/>
+            //     </IconButton>
+            //   </InputAdornment>
+            // }
             label="Cari"
           />
+          
         </FormControl>
+        <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+            <InputLabel id="demo-simple-select-label">Select Store</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={store}
+              label="Store"
+              onChange={(v)=>{setStore(v?.target?.value)}}
+            >
+                <MenuItem value="" >All</MenuItem>
+              {storeOption?.map((d,i)=>{
+                return(
+                  
+                    <MenuItem value={d?.id} >{d?.store_name}-{d?.alamat}</MenuItem>
+                  
+                )
+              })}
+              
+              {/* <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem> */}
+            </Select>
+          </FormControl>
       </div>
       
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
@@ -332,7 +568,9 @@ export default function Karyawan() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
+              checkAllList={(v)=>checkSemua(v)}
               numSelected={selected.length}
+              data={data}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
@@ -340,7 +578,7 @@ export default function Karyawan() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -356,19 +594,33 @@ export default function Karyawan() {
                       key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell align="left">{row.tanggal_transaksi}</TableCell>
-                      <TableCell align="left">{row.artikel}</TableCell>
-                      <TableCell align="left">{row.kategori}</TableCell>
-                      <TableCell align="left">{row.tipe}</TableCell>
-                      <TableCell align="left">{row.kuantitas}</TableCell>
-                      <TableCell align="left">{row.nama_barang}</TableCell>
-                      <TableCell align="left">{row.kuantitas}</TableCell>
-                      <TableCell align="left">{row.ukuran}</TableCell>
-                      <TableCell align="left">{row.hpp}</TableCell>
-                      <TableCell align="left">{row.total}</TableCell>
+                       <TableCell align="left">
+                      <input 
+                       type="checkbox" 
+                       value={row?.check} 
+                       checked={row?.check?row?.check:false} 
+                       onChange={()=>{}} 
+                       onClick={(e)=>checkSingle(row,index)}/>
+                       </TableCell>
+                       
+    
+                      <TableCell align="left">{row.id}</TableCell>
+                      <TableCell align="left">{row.nama_karyawan}</TableCell>
+                      <TableCell align="left">{row.no_hp}</TableCell>
+                      <TableCell align="left">{row.email}</TableCell>
+                      <TableCell align="left">{row.jabatan}</TableCell>
+                      <TableCell align="left">{row.alamat}</TableCell>
+                      <TableCell align="left">{row.tanggal_lahir}</TableCell>
+                      <TableCell align="left">{row.tanggal_join}</TableCell>
+                      <TableCell align="left">{convertStore(row.id_store)}</TableCell>
+                      <TableCell align="left">{row.lokasi_store}</TableCell>
+                      <TableCell align="left">{convertOffice(row.id_office)}</TableCell>
+                      <TableCell align="left">{row.lokasi_office}</TableCell>
+                      <TableCell align="left">{row.total_transaksi}</TableCell>
+                      <TableCell align="left"><img src={convertImage(row.image)} width="50px" height="50px" /></TableCell>
                       <TableCell align="right">
                       <div style={{
-                        marginLeft:"-100px"
+                        
                       }}>
                       <IconButton onClick={()=>{
                         handleOpenDetail(row)
@@ -395,7 +647,7 @@ export default function Karyawan() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -403,12 +655,70 @@ export default function Karyawan() {
         />
       </Paper>
     </Box>
-    <FormPembelian
+    <ModalUpdateKaryawan
     open={openDetail}
+    store={storeOption}
     data={toBeSelected}
-    onClose={()=>{
-      setOpenDetail(false)
-    }}
+    office={officeOption}
+    submit ={(no_hp,
+      lokasi_office,
+      tanggal_join,
+      jabatan,
+      nama_karyawan,
+      lokasi_store,
+      id_store,
+      tanggal_lahir,
+      email,
+      id_office,
+      alamat,
+      image,trx)=>submitUpdateKategori(no_hp,
+        lokasi_office,
+        tanggal_join,
+        jabatan,
+        nama_karyawan,
+        lokasi_store,
+        id_store,
+        tanggal_lahir,
+        email,
+        id_office,
+        alamat,
+        image,trx)}
+    onClickOpen = {()=>setOpenDetail(!openDetail)}
+    />
+    <ModalAddKaryawan
+    open={modal}
+    store={storeOption}
+    office={officeOption}
+    submit ={(no_hp,
+      lokasi_office,
+      tanggal_join,
+      jabatan,
+      nama_karyawan,
+      lokasi_store,
+      id_store,
+      tanggal_lahir,
+      email,
+      id_office,
+      alamat,
+      image)=>submitKategori(no_hp,
+      lokasi_office,
+      tanggal_join,
+      jabatan,
+      nama_karyawan,
+      lokasi_store,
+      id_store,
+      tanggal_lahir,
+      email,
+      id_office,
+      alamat,
+      image)}
+    onClickOpen = {()=>setModal(!modal)}
+    />
+     <ModalUploadTipe
+    open={modalUplaod}
+    mutate={()=>getAllKategori()}
+    submit ={(name)=>submitKategori(name)}
+    onClickOpen = {()=>setModalUplaod(!modalUplaod)}
     />
     </div>
       );

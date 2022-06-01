@@ -4,9 +4,9 @@ import {
    } from "@mui/material";
    import {alertSuccess} from '../../Component/alert/sweetalert'
    import React,{useState,useEffect,useRef} from 'react';
-   import {uploadType} from '../../Config/Api-new'
+   import {uploadKaryawan} from '../../Config/Api-new'
 //  import  Input  from "../../Component/input";
- const ModalUploadTipe =(props)=>{
+ const ModalUploadKaryawan =(props)=>{
      const [file,setFile] = useState(null)
      const [name,setName] = useState(null)
      const inputRefUploadImage = useRef(null)
@@ -25,7 +25,7 @@ import {
         reader.readAsDataURL(fileStrem);
         console.log({fileStrem})
         setName(fileStrem?.name)
-        let res = await uploadType(fileStrem)
+        let res = await uploadKaryawan(fileStrem)
         if(res?.status){
             props?.onClickOpen()
             props?.mutate()
@@ -57,10 +57,22 @@ import {
          border: '2px solid #000',
          boxShadow: 24,
          p: 4, }}>
-                 <h2 id="parent-modal-title">Upload Tipe</h2>
+                 <h2 id="parent-modal-title">Upload karyawan</h2>
                  <div>
                      <p>Upload Kategori</p>
                      <p>{name}</p>
+                     {/* <Button 
+                     style={{marginTop:10}}
+                     onClick={()=>atClickUploadHandler()}
+                     variant="contained">Chose file</Button>
+                     <input   onChange={(e)=>atChangeFile(e)} 
+                     accept="
+                     application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+                     application/vnd.ms-excel
+                     " type="file" 
+                     hidden
+                     ref={inputRefUploadImage}
+                     /> */}
                      <Button
                     variant="contained"
                     component="label"
@@ -76,7 +88,6 @@ import {
                         hidden
                     />
                     </Button>
-                     
                      {/* <Input 
                      value={name}
                      disable={false}
@@ -97,4 +108,4 @@ import {
      )
  
  }
- export default ModalUploadTipe
+ export default ModalUploadKaryawan

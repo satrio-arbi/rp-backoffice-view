@@ -36,7 +36,7 @@ const ModalUpdateTipe =(props)=>{
                     <Input 
                     value={name}
                     disable={false}
-                    label={'Nama Kategori'}
+                    label={'Nama Tipe'}
                     onChange={(v)=>setName(v?.target?.value)}
                     style={{width:'100%'}}
                     />

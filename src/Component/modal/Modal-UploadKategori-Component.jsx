@@ -80,6 +80,10 @@ import {
                     >
                     Upload File
                     <input
+                    accept="
+                    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+                    application/vnd.ms-excel
+                    " 
                         type="file"
                         hidden
                     />
