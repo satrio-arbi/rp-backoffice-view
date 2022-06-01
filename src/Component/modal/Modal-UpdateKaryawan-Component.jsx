@@ -40,7 +40,7 @@ const ModalUpdateddKaryawan =(props)=>{
         setEmail(data?.email)
         setIdOffice(data?.id_office)
         setIdStore(data?.id_store)
-        setImage('fileConvert')
+        // setImage('fileConvert')
         setLokasiStore(data?.lokasi_store)
         setJabatan(data?.jabatan)
         setTgl(data?.tanggal_join)
@@ -259,7 +259,7 @@ const ModalUpdateddKaryawan =(props)=>{
                             email,
                             idOffice,
                             alamat,
-                            image,trx)} variant="contained">Save</Button>
+                            image,trx)} variant="contained">Update</Button>
                     </div>
                 </div>
                

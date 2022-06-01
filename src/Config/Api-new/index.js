@@ -205,10 +205,10 @@ export const deleteKaryawan = async (id) => {
   
 }
 export const pindahStoreKaryawan = async (d) => {
-  const formData = new FormData();  
-    formData.append('karyawan',d)
+  // const formData = new FormData();  
+  //   formData.append('karyawan',d)
   //   formData.append('kategori_name',kategori_name)
-  const res = await NET("POST", `karyawan/pindahStore`, {})
+  const res = await NET("POST", `karyawan/pindahStore`, d)
   
   return res
   

@@ -16,6 +16,8 @@ import AddIcon from '@mui/icons-material/Add';
 import ModalAddKaryawan from '../../Component/modal/Modal-AddKaryawan-Component'
 import ModalUpdateKaryawan from '../../Component/modal/Modal-UpdateKaryawan-Component'
 import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
+import ModalPindahKaryawan from '../../Component/modal/Modal-PindahStoreKaryawan-Component'
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -44,7 +46,7 @@ import {addKaryawan,getKaryawan,
   getKaryawanSearchStore,
   updateKaryawan,deleteKaryawan,
 getStore,
-getOffice} from '../../Config/Api-new'
+getOffice,pindahStoreKaryawan} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -240,6 +242,7 @@ export default function MasterKatgori() {
   const dispatch = useDispatch();
   const dataStore = useSelector((state)=> state.reducer.getPembelian.data)
   const [openDetail,setOpenDetail] = React.useState(false)
+  const [openPindah,setOpenPindah] = React.useState(false)
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState('');
   const [cari, setCari] = React.useState(null);
@@ -386,6 +389,10 @@ export default function MasterKatgori() {
     settoBeSelected(dataStore)
     setOpenDetail(true)
   }
+  const handleOpenPindah=(dataStore)=>{
+    settoBeSelected(dataStore)
+    setOpenPindah(true)
+  }
   console.log(rows)
 
   const handleRequestSort = (event, property) => {
@@ -402,7 +409,19 @@ export default function MasterKatgori() {
     }
     setSelected([]);
   };
-  
+  const submitPindahStore = async(lokasi,id,d) => {
+    let array = d
+    array['id_store'] = id
+    array['lokasi_store'] = lokasi
+
+    console.log({array})
+    let res = await pindahStoreKaryawan(d)
+    if(res?.status){
+      alertSuccess('Success',res?.data?.message)
+      setOpenPindah(false)
+      getAllKategori()
+    }
+  }
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -627,6 +646,12 @@ export default function MasterKatgori() {
                       }}>
                           <RemoveRedEyeOutlinedIcon />
                         </IconButton>
+                        <IconButton onClick={()=>{
+                        handleOpenPindah(row)
+                      }}>
+                          <ChangeCircleIcon />
+                        </IconButton>
+                        
                       </div>
                         </TableCell>
                     </TableRow>
@@ -655,6 +680,19 @@ export default function MasterKatgori() {
         />
       </Paper>
     </Box>
+    <ModalPindahKaryawan
+    open={openPindah}
+    store={storeOption}
+    data={toBeSelected}
+    office={officeOption}
+    submit ={( lokasi_store,
+      id_store,
+      dats)=>submitPindahStore(
+        lokasi_store,
+        id_store,
+        dats)}
+    onClickOpen = {()=>setOpenPindah(!openPindah)}
+    />
     <ModalUpdateKaryawan
     open={openDetail}
     store={storeOption}
