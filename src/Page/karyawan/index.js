@@ -646,11 +646,26 @@ export default function MasterKatgori() {
                       }}>
                           <RemoveRedEyeOutlinedIcon />
                         </IconButton>
-                        <IconButton onClick={()=>{
+                        <Button
+                style={{
+                    background: "#828EED",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    // marginRight:"15px",
+                    fontSize:'10px',
+                    width:"100%",
+                    // padding:"1em",
+                    borderRadius:"14px"
+                }}
+                label="Pindah Store"
+                onClick={()=>handleOpenPindah(row)}
+                startIcon={<ChangeCircleIcon/>}
+           />
+                        {/* <IconButton onClick={()=>{
                         handleOpenPindah(row)
                       }}>
                           <ChangeCircleIcon />
-                        </IconButton>
+                        </IconButton> */}
                         
                       </div>
                         </TableCell>
