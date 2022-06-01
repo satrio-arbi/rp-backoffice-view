@@ -5,7 +5,7 @@ import {
   
   import React,{useState,useEffect} from 'react';
 import  Input  from "../../Component/input";
-const ModalAddPengiriman =(props)=>{
+const ModalAddKategori =(props)=>{
     const [name,setName] = useState('')
     useEffect(()=>{
         setName('')
@@ -52,4 +52,4 @@ const ModalAddPengiriman =(props)=>{
     )
 
 }
-export default ModalAddPengiriman
+export default ModalAddKategori

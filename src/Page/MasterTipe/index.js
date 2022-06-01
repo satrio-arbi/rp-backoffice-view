@@ -12,6 +12,10 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import ModalAddTipe from '../../Component/modal/Modal-AddTipe-Component'
+import ModalUpdateTipe from '../../Component/modal/Modal-UpdateTipe-Component'
+import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -34,8 +38,8 @@ import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-
-
+import {alertSuccess} from '../../Component/alert/sweetalert'
+import {addTipe,getTipe,getTipeSearch,updateTipe,deleteTipe} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -63,63 +67,23 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
+  console.log({stabilizedThis})
   return stabilizedThis.map((el) => el[0]);
 }
 
 const headCells = [
+ 
     {
-      id: "tanggal_transaksi",
-      label: "Tanggal Transaksi",
+      id: "id",
+      label: "Type Id",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "artikel",
-      label: "Artikel",
+      id: "type",
+      label: "Type",
       disablePadding: true,
       numeric: false,
-    },
-    {
-      id: "kategori",
-      label: "Kategori",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "tipe",
-      label: "Tipe",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "nama_barang",
-      label: "Nama Barang",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "kuantitas",
-      label: "Kuantitas",
-      numeric: true,
-      disablePadding: true,
-    },
-    {
-      id: "ukuran",
-      label: "Ukuran",
-      numeric: true,
-      disablePadding: true,
-    },
-    {
-      id: "hpp",
-      label: "HPP",
-      numeric: true,
-      disablePadding: true,
-    },
-    {
-      id: "total",
-      label: "Total",
-      numeric: true,
-      disablePadding: true,
     },
     {
       id: "aksi",
@@ -128,15 +92,27 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
+  const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
+  const checkAll =()=>{
+    checkAllList(!check)
+    setCheck(!check)
+  }
   return (
     <TableHead>
       <TableRow>
+      <TableCell
+            key={'check'}
+            // align="center"
+            // padding={'normal'}
+            // sortDirection={orderBy === headCell.id ? order : false}
+          >
+           <input type="checkbox" checked={check} onClick={()=>checkAll()} />
+          </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -165,6 +141,8 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
+  data: PropTypes.any,
+  checkAllList: PropTypes.func,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -173,7 +151,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function MasterTipe() {
+export default function MasterKatgori() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -187,9 +165,78 @@ export default function MasterTipe() {
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
   const [cari, setCari] = React.useState();
+  const [data,setData] = React.useState([]);
+  const [modal, setModal] = React.useState();
+  const [modalUplaod, setModalUplaod] = React.useState();
   useEffect(()=>{
-    dispatch(getPembelian())
+    getAllKategori()
   },[])
+  const submitKategori =async(name)=>{
+    setModal(false)
+    let res = await addTipe(name)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllKategori()
+    }
+    console.log({res:res})
+  }
+  const deleteData = async ()=>{
+    let array = [...data]
+    console.log({array:array?.length})
+    for(let i = 0;i<array?.length;i++){
+      if(array[i]?.check===true){
+        
+      await deleteTipe(array[i]?.id)
+    }
+    
+    
+    }
+    getAllKategori()
+    alertSuccess('Success','Success delete data')
+  }
+  const submitUpdateKategori =async(name)=>{
+    setOpenDetail(false)
+    settoBeSelected({})
+    let res = await updateTipe(name,toBeSelected?.id)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllKategori()
+    }
+    console.log({res:res})
+  }
+  const getAllKategori =async()=>{
+    
+    let res = await getTipe()
+    setData(res?.data)
+    
+  }
+  const checkSingle=(d,i)=>{
+    let array = [...data]
+    if(!d?.check){
+      array[i]['check'] = true
+    }else{
+      array[i]['check'] = false
+    }
+    
+    setData(array)
+
+  }
+  const checkSemua=(v)=>{
+    let array = [...data]
+    array.map((d,i)=>{
+      array[i]['check'] = v
+    })
+  
+    
+    setData(array)
+
+  }
+  const searching =async()=>{
+    
+    let res = await getTipeSearch(searched)
+    setData(res?.data)
+    
+  }
   useEffect(()=>{
     setRows(dataStore)
   },[dataStore])
@@ -213,7 +260,7 @@ export default function MasterTipe() {
     }
     setSelected([]);
   };
-
+  
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -260,7 +307,7 @@ export default function MasterTipe() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Master Tipe</h1>
+      <h1>Master Type</h1>
             <div
              style={{
                  position:"absolute",
@@ -278,6 +325,7 @@ export default function MasterTipe() {
                     padding:"1em",
                     borderRadius:"14px"
                 }}
+                onClick={()=>deleteData()}
                 label="Hapus"
                 startIcon={<DeleteIcon/>}
            />
@@ -292,7 +340,22 @@ export default function MasterTipe() {
                     borderRadius:"14px"
                 }}
                 label="Upload"
+                onClick={()=>setModalUplaod(true)}
                 startIcon={<CloudUploadIcon/>}
+           />
+            <Button
+                style={{
+                    background: "#03fc35",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                label="Add"
+                onClick={()=>setModal(true)}
+                startIcon={<AddIcon/>}
            />
            </div>
       </div>
@@ -315,7 +378,7 @@ export default function MasterTipe() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon/>
+                 <SearchIcon onClick={()=>searching()}/>
                 </IconButton>
               </InputAdornment>
             }
@@ -332,7 +395,9 @@ export default function MasterTipe() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
+              checkAllList={(v)=>checkSemua(v)}
               numSelected={selected.length}
+              data={data}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
@@ -340,7 +405,7 @@ export default function MasterTipe() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -356,19 +421,20 @@ export default function MasterTipe() {
                       key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell align="left">{row.tanggal_transaksi}</TableCell>
-                      <TableCell align="left">{row.artikel}</TableCell>
-                      <TableCell align="left">{row.kategori}</TableCell>
-                      <TableCell align="left">{row.tipe}</TableCell>
-                      <TableCell align="left">{row.kuantitas}</TableCell>
-                      <TableCell align="left">{row.nama_barang}</TableCell>
-                      <TableCell align="left">{row.kuantitas}</TableCell>
-                      <TableCell align="left">{row.ukuran}</TableCell>
-                      <TableCell align="left">{row.hpp}</TableCell>
-                      <TableCell align="left">{row.total}</TableCell>
+                       <TableCell align="left">
+                      <input 
+                       type="checkbox" 
+                       value={row?.check} 
+                       checked={row?.check?row?.check:false} 
+                       onChange={()=>{}} 
+                       onClick={(e)=>checkSingle(row,index)}/>
+                       </TableCell>
+                      <TableCell align="left">{row.id}</TableCell>
+                      <TableCell align="left">{row.type_name}</TableCell>
+                      
                       <TableCell align="right">
                       <div style={{
-                        marginLeft:"-100px"
+                        
                       }}>
                       <IconButton onClick={()=>{
                         handleOpenDetail(row)
@@ -395,7 +461,7 @@ export default function MasterTipe() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -403,12 +469,22 @@ export default function MasterTipe() {
         />
       </Paper>
     </Box>
-    <FormPembelian
+    <ModalUpdateTipe
     open={openDetail}
     data={toBeSelected}
-    onClose={()=>{
-      setOpenDetail(false)
-    }}
+    submit ={(name)=>submitUpdateKategori(name)}
+    onClickOpen = {()=>setModal(!modal)}
+    />
+    <ModalAddTipe
+    open={modal}
+    submit ={(name)=>submitKategori(name)}
+    onClickOpen = {()=>setModal(!modal)}
+    />
+     <ModalUploadTipe
+    open={modalUplaod}
+    mutate={()=>getAllKategori()}
+    submit ={(name)=>submitKategori(name)}
+    onClickOpen = {()=>setModalUplaod(!modalUplaod)}
     />
     </div>
       );

@@ -5,7 +5,7 @@ import {
   
   import React,{useState,useEffect} from 'react';
 import  Input  from "../../Component/input";
-const ModalUpdateKategori =(props)=>{
+const ModalUpdateTipe =(props)=>{
     const [name,setName] = useState('')
     useEffect(()=>{
         setName(props?.data?.kategori_name)
@@ -30,7 +30,7 @@ const ModalUpdateKategori =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Update kategori</h2>
+                <h2 id="parent-modal-title">Update Tipe</h2>
                 <div>
                     {/* <p>Nama Kategori</p> */}
                     <Input 
@@ -52,4 +52,4 @@ const ModalUpdateKategori =(props)=>{
     )
 
 }
-export default ModalUpdateKategori
+export default ModalUpdateTipe
