@@ -1,12 +1,14 @@
 import axios from 'axios'
 
 
-
+// import { useHistory } from 'react-router-dom';
 
 export const logoutEvent = () => {
+  
+  
   if(typeof window === 'undefined') return;
   localStorage.clear()
-  window.location.href = "/";
+  // window.location.href = "/";
 }
 
 export const NET = async (tipe, url, data, token, pin, isMultipart, isStream) => {

@@ -500,7 +500,9 @@ export default function PersistentDrawerLeft() {
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                    <ListItem>
+                    <ListItem onClick={() => {
+                      history.push('/manajemen-user')
+                    }}>
                       <ListItemText primary="Management User" />
                     </ListItem>
                     <ListItem>

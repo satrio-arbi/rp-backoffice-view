@@ -17,6 +17,7 @@ import Karyawan from '../../Page/karyawan';
 import Pemasok from '../../Page/pemasok';
 import PengirimanGudang from '../../Page/pengiriman/PengirimanGudang';
 import PengirimanStore from '../../Page/pengiriman';
+import ManajemenUser from '../../Page/ManajemenUser';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
 	const accessToken = localStorage.getItem("rd-prjt");
@@ -63,6 +64,8 @@ function Routes() {
         <PrivateRoute exact path='/pelanggan' component={Pelanggan}/>
         <PrivateRoute exact path='/karyawan' component={Karyawan}/>
         <PrivateRoute exact path='/pemasok' component={Pemasok}/>
+        <PrivateRoute exact path='/manajemen-user' component={ManajemenUser}/>
+        
         <PrivateRoute exact path='/pengiriman/gudang' component={PengirimanGudang}/>
         <PrivateRoute exact path='/pengiriman/store' component={PengirimanStore}/>
       </Switch>

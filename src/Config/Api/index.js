@@ -118,7 +118,13 @@ const BASE_URL = 'http://localhost:8282/'
 // 	localStorage.removeItem("rd-prjt");
 // }
 console.log(token)
-
+const logoutEvent = () => {
+  
+  
+	if(typeof window === 'undefined') return;
+	localStorage.clear()
+	// window.location.href = "/";
+  }
 const defaultHeaders = {
 	'Content-Type': 'application/json',
 	'Authorization':'Bearer '+ token
@@ -143,6 +149,7 @@ async function login(data) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -164,6 +171,7 @@ async function getPenjualanStore(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -185,6 +193,7 @@ async function addPenjualanStore(params,data) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -205,6 +214,7 @@ async function deletePenjualanStore(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -225,6 +235,7 @@ async function searchPenjualanStore(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -245,6 +256,7 @@ async function updatePenjualanStore(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -266,6 +278,7 @@ async function getPenjualanOffice(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -287,6 +300,7 @@ async function addPenjualanOffice(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -307,6 +321,7 @@ async function deletePenjualanOffice(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -327,6 +342,7 @@ async function searchPenjualanOffice(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -347,6 +363,7 @@ async function updatePenjualanOffice(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -367,6 +384,7 @@ async function getPembelian(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -387,6 +405,7 @@ async function deletePembelian(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -407,6 +426,7 @@ async function getPenyimpananKeluar(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -427,6 +447,7 @@ async function addPenyimpananKeluar(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -447,6 +468,7 @@ async function deletePenyimpananKeluar(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -467,6 +489,7 @@ async function searchPenyimpananKeluar(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -488,6 +511,7 @@ async function updatePenyimpananKeluar(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -509,6 +533,7 @@ async function getPenyimpananMasuk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -530,6 +555,7 @@ async function deletePenyimpananMasuk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -550,6 +576,7 @@ async function searchPenyimpananMasuk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -570,6 +597,7 @@ async function updatePenyimpananMasuk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -591,6 +619,7 @@ async function getStockOpname(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -613,6 +642,7 @@ async function addStockOpname(params,data) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -634,6 +664,7 @@ async function deleteStockOpname(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -655,6 +686,7 @@ async function searchStockOpname(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -676,6 +708,7 @@ async function updateStockOpname(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -697,6 +730,7 @@ async function getKaryawan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -718,6 +752,7 @@ async function getPelanggan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -739,6 +774,7 @@ async function deleteMasterKategori(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -759,6 +795,7 @@ async function searchMasterKategori(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -779,6 +816,7 @@ async function updateMasterKategori(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -799,6 +837,7 @@ async function getMasterKategori(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -819,6 +858,7 @@ async function getMasterAksesoris(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -840,6 +880,7 @@ async function addMasterAksesoris(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -860,6 +901,7 @@ async function deleteMasterAksesoris(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -880,6 +922,7 @@ async function searchMasterAksesoris(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -901,6 +944,7 @@ async function addMasterProduk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -922,6 +966,7 @@ async function deleteMasterProduk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -943,6 +988,7 @@ async function dropdownMasterProduk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -964,6 +1010,7 @@ async function importMasterProduk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -985,6 +1032,7 @@ async function searchMasterProduk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1006,6 +1054,7 @@ async function getMasterProduk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1027,6 +1076,7 @@ async function updateMasterProduk(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1051,6 +1101,7 @@ async function getMasterTipe(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1072,6 +1123,7 @@ async function addMasterTipe(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1092,6 +1144,7 @@ async function deleteMasterTipe(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1112,6 +1165,7 @@ async function searchMasterTipe(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1132,6 +1186,7 @@ async function updateMasterTipe(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1153,6 +1208,7 @@ async function getMasterProject(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1173,6 +1229,7 @@ async function addMasterProject(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1193,6 +1250,7 @@ async function deleteMasterProject(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1213,6 +1271,7 @@ async function searchMasterProject(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1233,6 +1292,7 @@ async function updateMasterProject(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1253,6 +1313,7 @@ async function getDetailPesanan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1274,6 +1335,7 @@ async function getDashboardBiaya(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1294,6 +1356,7 @@ async function getDashboardBiayaPembelian(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1314,6 +1377,7 @@ async function getDashboardJumlahCustomer(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1334,6 +1398,7 @@ async function getDashboardJumlahProduct(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1354,6 +1419,7 @@ async function getDashboardJumlahSupplier(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1374,6 +1440,7 @@ async function getDashboardKeuntungan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1394,6 +1461,7 @@ async function getDashboardPembelian(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1414,6 +1482,7 @@ async function getDashboardPendapatan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1434,6 +1503,7 @@ async function getDashboardPenjualan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1454,6 +1524,7 @@ async function getDashboardStockOffice(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1474,6 +1545,7 @@ async function getDashboardStockStore(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1494,6 +1566,7 @@ async function addDetailPesanan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1514,6 +1587,7 @@ async function deleteDetailPesanan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1534,6 +1608,7 @@ async function searchDetailPesanan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1554,6 +1629,7 @@ async function updateDetailPesanan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1574,6 +1650,7 @@ async function addJurnal(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1594,6 +1671,7 @@ async function getJurnal(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1614,6 +1692,7 @@ async function getJurnalUmum(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1634,6 +1713,7 @@ async function addKaryawan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1654,6 +1734,7 @@ async function deleteKaryawan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1675,6 +1756,7 @@ async function karyawanImport(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1696,6 +1778,7 @@ async function karyawanSearch(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1717,6 +1800,7 @@ async function updateKaryawan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1738,6 +1822,7 @@ async function getMasterukuran(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1758,6 +1843,7 @@ async function addMasterukuran(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1778,6 +1864,7 @@ async function addMasteroffice(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1798,6 +1885,7 @@ async function deleteMasteroffice(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1818,6 +1906,7 @@ async function searchMasteroffice(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1838,6 +1927,7 @@ async function updateMasteroffice(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1859,6 +1949,7 @@ async function addMasterstore(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1879,6 +1970,7 @@ async function deleteMasterstore(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1899,6 +1991,7 @@ async function searchMasterstore(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1919,6 +2012,7 @@ async function updateMasterstore(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1940,6 +2034,7 @@ async function getAkuntansiLabaRugi(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1961,6 +2056,7 @@ async function getAkuntansiKeuangan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -1982,6 +2078,7 @@ async function getPemasok(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2003,6 +2100,7 @@ async function postPemasok(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2024,6 +2122,7 @@ async function deletePemasok(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2045,6 +2144,7 @@ async function downloadPemasok(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2066,6 +2166,7 @@ async function importPemasok(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2087,6 +2188,7 @@ async function searchPemasok(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2108,6 +2210,7 @@ async function updatePemasok(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2130,6 +2233,7 @@ async function postPelanggan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2151,6 +2255,7 @@ async function deletePelanggan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2172,6 +2277,7 @@ async function downloadPelanggan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2193,6 +2299,7 @@ async function importPelanggan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2214,6 +2321,7 @@ async function searchPelanggan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}
@@ -2235,6 +2343,7 @@ async function updatePelanggan(params) {
 	} catch (error) {
 		if (error.response.status === 401) {
 			//clearStoredCreds();
+logoutEvent();
 		}
 		return Promise.reject(error.response);
 	}

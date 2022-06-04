@@ -237,3 +237,92 @@ export const getOffice = async () => {
   return res
   
 }
+
+//manajemen user
+export const addUser = async (
+  firstName,
+  lastName,
+  password,
+  phoneNumber,
+  lokasi_office,
+  lokasi_store,
+  akses_modul,
+  userName,
+  id_store,
+  id_office,
+  email
+) => {
+  const formData = new FormData();  
+    formData.append('firstName',firstName)
+    formData.append('lastName',lastName)
+    formData.append('password',password)
+    formData.append('phoneNumber',phoneNumber)
+    formData.append('lokasi_office',lokasi_office)
+    formData.append('lokasi_store',lokasi_store)
+    formData.append('akses_modul',akses_modul)
+    formData.append('userName',userName)
+    formData.append('id_store',id_store)
+    formData.append('id_office',id_office)
+    formData.append('email',email)
+  const res = await NET("POST", `api/auth/signup`, formData)
+  
+  return res
+  
+}
+
+export const updateUser = async (
+  firstName,
+  lastName,
+  password,
+  phoneNumber,
+  lokasi_office,
+  lokasi_store,
+  akses_modul,
+  userName,
+  id_store,
+  id_office,
+  email
+  ,id) => {
+  const formData = new FormData();  
+    formData.append('id',id)
+    formData.append('firstName',firstName)
+    formData.append('lastName',lastName)
+    formData.append('password',password)
+    formData.append('phoneNumber',phoneNumber)
+    formData.append('lokasi_office',lokasi_office)
+    formData.append('lokasi_store',lokasi_store)
+    formData.append('akses_modul',akses_modul)
+    formData.append('userName',userName)
+    formData.append('id_store',id_store)
+    formData.append('id_office',id_office)
+    formData.append('email',email)
+  const res = await NET("POST", `api/auth/updateUser`, formData)
+  
+  return res
+  
+}
+export const deletUser = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `master/kategori/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const getUser = async (search) => {
+
+  const res = await NET("GET", `api/auth/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+
+//menu
+export const getMenu = async () => {
+
+  const res = await NET("GET", `master/menu/all`, {})
+  
+  return res
+  
+}
