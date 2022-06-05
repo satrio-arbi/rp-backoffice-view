@@ -377,8 +377,10 @@ export const addProduk = async (
 export const addProdukCustom = async (
   artikel_frame_ns,
   artikel_lens_ns,
-  sku_code_s,
-  sku_code_f,
+  // sku_code_s,
+  // sku_code_f,
+  artikel_s,
+  artikel_f,
   ukuran,
   type_name,
   hpp,
@@ -400,8 +402,8 @@ export const addProdukCustom = async (
   image
 ) => {
   const formData = new FormData();  
-    formData.append('sku_code_f',sku_code_f)
-    formData.append('sku_code_s',sku_code_s)
+    formData.append('artikel_f',artikel_f)
+    formData.append('artikel_s',artikel_s)
     formData.append('artikel_lens_ns',artikel_lens_ns)
     formData.append('artikel_frame_ns',artikel_frame_ns)
     formData.append('ukuran',ukuran)

@@ -268,7 +268,7 @@ export default function MasterKatgori() {
      nama_kategori,
      image
   )=>{
-    setModal(false)
+    setModalCostum(false)
     let res = await addProdukCustom(
       artikel_frame_ns,
     artikel_lens_ns,
@@ -291,10 +291,10 @@ export default function MasterKatgori() {
      image
     )
     if(res?.status){
-      alertSuccess('Success','')
+      alertSuccess('Success',res?.data)
       getAllKategori()
     }
-    console.log({res:res})
+    
   }
   const submitMasterProduk =async(
     ukuran,

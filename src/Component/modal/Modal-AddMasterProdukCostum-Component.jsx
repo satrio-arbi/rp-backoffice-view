@@ -68,8 +68,8 @@ import {
         let a 
         let b
         if(sku_code_f&&sku_code_s){
-            a = [prodOption[idx].artikel_frame,prodOption[idx1].artikel_frame]
-            b = [prodOption[idx].artikel_lens,prodOption[idx1].artikel_lens]
+            a = [{value:prodOption[idx].artikel_product,label:prodOption[idx].artikel_frame},{value:prodOption[idx1].artikel_product,label:prodOption[idx1].artikel_frame}]
+            b = [{value:prodOption[idx].artikel_product,label:prodOption[idx].artikel_lens},{value:prodOption[idx1].artikel_product,label:prodOption[idx1].artikel_lens}]
             setFrame(a)
             setLens(b)
         }
@@ -78,14 +78,21 @@ import {
         // return props?.type?props?.type[idx]?.type_name:''
       }
      const getProduk =async(v)=>{
+       if(v){
         let res = await getProdukByType(v)
         console.log({s:res?.data})
         setProdOption(res?.data)
+      }
      }
      const convertSku = (v) =>{
         let idx = prodOption?.findIndex(a=>a.id==v)
         
         return prodOption?prodOption[idx]?.sku_code:''
+      }
+      const convertArtikel = (v) =>{
+        let idx = prodOption?.findIndex(a=>a.id==v)
+        
+        return prodOption?prodOption[idx]?.artikel_product:''
       }
      const convertType = (v) =>{
          let idx = props?.type?.findIndex(a=>a.id==v)
@@ -210,7 +217,7 @@ import {
                              {frame?.map((d,i)=>{
                                return(
                                  
-                                   <MenuItem value={d} >{d}</MenuItem>
+                                   <MenuItem value={d?.value} >{d?.label}</MenuItem>
                                  
                                )
                              })}
@@ -228,7 +235,7 @@ import {
                              {lens?.map((d,i)=>{
                                return(
                                  
-                                   <MenuItem value={d} >{d}</MenuItem>
+                                   <MenuItem value={d?.value} >{d?.label}</MenuItem>
                                  
                                )
                              })}
@@ -239,7 +246,7 @@ import {
                  <Input 
                          value={artikel_produk}
                          disable={false}
-                         label={'Nama artikel frame'}
+                         label={'Produk Artikel'}
                          onChange={(v)=>setArtikel_produk(v?.target?.value)}
                          style={{width:'100%',marginTop:10}}
                          />
@@ -254,7 +261,7 @@ import {
                      <Input 
                          value={artikel_frame}
                          disable={false}
-                         label={'Nama artikel frame'}
+                         label={'Artikel frame'}
                          onChange={(v)=>setArtikel_frame(v?.target?.value)}
                          style={{width:'100%',marginTop:10}}
                          />
@@ -262,7 +269,7 @@ import {
                     <Input 
                          value={artikel_lens}
                          disable={false}
-                         label={'Nama artikel frame'}
+                         label={'Artikel lens'}
                          onChange={(v)=>setArtikel_lens(v?.target?.value)}
                          style={{width:'100%',marginTop:10}}
                          />
@@ -350,8 +357,8 @@ import {
                          props?.submit(
                             artikel_frame_ns,
                             artikel_lens_ns,
-                            convertSku(sku_code_s),
-                            convertSku(sku_code_f),
+                            convertArtikel(sku_code_s),
+                            convertArtikel(sku_code_f),
                              ukuran,
                              convertType(type),
                              hpp,

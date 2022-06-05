@@ -95,7 +95,7 @@ const ModalAddMasterProduk =(props)=>{
                 <Input 
                         value={artikel_produk}
                         disable={false}
-                        label={'Nama artikel frame'}
+                        label={'Produk Artikel'}
                         onChange={(v)=>setArtikel_produk(v?.target?.value)}
                         style={{width:'100%',marginTop:10}}
                         />
@@ -110,7 +110,7 @@ const ModalAddMasterProduk =(props)=>{
                     <Input 
                         value={artikel_frame}
                         disable={false}
-                        label={'Nama artikel frame'}
+                        label={'Artikel frame'}
                         onChange={(v)=>setArtikel_frame(v?.target?.value)}
                         style={{width:'100%',marginTop:10}}
                         />
@@ -118,7 +118,7 @@ const ModalAddMasterProduk =(props)=>{
                    <Input 
                         value={artikel_lens}
                         disable={false}
-                        label={'Nama artikel frame'}
+                        label={'Artikel lens'}
                         onChange={(v)=>setArtikel_lens(v?.target?.value)}
                         style={{width:'100%',marginTop:10}}
                         />
