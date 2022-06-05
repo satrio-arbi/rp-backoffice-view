@@ -369,12 +369,14 @@ export default function PersistentDrawerLeft() {
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                    <ListItem>
+                    <ListItem  onClick={() => {
+                      history.push('/produk')
+                    }}>
                       <ListItemText primary="Basic" />
                     </ListItem>
-                    <ListItem>
+                    {/* <ListItem>
                       <ListItemText primary="Custom" />
-                    </ListItem>
+                    </ListItem> */}
                   </List>
                 </AccordionDetails>
               </Accordion>

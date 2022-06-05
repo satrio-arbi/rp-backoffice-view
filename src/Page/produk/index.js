@@ -13,9 +13,10 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddTipe from '../../Component/modal/Modal-AddTipe-Component'
-import ModalUpdateTipe from '../../Component/modal/Modal-UpdateTipe-Component'
-import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
+import ModalAddMasterProduk from '../../Component/modal/Modal-AddMasterProduk-Component'
+import ModalAddMasterProdukCostum from '../../Component/modal/Modal-AddMasterProdukCostum-Component'
+import ModalUpdateMasterProduk from '../../Component/modal/Modal-UpdateMasterProduk-Component'
+import ModalUploadMasterProduk from '../../Component/modal/Modal-UploadMasterProduk-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -39,7 +40,10 @@ import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess} from '../../Component/alert/sweetalert'
-import {addTipe,getTipe,getTipeSearch,updateTipe,deleteTipe} from '../../Config/Api-new'
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
+import {addProdukCustom,addProduk,getKategori,getTipe,getProduk,getProdukSearch,getProdukByType,getProdukBySKU,updateProduk,deleteProduk} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -75,13 +79,79 @@ const headCells = [
  
     {
       id: "id",
-      label: "Type Id",
+      label: "Product Id",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "type",
-      label: "Type",
+      id: "name",
+      label: "Name",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "artikel",
+      label: "Artikel",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "tipe",
+      label: "Tipe",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "kategori",
+      label: "Kategori",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "artikel_frame",
+      label: "Artikel Frame",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "artikel_lens",
+      label: "Artikel Lensa",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "ukuran",
+      label: "Ukuran",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "qty",
+      label: "Kuantitas",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "hpp",
+      label: "HPP",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "harga_jual",
+      label: "Harga jual",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "remark",
+      label: "Remarks",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "image",
+      label: "Image",
       disablePadding: true,
       numeric: false,
     },
@@ -167,15 +237,102 @@ export default function MasterKatgori() {
   const [cari, setCari] = React.useState();
   const [data,setData] = React.useState([]);
   const [modal, setModal] = React.useState();
+  const [modalCostum, setModalCostum] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
+  const [searchSKU, setSearchSKU] = React.useState();
+  const [type, setType] = React.useState();
+  const [kategori, setKategori] = React.useState();
+  const [typeValue, setTypeValue] = React.useState();
   useEffect(()=>{
     getAllKategori()
   },[])
-  const submitKategori =async(name)=>{
+   
+   const submitMasterProdukCustom =async(
+    artikel_frame_ns,
+    artikel_lens_ns,
+    sku_code_s,
+    sku_code_f,
+     ukuran,
+     type_name,
+     hpp,
+     kategori,
+     type,
+     kuantitas,
+     artikel_produk,
+     artikel_frame,
+     nama_produk,
+     artikel_lens,
+     harga_jual,
+     sku_code,
+     remarks,
+     nama_kategori,
+     image
+  )=>{
     setModal(false)
-    let res = await addTipe(name)
+    let res = await addProdukCustom(
+      artikel_frame_ns,
+    artikel_lens_ns,
+    sku_code_s,
+    sku_code_f,
+     ukuran,
+     type_name,
+     hpp,
+     kategori,
+     type,
+     kuantitas,
+     artikel_produk,
+     artikel_frame,
+     nama_produk,
+     artikel_lens,
+     harga_jual,
+     sku_code,
+     remarks,
+     nama_kategori,
+     image
+    )
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
+      getAllKategori()
+    }
+    console.log({res:res})
+  }
+  const submitMasterProduk =async(
+    ukuran,
+      type_name,
+      hpp,
+      kategori,
+      type,
+      kuantitas,
+      artikel_produk,
+      artikel_frame,
+      nama_produk,
+      artikel_lens,
+      harga_jual,
+      sku_code,
+      remarks,
+      nama_kategori,
+      image
+  )=>{
+    setModal(false)
+    let res = await addProduk(
+      ukuran,
+      type_name,
+      hpp,
+      kategori,
+      type,
+      kuantitas,
+      artikel_produk,
+      artikel_frame,
+      nama_produk,
+      artikel_lens,
+      harga_jual,
+      sku_code,
+      remarks,
+      nama_kategori,
+      image
+    )
+    if(res?.status){
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})
@@ -186,7 +343,7 @@ export default function MasterKatgori() {
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
-      await deleteTipe(array[i]?.id)
+      await deleteProduk(array[i]?.id)
     }
     
     
@@ -194,10 +351,38 @@ export default function MasterKatgori() {
     getAllKategori()
     alertSuccess('Success','Success delete data')
   }
-  const submitUpdateKategori =async(name)=>{
+  const submitUpdateProduk =async( ukuran,
+    type_name,
+    hpp,
+    kategori,
+    type,
+    kuantitas,
+    artikel_produk,
+    artikel_frame,
+    nama_produk,
+    artikel_lens,
+    harga_jual,
+    sku_code,
+    remarks,
+    nama_kategori,
+    image)=>{
     setOpenDetail(false)
     settoBeSelected({})
-    let res = await updateTipe(name,toBeSelected?.id)
+    let res = await updateProduk( ukuran,
+      type_name,
+      hpp,
+      kategori,
+      type,
+      kuantitas,
+      artikel_produk,
+      artikel_frame,
+      nama_produk,
+      artikel_lens,
+      harga_jual,
+      sku_code,
+      remarks,
+      nama_kategori,
+      image,toBeSelected?.id)
     if(res?.status){
       alertSuccess('Success',res?.data)
       getAllKategori()
@@ -206,10 +391,18 @@ export default function MasterKatgori() {
   }
   const getAllKategori =async()=>{
     
-    let res = await getTipe()
+    let res = await getProduk()
+    let res1 = await getTipe()
+    let res2 = await getKategori()
+    setType(res1?.data)
     setData(res?.data)
+    setKategori(res2?.data)
     
   }
+  const convertImage = (v) => {
+    
+    return 'data:image/png;base64,'+v
+  };
   const checkSingle=(d,i)=>{
     let array = [...data]
     if(!d?.check){
@@ -233,8 +426,20 @@ export default function MasterKatgori() {
   }
   const searching =async()=>{
     
-    let res = await getTipeSearch(searched)
+    let res = await getProdukSearch(searched)
     setData(res?.data)
+    
+  }
+  const searchingBySKU =async()=>{
+    
+    let res = await getProdukBySKU(searchSKU)
+    setData(res?.data?res?.data:[])
+    
+  }
+  const searchingByType =async()=>{
+    
+    let res = await getProdukByType(typeValue)
+    setData(res?.data?res?.data:[])
     
   }
   useEffect(()=>{
@@ -307,7 +512,7 @@ export default function MasterKatgori() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Master Type</h1>
+      <h1>Master Product</h1>
             <div
              style={{
                  position:"absolute",
@@ -357,6 +562,20 @@ export default function MasterKatgori() {
                 onClick={()=>setModal(true)}
                 startIcon={<AddIcon/>}
            />
+           <Button
+                style={{
+                    background: "#03fc35",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                label="Add Costum"
+                onClick={()=>setModalCostum(true)}
+                startIcon={<AddIcon/>}
+           />
            </div>
       </div>
            <Gap height={15}/>
@@ -364,7 +583,7 @@ export default function MasterKatgori() {
       <Paper sx={{ width: '100%', mb: 2 }}>
       <div align='left'>
       <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Cari</InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password">Search by Name</InputLabel>
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
@@ -385,6 +604,57 @@ export default function MasterKatgori() {
             label="Cari"
           />
         </FormControl>
+        {/* <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">Search by SKU</InputLabel>
+          <OutlinedInput
+            value={searchSKU}
+            onChange={(v)=>setSearchSKU(v?.target?.value)}
+            // onKeyUp={()=>{
+            //   dispatch(getPenjualanOffice(`/search`))
+            // }}
+            id="outlined-adornment-password"
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  edge="end"
+                >
+                 <SearchIcon onClick={()=>searchingBySKU()}/>
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Cari By SKU"
+          />
+        </FormControl> */}
+        {/* <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">Select by Type</InputLabel>
+          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={typeValue}
+                            label="Store"
+                            onChange={(v)=>{setTypeValue(v?.target?.value)}}
+                            endAdornment={
+                              <InputAdornment position="end">
+                                <IconButton
+                                  aria-label="toggle password visibility"
+                                  edge="end"
+                                >
+                                 <SearchIcon onClick={()=>searchingByType()}/>
+                                </IconButton>
+                              </InputAdornment>
+                            }
+                          >
+                            {type?.map((d,i)=>{
+                              return(
+                                
+                                  <MenuItem value={d?.id} >{d?.type_name}</MenuItem>
+                                
+                              )
+                            })}
+                          </Select>
+         
+        </FormControl> */}
       </div>
       
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
@@ -430,8 +700,20 @@ export default function MasterKatgori() {
                        onClick={(e)=>checkSingle(row,index)}/>
                        </TableCell>
                       <TableCell align="left">{row.id}</TableCell>
+                      <TableCell align="left">{row.nama_product}</TableCell>
+                      <TableCell align="left">{row.artikel_product}</TableCell>
                       <TableCell align="left">{row.type_name}</TableCell>
-                      
+                      <TableCell align="left">{row.nama_kategori}</TableCell>
+                      <TableCell align="left">{row.artikel_frame}</TableCell>
+                      <TableCell align="left">{row.artikel_lens}</TableCell>
+                      <TableCell align="left">{row.ukuran}</TableCell>
+                      <TableCell align="left">{row.kuantitas}</TableCell>
+                      <TableCell align="left">{row.hpp}</TableCell>
+                      <TableCell align="left">{row.harga_jual}</TableCell>
+                      <TableCell align="left">{row.remarks}</TableCell>
+                      <TableCell align="left">
+                        <img src={convertImage(row.image)} style={{width:50,height:50}} />
+                      </TableCell>
                       <TableCell align="right">
                       <div style={{
                         
@@ -469,21 +751,136 @@ export default function MasterKatgori() {
         />
       </Paper>
     </Box>
-    <ModalUpdateTipe
+    <ModalUpdateMasterProduk
     open={openDetail}
     data={toBeSelected}
-    submit ={(name)=>submitUpdateKategori(name)}
+    type={type}
+    kategori={kategori}
+    submit ={(
+      ukuran,
+      type_name,
+      hpp,
+      kategori,
+      type,
+      kuantitas,
+      artikel_produk,
+      artikel_frame,
+      nama_produk,
+      artikel_lens,
+      harga_jual,
+      sku_code,
+      remarks,
+      nama_kategori,
+      image
+    )=>submitUpdateProduk(
+      ukuran,
+      type_name,
+      hpp,
+      kategori,
+      type,
+      kuantitas,
+      artikel_produk,
+      artikel_frame,
+      nama_produk,
+      artikel_lens,
+      harga_jual,
+      sku_code,
+      remarks,
+      nama_kategori,
+      image
+    )}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <ModalAddTipe
+    <ModalAddMasterProdukCostum
+     open={modalCostum}
+     type={type}
+     kategori={kategori}
+     submit ={(
+      artikel_frame_ns,
+      artikel_lens_ns,
+      sku_code_s,
+      sku_code_f,
+       ukuran,
+       type_name,
+       hpp,
+       kategori,
+       type,
+       kuantitas,
+       artikel_produk,
+       artikel_frame,
+       nama_produk,
+       artikel_lens,
+       harga_jual,
+       sku_code,
+       remarks,
+       nama_kategori,
+       image
+     )=>submitMasterProdukCustom(
+      artikel_frame_ns,
+      artikel_lens_ns,
+      sku_code_s,
+      sku_code_f,
+       ukuran,
+       type_name,
+       hpp,
+       kategori,
+       type,
+       kuantitas,
+       artikel_produk,
+       artikel_frame,
+       nama_produk,
+       artikel_lens,
+       harga_jual,
+       sku_code,
+       remarks,
+       nama_kategori,
+       image
+     )}
+     onClickOpen = {()=>setModalCostum(!modalCostum)}
+    />
+    <ModalAddMasterProduk
     open={modal}
-    submit ={(name)=>submitKategori(name)}
+    type={type}
+    kategori={kategori}
+    submit ={(
+      ukuran,
+      type_name,
+      hpp,
+      kategori,
+      type,
+      kuantitas,
+      artikel_produk,
+      artikel_frame,
+      nama_produk,
+      artikel_lens,
+      harga_jual,
+      sku_code,
+      remarks,
+      nama_kategori,
+      image
+    )=>submitMasterProduk(
+      ukuran,
+      type_name,
+      hpp,
+      kategori,
+      type,
+      kuantitas,
+      artikel_produk,
+      artikel_frame,
+      nama_produk,
+      artikel_lens,
+      harga_jual,
+      sku_code,
+      remarks,
+      nama_kategori,
+      image
+    )}
     onClickOpen = {()=>setModal(!modal)}
     />
-     <ModalUploadTipe
+     <ModalUploadMasterProduk
     open={modalUplaod}
     mutate={()=>getAllKategori()}
-    submit ={(name)=>submitKategori(name)}
+    submit ={(name)=>submitMasterProduk(name)}
     onClickOpen = {()=>setModalUplaod(!modalUplaod)}
     />
     </div>

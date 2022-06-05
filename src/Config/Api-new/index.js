@@ -326,3 +326,192 @@ export const getMenu = async () => {
   return res
   
 }
+
+//Produk
+
+export const getProduk= async () => {
+
+  const res = await NET("GET", `master/product/all`, {})
+  
+  return res
+  
+}
+export const addProduk = async (
+  ukuran,
+  type_name,
+  hpp,
+  kategori,
+  type,
+  kuantitas,
+  artikel_produk,
+  artikel_frame,
+  nama_produk,
+  artikel_lens,
+  harga_jual,
+  sku_code,
+  remarks,
+  nama_kategori,
+  image
+) => {
+  const formData = new FormData();  
+    formData.append('ukuran',ukuran)
+    formData.append('type_name',type_name)
+    formData.append('hpp',hpp)
+    formData.append('kategori',kategori)
+    formData.append('type',type)
+    formData.append('kuantitas',kuantitas)
+    formData.append('artikel_product',artikel_produk)
+    formData.append('artikel_frame',artikel_frame)
+    formData.append('nama_product',nama_produk)
+    formData.append('artikel_lens',artikel_lens)
+    formData.append('harga_jual',harga_jual)
+    formData.append('sku_code',sku_code)
+    formData.append('remarks',remarks)
+    formData.append('nama_kategori',nama_kategori)
+    formData.append('image',image)
+  const res = await NET("POST", `master/product/add`, formData)
+  
+  return res
+  
+}
+export const addProdukCustom = async (
+  artikel_frame_ns,
+  artikel_lens_ns,
+  sku_code_s,
+  sku_code_f,
+  ukuran,
+  type_name,
+  hpp,
+  kategori,
+  type,
+  kuantitas,
+  artikel_produk,
+  artikel_frame,
+  // artikel_frame_ns,
+  nama_produk,
+  artikel_lens,
+  // artikel_lens_ns,
+  harga_jual,
+  sku_code,
+  // sku_code_s,
+  // sku_code_f,
+  remarks,
+  nama_kategori,
+  image
+) => {
+  const formData = new FormData();  
+    formData.append('sku_code_f',sku_code_f)
+    formData.append('sku_code_s',sku_code_s)
+    formData.append('artikel_lens_ns',artikel_lens_ns)
+    formData.append('artikel_frame_ns',artikel_frame_ns)
+    formData.append('ukuran',ukuran)
+    formData.append('type_name',type_name)
+    formData.append('hpp',hpp)
+    formData.append('kategori',kategori)
+    formData.append('type',type)
+    formData.append('kuantitas',kuantitas)
+    formData.append('artikel_product',artikel_produk)
+    formData.append('artikel_frame',artikel_frame)
+    formData.append('nama_product',nama_produk)
+    formData.append('artikel_lens',artikel_lens)
+    formData.append('harga_jual',harga_jual)
+    formData.append('sku_code',sku_code)
+    formData.append('remarks',remarks)
+    formData.append('nama_kategori',nama_kategori)
+    formData.append('image',image)
+  const res = await NET("POST", `master/product/addCustom`, formData)
+  
+  return res
+  
+}
+export const updateProduk = async (
+  ukuran,
+  type_name,
+  hpp,
+  kategori,
+  type,
+  kuantitas,
+  artikel_produk,
+  artikel_frame,
+  nama_produk,
+  artikel_lens,
+  harga_jual,
+  sku_code,
+  remarks,
+  nama_kategori,
+  image
+  ,id) => {
+  const formData = new FormData();  
+    formData.append('id',id)
+    formData.append('ukuran',ukuran)
+    formData.append('type_name',type_name)
+    formData.append('hpp',hpp)
+    formData.append('kategori',kategori)
+    formData.append('type',type)
+    formData.append('kuantitas',kuantitas)
+    formData.append('artikel_produk',artikel_produk)
+    formData.append('artikel_frame',artikel_frame)
+    formData.append('nama_produk',nama_produk)
+    formData.append('artikel_lens',artikel_lens)
+    formData.append('harga_jual',harga_jual)
+    formData.append('sku_code',sku_code)
+    formData.append('remarks',remarks)
+    formData.append('nama_kategori',nama_kategori)
+    formData.append('image',image)
+  const res = await NET("POST", `api/auth/updateUser`, formData)
+  
+  return res
+  
+}
+
+export const deleteProduk = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `master/product/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const getProdukById = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `master/product/getById?id=${id}`, {})
+  
+  return res
+  
+}
+export const getProdukBySKU = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `master/product/getBySkuCode?sku_code=${id}`, {})
+  
+  return res
+  
+}
+export const getProdukByType = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `master/product/getByType?type=${id}`, {})
+  
+  return res
+  
+}
+export const getProdukSearch = async (search) => {
+
+  const res = await NET("GET", `master/product/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const uploadProduct = async (file) => {
+  const formData = new FormData();  
+    formData.append('file',file)
+  const res = await NET("POST", `master/product/import`, formData, '', '',true)
+  
+  return res
+  
+}

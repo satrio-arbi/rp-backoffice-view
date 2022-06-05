@@ -185,11 +185,6 @@ const ModalAddKaryawan =(props)=>{
                     style={{width:'100%',marginTop:10}}
                     />
                    
-                        
-                   
-                            {
-
-                            }
                  
                     {imageAddress?
                     <img style={{marginTop:10}} 
