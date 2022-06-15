@@ -12,6 +12,11 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import ModalAddReturGudang from '../../../Component/modal/Modal-AddReturGudang-Component'
+import ModaEditReturGudang from '../../../Component/modal/Modal-EditReturGudang-Component'
+
+import ModalUploadKategori from '../../../Component/modal/Modal-UploadKategori-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -27,15 +32,16 @@ import Input from '../../../Component/input/index'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search'
-import DetailPenjualanStore from '../../../Page/DetailStockOpname/index';
+import FormPembelian from '../../../Page/FormPembelian/index'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getStockOpname } from '../../../Config/Redux/action';
 import Gap from '../../../Component/gap/index';
 import clsx from 'clsx';
-import Add from '@mui/icons-material/Add';
-
+import { getPembelian } from '../../../Config/Redux/action';
+import {alertSuccess} from '../../../Component/alert/sweetalert'
+import {getUkuran,addReturGudang,getOffice,getStore,getReturGudang,getReturGudangSearch,updateReturGudang,deleteReturGudang} from '../../../Config/Api-new'
+import { set } from 'date-fns/esm';
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -63,82 +69,82 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
+  console.log({stabilizedThis})
   return stabilizedThis.map((el) => el[0]);
 }
 
 const headCells = [
-  {
-    id: "TanggalTransaksi",
-    label: "Tanggal Keluar",
-    disablePadding: true,
-  },
-  {
-    id: "Artikel",
-    label: "Artikel",
-    disablePadding: true,
-  },
-  {
-    id: "Kategori",
-    label: "Kategori",
-    disablePadding: true,
-  },
-  {
-    id: "tipe",
-    label: "Tipe",
-    disablePadding: true,
-  },
-  {
-    id: "nama_barang",
-    label: "Nama Barang",
-    disablePadding: true,
-  },
-  {
-    id: "kuantitas_masuk",
-    label: "Kuantitas Masuk",
-    disablePadding: true,
-  },
-  {
-    id: "Kuantitas_keluar",
-    label: "Kuantitas Keluar",
-    disablePadding: true,
-  },
  
-  {
-    id: "stock",
-    label: "Stock",
-    // description: 'This column has a value getter and is not sortable.',
-    disablePadding: true,
-  },
-  {
-    id: "so",
-    label: "SO",
-    // description: 'This column has a value getter and is not disablePadding.',
-    disablePadding: true,
-  },
-  {
-  id: "keterangan",
-  label: "Keterangan",
-  // description: 'This column has a value getter and is not disablePadding.',
-  disablePadding: true,
-  },
-        {
-          id: 'aksi',
-          label: 'Aksi',
-         numeric: false,
-         disablePadding: true
-        },
+    {
+      id: "id",
+      label: "Id",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "pengiriman_code",
+      label: "Kode Pengiriman",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "tanggal_retur",
+      label: "Tanggal Retur",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "store_asal",
+      label: "Store Asal",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "lokasi_store_asal",
+      label: "Lokasi Store Asal",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "office_tujuan",
+      label: "Office Tujuan",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "lokasi_store_tujuan",
+      label: "Lokasi Office Tujuan",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "aksi",
+      label: "Aksi",
+    }
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
+  const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
+  const checkAll =()=>{
+    checkAllList(!check)
+    setCheck(!check)
+  }
   return (
     <TableHead>
       <TableRow>
+      <TableCell
+            key={'check'}
+            // align="center"
+            // padding={'normal'}
+            // sortDirection={orderBy === headCell.id ? order : false}
+          >
+           <input type="checkbox" checked={check} onClick={()=>checkAll()} />
+          </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -147,7 +153,7 @@ function EnhancedTableHead(props) {
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
-              style={{fontWeight:'bold', padding:'1em', alignItems:'center'}}
+              style={{fontWeight:'bold', padding:'1em'}}
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
@@ -167,6 +173,8 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
+  data: PropTypes.any,
+  checkAllList: PropTypes.func,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -175,7 +183,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function PenjualanStore() {
+export default function PengirimanStoreStore() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -184,20 +192,167 @@ export default function PenjualanStore() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [toBeSelected, settoBeSelected] = React.useState({});
   const dispatch = useDispatch();
-  const dataStore = useSelector((state)=> state.reducer.getStockOpname.data)
+  const dataStore = useSelector((state)=> state.reducer.getPembelian.data)
   const [openDetail,setOpenDetail] = React.useState(false)
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
-  const [openDetailAdd,setOpenDetailAdd] = React.useState(false)
   const [cari, setCari] = React.useState();
+  const [data,setData] = React.useState([]);
+  const [ukuran,setUkuran] = React.useState([]);
+  const [dataToko,setDataToko] = React.useState([]);
+  const [detailToko,setDetailToko] = React.useState([]);
+  const [modal, setModal] = React.useState();
+  const [modalUplaod, setModalUplaod] = React.useState();
+  const [detail, setDetail] = React.useState([]);
+  const [office,setOffice] = React.useState([])
   useEffect(()=>{
-    dispatch(getStockOpname())
+    getAllKategori()
   },[])
+  const submitPengirimanStorekeStor =async(
+    detail_pengiriman,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan
+  )=>{
+    setModal(false)
+
+    let res = await addReturGudang(
+      detail_pengiriman,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan
+    )
+    if(res?.status){
+      alertSuccess('Success','')
+      getAllKategori()
+    }
+    // console.log({detail_pengiriman,
+    //   tanggal_pengiriman,
+    //   id_store_asal,
+    //   lokasi_store_asal,
+    //   id_store_tujuan,
+    //   lokasi_store_tujuan})
+  }
+  const deleteData = async ()=>{
+    let array = [...data]
+    console.log({array:array?.length})
+    for(let i = 0;i<array?.length;i++){
+      if(array[i]?.check===true){
+        
+      await deleteReturGudang(array[i]?.id)
+    }
+    
+    
+    }
+    getAllKategori()
+    alertSuccess('Success','Success delete data')
+  }
+  const submitUpdateKategori =async( detail_pengiriman,
+    tanggal_pengiriman,
+    id_store_asal,
+    lokasi_store_asal,
+    id_store_tujuan,
+    lokasi_store_tujuan)=>{
+    setOpenDetail(false)
+    settoBeSelected({})
+    setDetail([])
+    
+    let res = await updateReturGudang( detail_pengiriman,
+      tanggal_pengiriman,
+      id_store_asal,
+      lokasi_store_asal,
+      id_store_tujuan,
+      lokasi_store_tujuan,toBeSelected?.pengiriman_code,toBeSelected?.id)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllKategori()
+    }
+    console.log({res:res})
+  }
+ 
+  const convertToko = (v) =>{
+    let idx = dataToko?.findIndex(a=>a.id==v)
+    
+    return dataToko?dataToko[idx]?.store_name:''
+  }
+  const convertOffice = (v) =>{
+    let idx = office?.findIndex(a=>a.id==v)
+    
+    return office?office[idx]?.office_name:''
+  }
+  const getAllKategori =async()=>{
+    
+    let res = await getReturGudang()
+    let res1 = await getStore()
+    let res2 = await getUkuran()
+    let res3 = await getOffice()
+    setOffice(res3?.data)
+    setDataToko(res1?.data)
+    setData(res?.data)
+    let arr = [...detailToko]
+    res?.data?.map((d)=>{
+      arr.push(d?.detailPengirimanList)
+    })
+    setDetailToko(arr)
+    setUkuran(res2?.data)
+    
+    
+  }
+  const checkSingle=(d,i)=>{
+    let array = [...data]
+    let idx = array?.findIndex(a=>a.id==d?.id)
+    if(!d?.check){
+      array[idx]['check'] = true
+    }else{
+      array[idx]['check'] = false
+    }
+    
+    setData(array)
+
+  }
+  const checkSemua=(v)=>{
+    let array = [...data]
+    array.map((d,i)=>{
+      array[i]['check'] = v
+    })
+  
+    
+    setData(array)
+
+  }
+  const searching =async()=>{
+    
+    let res = await getReturGudangSearch(searched)
+    setData(res?.data)
+    
+  }
   useEffect(()=>{
     setRows(dataStore)
   },[dataStore])
-  const handleOpenDetail=(dataStore)=>{
-    settoBeSelected(dataStore)
+  const handleOpenDetail=(v,i)=>{
+    settoBeSelected(v)
+    let arr = []
+    v?.detail_pengiriman?.map((d)=>{
+      arr.push({
+        id:d?.id,
+        sku_code:d?.sku_code,
+        artikel:d?.artikel,
+        type_name:d?.type_name,
+        tipe:d?.type,
+        nama_kategori:d?.nama_kategori,
+        kategori:d?.kategori,
+        nama_barang:d?.nama_barang,
+        kuantitas:d?.kuantitas,
+        ukuran:d?.ukuran,
+        hpp:d?.hpp,
+        harga_jual:d?.harga_jual
+      })
+    })
+    setDetail(arr)
     setOpenDetail(true)
   }
   console.log(rows)
@@ -216,7 +371,7 @@ export default function PenjualanStore() {
     }
     setSelected([]);
   };
-
+  
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -263,7 +418,7 @@ export default function PenjualanStore() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Stock Opname</h1>
+      <h1>Retur Gudang</h1>
             <div
              style={{
                  position:"absolute",
@@ -273,7 +428,7 @@ export default function PenjualanStore() {
             >
             <Button
                 style={{
-                    background: "rgb(81, 94, 193)",
+                    background: "#E14C4C",
                     color: 'white',
                     textTransform: 'capitalize',
                     marginRight:"15px",
@@ -281,15 +436,14 @@ export default function PenjualanStore() {
                     padding:"1em",
                     borderRadius:"14px"
                 }}
-                label="Tambah"
-                startIcon={<Add/>}
-                onClick={()=>{
-                  setOpenDetailAdd(true)
-                }}
+                onClick={()=>deleteData()}
+                label="Hapus"
+                startIcon={<DeleteIcon/>}
            />
-           <Button
+           
+            <Button
                 style={{
-                    background: "#828EED",
+                    background: "#03fc35",
                     color: 'white',
                     textTransform: 'capitalize',
                     marginRight:"15px",
@@ -297,8 +451,9 @@ export default function PenjualanStore() {
                     padding:"1em",
                     borderRadius:"14px"
                 }}
-                label="Upload"
-                startIcon={<CloudUploadIcon/>}
+                label="Add"
+                onClick={()=>setModal(true)}
+                startIcon={<AddIcon/>}
            />
            </div>
       </div>
@@ -311,6 +466,9 @@ export default function PenjualanStore() {
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
+            // onKeyUp={()=>{
+            //   dispatch(getPenjualanOffice(`/search`))
+            // }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -318,7 +476,7 @@ export default function PenjualanStore() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon/>
+                 <SearchIcon onClick={()=>searching()}/>
                 </IconButton>
               </InputAdornment>
             }
@@ -335,7 +493,9 @@ export default function PenjualanStore() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
+              checkAllList={(v)=>checkSemua(v)}
               numSelected={selected.length}
+              data={data}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
@@ -343,7 +503,7 @@ export default function PenjualanStore() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -359,34 +519,32 @@ export default function PenjualanStore() {
                       key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell
-                        align='left'
-                      >
-                        {row.tanggal_so}
-                      </TableCell>
-                      <TableCell
-                        align='left'
-                      >
-                        {row.artikel}
-                      </TableCell>
-                      <TableCell
-                        align='left'
-                      >
-                        {row.kategori}
-                      </TableCell>
-                      <TableCell align="left">{row.type}</TableCell>
-                      <TableCell align="left">{row.nama_barang}</TableCell>
-                      <TableCell align="left">{row.kuantitas_masuk}</TableCell>
-                      <TableCell align="left">{row.kuantitas_keluar}</TableCell>
-                      <TableCell align="left">{row.stock}</TableCell>
-                      <TableCell align="left">{row.stock_opname}</TableCell>
-                      <TableCell align="left">{row.keterangan}</TableCell>
-                      <TableCell align="left">
+                       <TableCell align="left">
+                      <input 
+                       type="checkbox" 
+                       value={row?.check} 
+                       checked={row?.check?row?.check:false} 
+                       onChange={()=>{}} 
+                       onClick={(e)=>{console.log({row,index});checkSingle(row,index)}}/>
+                       </TableCell>
+                      <TableCell align="left">{row.id}</TableCell>
+                      <TableCell align="left">{row.pengiriman_code}</TableCell>
+                      <TableCell align="left">{row.tanggal_retur}</TableCell>
+                      <TableCell align="left">{convertToko(row.id_store_asal)}</TableCell>
+                      <TableCell align="left">{row.lokasi_store_asal}</TableCell>
+                      <TableCell align="left">{convertOffice(row.id_office_tujuan)}</TableCell>
+                      <TableCell align="left">{row.lokasi_office_tujuan}</TableCell>
+                      
+                      <TableCell align="right">
+                      <div style={{
+                        
+                      }}>
                       <IconButton onClick={()=>{
-                        handleOpenDetail(row)
+                        handleOpenDetail(row,row?.detailPengirimanList)
                       }}>
                           <RemoveRedEyeOutlinedIcon />
                         </IconButton>
+                      </div>
                         </TableCell>
                     </TableRow>
                   );
@@ -406,7 +564,7 @@ export default function PenjualanStore() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -414,18 +572,53 @@ export default function PenjualanStore() {
         />
       </Paper>
     </Box>
-    <DetailPenjualanStore
+    <ModaEditReturGudang
     open={openDetail}
     data={toBeSelected}
-    onClose={()=>{
-      setOpenDetail(false)
-    }}
+    store={dataToko}
+    ukuran={ukuran}
+    detail={detail}
+    office={office}
+    submit ={( detail_pengiriman,
+      tanggal_pengiriman,
+      id_store_asal,
+      lokasi_store_asal,
+      id_store_tujuan,
+      lokasi_store_tujuan)=>submitUpdateKategori( detail_pengiriman,
+        tanggal_pengiriman,
+        id_store_asal,
+        lokasi_store_asal,
+        id_store_tujuan,
+        lokasi_store_tujuan)}
+    onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <DetailPenjualanStore
-    open={openDetailAdd}
-    onClose={()=>{
-      setOpenDetailAdd(false)
-    }}
+    <ModalAddReturGudang 
+    open={modal}
+    store={dataToko}
+    office={office}
+    ukuran={ukuran}
+    submit ={(
+      detail_pengiriman,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan
+    )=>submitPengirimanStorekeStor(
+      detail_pengiriman,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan
+    )}
+    onClickOpen = {()=>setModal(!modal)}
+    />
+     <ModalUploadKategori 
+    open={modalUplaod}
+    mutate={()=>getAllKategori()}
+    submit ={(name)=>submitPengirimanStorekeStor(name)}
+    onClickOpen = {()=>setModalUplaod(!modalUplaod)}
     />
     </div>
       );

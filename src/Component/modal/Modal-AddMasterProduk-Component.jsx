@@ -157,13 +157,24 @@ const ModalAddMasterProduk =(props)=>{
                         onChange={(v)=>setRemarks(v?.target?.value)}
                         style={{width:'100%',marginTop:10}}
                         />
-                         <Input 
-                        value={ukuran}
-                        disable={false}
-                        label={'Ukuran'}
-                        onChange={(v)=>setUkuran(v?.target?.value)}
-                        style={{width:'100%',marginTop:10}}
-                        />
+                            <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
+                          <InputLabel id="demo-simple-select-label">Select Ukuran</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={ukuran}
+                            label="Select Toko Tujuan"
+                            onChange={(v)=>{setUkuran(v?.target?.value)}}
+                          >
+                            {props?.ukuran?.map((d,i)=>{
+                              return(
+                                
+                                  <MenuItem value={d?.ukuran} >{d?.ukuran}</MenuItem>
+                                
+                              )
+                            })}
+                          </Select>
+                        </FormControl>
                             <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
                           <InputLabel id="demo-simple-select-label">Select Type</InputLabel>
                           <Select

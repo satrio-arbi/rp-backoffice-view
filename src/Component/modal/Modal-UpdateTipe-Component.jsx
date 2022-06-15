@@ -8,7 +8,7 @@ import  Input  from "../../Component/input";
 const ModalUpdateTipe =(props)=>{
     const [name,setName] = useState('')
     useEffect(()=>{
-        setName(props?.data?.kategori_name)
+        setName(props?.data?.type_name)
     },[props?.open])
 
     return (

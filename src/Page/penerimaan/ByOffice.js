@@ -12,6 +12,11 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import ModalPenerimaanAddOfficeStore from '../../Component/modal/Modal-AddPenerimaanOfficekeStore-Component'
+import ModalPenerimaanUpdateOfficekeStore from '../../Component/modal/Modal-EditPenerimaanOfficekeStore-Component'
+
+import ModalUploadKategori from '../../Component/modal/Modal-UploadKategori-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -22,19 +27,21 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import Button from '../../../Component/button/index'
-import AddIcon from '@mui/icons-material/Add';
+import Button from '../../Component/button/index'
+import Input from '../../Component/input/index'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search'
-import DetailPenjualanStore from '../../../Page/detailBarangMasuk/index';
+import FormPembelian from '../../Page/FormPembelian/index'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getPenyimpananMasuk } from '../../../Config/Redux/action';
-import Gap from '../../../Component/gap/index';
+import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
-
+import { getPembelian } from '../../Config/Redux/action';
+import {alertSuccess} from '../../Component/alert/sweetalert'
+import {getOffice,getUkuran,addPenenrimaanOffice,getStore,getPenenrimaanOffice,getPenenrimaanOfficeSearch,updatePenerimaanOffice,deletePenenrimaanOffice} from '../../Config/Api-new'
+import { set } from 'date-fns/esm';
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -62,77 +69,82 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
+  console.log({stabilizedThis})
   return stabilizedThis.map((el) => el[0]);
 }
 
 const headCells = [
-  {
-    id: "TanggalTransaksi",
-    label: "Tanggal Masuk",
-    disablePadding: true,
-  },
-  {
-    id: "Artikel",
-    label: "Artikel",
-    disablePadding: true,
-  },
-  {
-    id: "Kategori",
-    label: "Kategori",
-    disablePadding: true,
-  },
-  {
-    id: "tipe",
-    label: "Tipe",
-    disablePadding: true,
-  },
-  {
-    id: "NamaBarang",
-    label: "Nama Barang",
-    disablePadding: true,
-  },
-  {
-    id: "Kualitas",
-    label: "Kuantitas",
-    // description: 'This column has a value getter and is not sortable.',
-    disablePadding: true,
-  },
-  {
-    id: "ukuran",
-    label: "Ukuran",
-    // description: 'This column has a value getter and is not disablePadding.',
-    disablePadding: true,
-  },
-  {
-    id: "TotalHPP",
-    label: "HPP",
-    // description: 'This column has a value getter and is not disablePadding.',
-    disablePadding: true,
-  },
-  {
-  id: "keterangan",
-  label: "Keterangan",
-  // description: 'This column has a value getter and is not disablePadding.',
-  disablePadding: true,
-  },
-        {
-          id: 'aksi',
-          label: 'Aksi',
-         numeric: false,
-         disablePadding: true
-        },
+ 
+    {
+      id: "id",
+      label: "Id",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "penenerimaan_code",
+      label: "Kode Penerimaan",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "tanggal_penerimaan",
+      label: "Tanggal Penerimaan",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "office",
+      label: "Office",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "lokasi_office",
+      label: "Lokasi Office",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "store",
+      label: "Store",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "lokasi_store",
+      label: "Lokasi Store",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "aksi",
+      label: "Aksi",
+    }
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
+  const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
+  const checkAll =()=>{
+    checkAllList(!check)
+    setCheck(!check)
+  }
   return (
     <TableHead>
       <TableRow>
+      <TableCell
+            key={'check'}
+            // align="center"
+            // padding={'normal'}
+            // sortDirection={orderBy === headCell.id ? order : false}
+          >
+           <input type="checkbox" checked={check} onClick={()=>checkAll()} />
+          </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -141,7 +153,7 @@ function EnhancedTableHead(props) {
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
-              style={{fontWeight:'bold', padding:'1em', alignItems:'center'}}
+              style={{fontWeight:'bold', padding:'1em'}}
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
@@ -161,6 +173,8 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
+  data: PropTypes.any,
+  checkAllList: PropTypes.func,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -169,7 +183,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function PenjualanStore() {
+export default function PengirimanStoreStore() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -178,23 +192,171 @@ export default function PenjualanStore() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [toBeSelected, settoBeSelected] = React.useState({});
   const dispatch = useDispatch();
-  const dataStore = useSelector((state)=> state.reducer.getPenyimpananMasuk.data)
+  const dataStore = useSelector((state)=> state.reducer.getPembelian.data)
   const [openDetail,setOpenDetail] = React.useState(false)
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
   const [cari, setCari] = React.useState();
-  const [openTambah, setOpenTambah] = React.useState(false)
-  const handleOpenTambah = () =>{
-    setOpenTambah(true)
-  }
+  const [data,setData] = React.useState([]);
+  const [ukuran,setUkuran] = React.useState([]);
+  const [dataToko,setDataToko] = React.useState([]);
+  const [detailToko,setDetailToko] = React.useState([]);
+  const [modal, setModal] = React.useState();
+  const [modalUplaod, setModalUplaod] = React.useState();
+  const [detail, setDetail] = React.useState([]);
+  const [dataOffice,setDataOffice] = React.useState([])
   useEffect(()=>{
-    dispatch(getPenyimpananMasuk())
+    getAllKategori()
   },[])
+  const submitPenerimaanOffice =async(
+    detail_pengiriman,
+    tanggal_penerimaan,
+    id_office,
+    lokasi_office,
+    id_store,
+    lokasi_store,
+    pengiriman
+  )=>{
+    setModal(false)
+
+    let res = await addPenenrimaanOffice(
+      detail_pengiriman,
+      tanggal_penerimaan,
+      id_office,
+      lokasi_office,
+      id_store,
+      lokasi_store,
+      pengiriman
+    )
+    if(res?.status){
+      alertSuccess('Success','')
+      getAllKategori()
+    }
+    // console.log({detail_pengiriman,
+    //   tanggal_pengiriman,
+    //   id_store_asal,
+    //   lokasi_store_asal,
+    //   id_store_tujuan,
+    //   lokasi_store_tujuan})
+  }
+  const deleteData = async ()=>{
+    let array = [...data]
+    console.log({array:array?.length})
+    for(let i = 0;i<array?.length;i++){
+      if(array[i]?.check===true){
+        
+      await deletePenenrimaanOffice(array[i]?.id)
+    }
+    
+    
+    }
+    getAllKategori()
+    alertSuccess('Success','Success delete data')
+  }
+  const submitUpdateKategori =async( detail_pengiriman,
+    tanggal_pengiriman,
+id_store_asal,
+lokasi_store_asal,
+id_store_tujuan,
+lokasi_store_tujuan,
+pengiriman)=>{
+    setOpenDetail(false)
+    settoBeSelected({})
+    setDetail([])
+  
+    let res = await updatePenerimaanOffice( detail_pengiriman,
+      tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,
+  pengiriman,toBeSelected?.penerimaan_code,toBeSelected?.id)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllKategori()
+    }
+    console.log({res:res})
+  }
+ 
+  const convertToko = (v) =>{
+    let idx = dataToko?.findIndex(a=>a.id==v)
+    
+    return dataToko?dataToko[idx]?.store_name:''
+  }
+  const convertOffice = (v) =>{
+    let idx = dataOffice?.findIndex(a=>a.id==v)
+    
+    return dataOffice?dataOffice[idx]?.office_name:''
+  }
+  const getAllKategori =async()=>{
+    
+    let res = await getPenenrimaanOffice()
+    let res1 = await getStore()
+    let res2 = await getUkuran()
+    let res3 = await getOffice()
+    setDataToko(res1?.data)
+    setData(res?.data)
+    let arr = [...detailToko]
+    res?.data?.map((d)=>{
+      arr.push(d?.detailPengirimanList)
+    })
+    setDetailToko(arr)
+    setDataOffice(res3?.data)
+    setUkuran(res2?.data)
+    
+    
+  }
+  const checkSingle=(d,i)=>{
+    let array = [...data]
+    let idx = array?.findIndex(a=>a.id==d?.id)
+    if(!d?.check){
+      array[idx]['check'] = true
+    }else{
+      array[idx]['check'] = false
+    }
+    
+    setData(array)
+
+  }
+  const checkSemua=(v)=>{
+    let array = [...data]
+    array.map((d,i)=>{
+      array[i]['check'] = v
+    })
+  
+    
+    setData(array)
+
+  }
+  const searching =async()=>{
+    
+    let res = await getPenenrimaanOfficeSearch(searched)
+    setData(res?.data)
+    
+  }
   useEffect(()=>{
     setRows(dataStore)
   },[dataStore])
-  const handleOpenDetail=(dataStore)=>{
-    settoBeSelected(dataStore)
+  const handleOpenDetail=(v,i)=>{
+    settoBeSelected(v)
+    let arr = []
+    v?.detailPengirimanList?.map((d)=>{
+      arr.push({
+        id:d?.id,
+        sku_code:d?.sku_code,
+        artikel:d?.artikel,
+        type_name:d?.type_name,
+        tipe:d?.type,
+        kategori_name:d?.nama_kategori,
+        kategori:d?.kategori,
+        nama_barang:d?.nama_barang,
+        kuantitas:d?.kuantitas,
+        ukuran:d?.ukuran,
+        hpp:d?.hpp,
+        harga_jual:d?.harga_jual
+      })
+    })
+    setDetail(arr)
     setOpenDetail(true)
   }
   console.log(rows)
@@ -213,7 +375,7 @@ export default function PenjualanStore() {
     }
     setSelected([]);
   };
-
+  
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -260,7 +422,7 @@ export default function PenjualanStore() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Barang Masuk</h1>
+      <h1>Penerimaan dari Office ke Store</h1>
             <div
              style={{
                  position:"absolute",
@@ -268,9 +430,9 @@ export default function PenjualanStore() {
                  display:"flex"
              }}
             >
-            {/* <Button
+            <Button
                 style={{
-                    background: "#5c6ded",
+                    background: "#E14C4C",
                     color: 'white',
                     textTransform: 'capitalize',
                     marginRight:"15px",
@@ -278,24 +440,24 @@ export default function PenjualanStore() {
                     padding:"1em",
                     borderRadius:"14px"
                 }}
-                label="Tambah"
+                onClick={()=>deleteData()}
+                label="Hapus"
+                startIcon={<DeleteIcon/>}
+           />
+           
+            <Button
+                style={{
+                    background: "#03fc35",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                label="Add"
+                onClick={()=>setModal(true)}
                 startIcon={<AddIcon/>}
-                onClick={()=>{
-                  handleOpenTambah(true)
-                }}
-           /> */}
-           <Button
-                style={{
-                    background: "#828EED",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                label="Upload"
-                startIcon={<CloudUploadIcon/>}
            />
            </div>
       </div>
@@ -309,7 +471,7 @@ export default function PenjualanStore() {
             value={searched}
             onChange={handleChangeSearch}
             // onKeyUp={()=>{
-            //   dispatch(getPenjualanStore(`/search`))
+            //   dispatch(getPenjualanOffice(`/search`))
             // }}
             id="outlined-adornment-password"
             endAdornment={
@@ -318,7 +480,7 @@ export default function PenjualanStore() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon/>
+                 <SearchIcon onClick={()=>searching()}/>
                 </IconButton>
               </InputAdornment>
             }
@@ -335,7 +497,9 @@ export default function PenjualanStore() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
+              checkAllList={(v)=>checkSemua(v)}
               numSelected={selected.length}
+              data={data}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
@@ -343,7 +507,7 @@ export default function PenjualanStore() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -359,25 +523,32 @@ export default function PenjualanStore() {
                       key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell
-                        align='left'
-                      >
-                        {row.tanggal_masuk}
-                      </TableCell>
-                      <TableCell align="left">{row.artikel}</TableCell>
-                      <TableCell align="left">{row.kategori}</TableCell>
-                      <TableCell align="left">{row.type}</TableCell>
-                      <TableCell align="left">{row.nama_barang}</TableCell>
-                      <TableCell align="left">{row.kuantitas}</TableCell>
-                      <TableCell align="left">{row.ukuran}</TableCell>
-                      <TableCell align="left">{row.hpp}</TableCell>
-                      <TableCell align="left">{row.keterangan}</TableCell>
-                      <TableCell align="left">
+                       <TableCell align="left">
+                      <input 
+                       type="checkbox" 
+                       value={row?.check} 
+                       checked={row?.check?row?.check:false} 
+                       onChange={()=>{}} 
+                       onClick={(e)=>{console.log({row,index});checkSingle(row,index)}}/>
+                       </TableCell>
+                      <TableCell align="left">{row.id}</TableCell>
+                      <TableCell align="left">{row.penerimaan_code}</TableCell>
+                      <TableCell align="left">{row.tanggal_penerimaan}</TableCell>
+                      <TableCell align="left">{convertOffice(row.id_office)}</TableCell>
+                      <TableCell align="left">{row.lokasi_office}</TableCell>
+                      <TableCell align="left">{convertToko(row.id_store)}</TableCell>
+                      <TableCell align="left">{row.lokasi_store}</TableCell>
+                      
+                      <TableCell align="right">
+                      <div style={{
+                        
+                      }}>
                       <IconButton onClick={()=>{
-                        handleOpenDetail(row)
+                        handleOpenDetail(row,row?.detailPengirimanList)
                       }}>
                           <RemoveRedEyeOutlinedIcon />
                         </IconButton>
+                      </div>
                         </TableCell>
                     </TableRow>
                   );
@@ -397,7 +568,7 @@ export default function PenjualanStore() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -405,19 +576,58 @@ export default function PenjualanStore() {
         />
       </Paper>
     </Box>
-    <DetailPenjualanStore
-      open={openDetail}
-      data={toBeSelected}
-      onClose={()=>{
-        setOpenDetail(false)
-      }}
+    <ModalPenerimaanUpdateOfficekeStore
+    open={openDetail}
+    data={toBeSelected}
+  
+    store={dataToko}
+    ukuran={ukuran}
+    office={dataOffice}
+    submit ={(detail_pengiriman,
+      tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,
+  pengiriman)=>submitUpdateKategori( detail_pengiriman,
+    tanggal_pengiriman,
+id_store_asal,
+lokasi_store_asal,
+id_store_tujuan,
+lokasi_store_tujuan,
+pengiriman)}
+    onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    {/* <DetailPenjualanStore
-      open={openTambah}
-      onClose={()=>{
-        setOpenTambah(false)
-      }}
-    /> */}
+    <ModalPenerimaanAddOfficeStore 
+    open={modal}
+    store={dataToko}
+    ukuran={ukuran}
+    office={dataOffice}
+    submit ={(
+      detail_pengiriman,
+      tanggal_penerimaan,
+      id_office,
+      lokasi_office,
+      id_store,
+      lokasi_store,
+      pengiriman
+    )=>submitPenerimaanOffice(
+      detail_pengiriman,
+      tanggal_penerimaan,
+      id_office,
+      lokasi_office,
+      id_store,
+      lokasi_store,
+      pengiriman
+    )}
+    onClickOpen = {()=>setModal(!modal)}
+    />
+     <ModalUploadKategori 
+    open={modalUplaod}
+    mutate={()=>getAllKategori()}
+    submit ={(name)=>submitPenerimaanOffice(name)}
+    onClickOpen = {()=>setModalUplaod(!modalUplaod)}
+    />
     </div>
       );
 }

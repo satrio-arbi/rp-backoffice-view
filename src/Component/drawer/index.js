@@ -262,12 +262,17 @@ export default function PersistentDrawerLeft() {
                     <ListItem onClick={() => {
                       history.push('/pengiriman/gudang')
                     }}>
-                      <ListItemText primary="Dari Gudang ke Store" />
+                      <ListItemText primary="Dari Office ke Store" />
                     </ListItem>
                     <ListItem onClick={() => {
                       history.push('/pengiriman/store')
                     }}>
                       <ListItemText primary="Dari Store ke Store" />
+                    </ListItem>
+                    <ListItem onClick={() => {
+                      history.push('/pengiriman/retur-gudang')
+                    }}>
+                      <ListItemText primary="Retur Gudang" />
                     </ListItem>
                   </List>
                 </AccordionDetails>
@@ -287,10 +292,24 @@ export default function PersistentDrawerLeft() {
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                    <ListItem>
-                      <ListItemText primary="By Store" />
+                    <ListItem onClick={() => {
+                      history.push('/penerimaan/ByOffice')
+                    }}>
+                      <ListItemText primary="Office from store" />
                     </ListItem>
-                    <ListItem>
+                    <ListItem onClick={() => {
+                      history.push('/penerimaan/ByStoreOffice')
+                    }}>
+                      <ListItemText primary="Store from office" />
+                    </ListItem>
+                    <ListItem onClick={() => {
+                      history.push('/penerimaan/ByStore')
+                    }}>
+                      <ListItemText primary="Store from Store" />
+                    </ListItem>
+                    <ListItem onClick={() => {
+                      history.push('/penerimaan/BySuplier')
+                    }}>
                       <ListItemText primary="By Supplier" />
                     </ListItem>
                   </List>

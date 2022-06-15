@@ -13,9 +13,10 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddUser from '../../Component/modal/Modal-AddUser-Component'
-import ModalUpdateUser from '../../Component/modal/Modal-UpdateUser-Component'
-import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
+import ModalPenerimaanAddStoreOffice from '../../Component/modal/Modal-AddPenerimaStorekeOffice-Component'
+import ModalPenerimaanUpdateStorekeOffice from '../../Component/modal/Modal-AddPenerimaanStorekeStore-Component'
+
+import ModalUploadKategori from '../../Component/modal/Modal-UploadKategori-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -39,7 +40,8 @@ import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess} from '../../Component/alert/sweetalert'
-import {addUser,getUser,getMenu,getOffice,getStore,updateUser,deleteTipe} from '../../Config/Api-new'
+import {getOffice,getUkuran,addPenenrimaanStoreOffice,getStore,getPenenrimaanStoreOffice,getPenenrimaanStoreOfficeSearch,updatePenerimaanStoreOffice,deletePenenrimaanStoreOffice} from '../../Config/Api-new'
+import { set } from 'date-fns/esm';
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -75,50 +77,43 @@ const headCells = [
  
     {
       id: "id",
-      label: "Type Id",
-      disablePadding: true,
-      numeric: false,
-    },
-   
-    {
-      id: "userName",
-      label: "User Name",
+      label: "Id",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "name",
-      label: "Name",
+      id: "penenerimaan_code",
+      label: "Kode Penerimaan",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "email",
-      label: "Email",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "phone",
-      label: "Phone Number",
+      id: "tanggal_penerimaan",
+      label: "Tanggal Penerimaan",
       disablePadding: true,
       numeric: false,
     },
     {
       id: "office",
+      label: "Office",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "lokasi_office",
       label: "Lokasi Office",
       disablePadding: true,
       numeric: false,
     },
     {
       id: "store",
-      label: "Lokasi Store",
+      label: "Store",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "created_at",
-      label: "Tanggal Dibuat",
+      id: "lokasi_store",
+      label: "Lokasi Store",
       disablePadding: true,
       numeric: false,
     },
@@ -188,7 +183,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function MasterKatgori() {
+export default function PengirimanStoreStore() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -200,55 +195,49 @@ export default function MasterKatgori() {
   const dataStore = useSelector((state)=> state.reducer.getPembelian.data)
   const [openDetail,setOpenDetail] = React.useState(false)
   const [rows, setRows] = React.useState(dataStore)
-  const [menu, setMenu] = React.useState([]);
-  const [store, setStore] = React.useState([]);
-  const [office, setOffice] = React.useState([]);
+  const [searched, setSearched] = React.useState();
+  const [cari, setCari] = React.useState();
   const [data,setData] = React.useState([]);
+  const [ukuran,setUkuran] = React.useState([]);
+  const [dataToko,setDataToko] = React.useState([]);
+  const [detailToko,setDetailToko] = React.useState([]);
   const [modal, setModal] = React.useState();
-  const [search, setSearch] = React.useState('');
   const [modalUplaod, setModalUplaod] = React.useState();
+  const [detail, setDetail] = React.useState([]);
+  const [dataOffice,setDataOffice] = React.useState([])
   useEffect(()=>{
     getAllKategori()
   },[])
-  const submitUser =async(firstName,
-    lastName,
-    password,
-    phoneNumber,
-    lokasi_office,
-    lokasi_store,
-    akses_modul,
-    userName,
-    id_store,
+  const submitPenerimaanOffice =async(
+    detail_pengiriman,
+    tanggal_penerimaan,
     id_office,
-    email)=>{
-      console.log({firstName,
-        lastName,
-        password,
-        phoneNumber,
-        lokasi_office,
-        lokasi_store,
-        akses_modul,
-        userName,
-        id_store,
-        id_office,
-        email})
+    lokasi_office,
+    id_store,
+    lokasi_store,
+    pengiriman
+  )=>{
     setModal(false)
-    let res = await addUser(firstName,
-      lastName,
-      password,
-      phoneNumber,
-      lokasi_office,
-      lokasi_store,
-      akses_modul,
-      userName,
-      id_store,
+
+    let res = await addPenenrimaanStoreOffice(
+      detail_pengiriman,
+      tanggal_penerimaan,
       id_office,
-      email)
+      lokasi_office,
+      id_store,
+      lokasi_store,
+      pengiriman
+    )
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
-    console.log({res:res})
+    // console.log({detail_pengiriman,
+    //   tanggal_pengiriman,
+    //   id_store_asal,
+    //   lokasi_store_asal,
+    //   id_store_tujuan,
+    //   lokasi_store_tujuan})
   }
   const deleteData = async ()=>{
     let array = [...data]
@@ -256,7 +245,7 @@ export default function MasterKatgori() {
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
-      await deleteTipe(array[i]?.id)
+      await deletePenenrimaanStoreOffice(array[i]?.id)
     }
     
     
@@ -264,53 +253,56 @@ export default function MasterKatgori() {
     getAllKategori()
     alertSuccess('Success','Success delete data')
   }
-  const submitUpdateUser =async(firstName,
-    lastName,
-    password,
-    phoneNumber,
-    lokasi_office,
-    lokasi_store,
-    akses_modul,
-    userName,
-    id_store,
-    id_office,
-    email)=>{
+  const submitUpdateKategori =async( detail_pengiriman,
+    tanggal_pengiriman,
+id_store_asal,
+lokasi_store_asal,
+id_store_tujuan,
+lokasi_store_tujuan,
+pengiriman)=>{
     setOpenDetail(false)
     settoBeSelected({})
-    let res = await updateUser(firstName,
-      lastName,
-      password,
-      phoneNumber,
-      lokasi_office,
-      lokasi_store,
-      akses_modul,
-      userName,
-      id_store,
-      id_office,
-      email,toBeSelected?.id)
+    setDetail([])
+  
+    let res = await updatePenerimaanStoreOffice( detail_pengiriman,
+      tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,
+  pengiriman,toBeSelected?.penerimaan_code,toBeSelected?.id)
     if(res?.status){
       alertSuccess('Success',res?.data)
       getAllKategori()
     }
     console.log({res:res})
   }
+ 
+  const convertToko = (v) =>{
+    let idx = dataToko?.findIndex(a=>a.id==v)
+    
+    return dataToko?dataToko[idx]?.store_name:''
+  }
+  const convertOffice = (v) =>{
+    let idx = dataOffice?.findIndex(a=>a.id==v)
+    
+    return dataOffice?dataOffice[idx]?.office_name:''
+  }
   const getAllKategori =async()=>{
     
-    let res = await getUser(search)
-    let res1 = await getMenu()
-    let res2 = await getStore()
+    let res = await getPenenrimaanStoreOffice()
+    let res1 = await getStore()
+    let res2 = await getUkuran()
     let res3 = await getOffice()
-    let arr = []
-    res1?.data?.map((d)=>{
-      arr.push({
-        value:d?.id,
-        label:d?.nama_menu
-      })
-    })
+    setDataToko(res1?.data)
     setData(res?.data)
-    setMenu(arr)
-    setStore(res2?.data)
-    setOffice(res3?.data)
+    let arr = [...detailToko]
+    res?.data?.map((d)=>{
+      arr.push(d?.detailPengirimanList)
+    })
+    setDetailToko(arr)
+    setDataOffice(res3?.data)
+    setUkuran(res2?.data)
     
     
   }
@@ -336,18 +328,35 @@ export default function MasterKatgori() {
     setData(array)
 
   }
-  const searching =()=>{
-    getAllKategori()
-  //   let res = await getTipeSearch(searched)
-  //   setData(res?.data)
+  const searching =async()=>{
+    
+    let res = await getPenenrimaanStoreOfficeSearch(searched)
+    setData(res?.data)
     
   }
   useEffect(()=>{
     setRows(dataStore)
   },[dataStore])
-  const handleOpenDetail=(dataStore)=>{
-    settoBeSelected(dataStore)
-    console.log({dataStore})
+  const handleOpenDetail=(v,i)=>{
+    settoBeSelected(v)
+    let arr = []
+    v?.detailPengirimanList?.map((d)=>{
+      arr.push({
+        id:d?.id,
+        sku_code:d?.sku_code,
+        artikel:d?.artikel,
+        type_name:d?.type_name,
+        tipe:d?.type,
+        kategori_name:d?.nama_kategori,
+        kategori:d?.kategori,
+        nama_barang:d?.nama_barang,
+        kuantitas:d?.kuantitas,
+        ukuran:d?.ukuran,
+        hpp:d?.hpp,
+        harga_jual:d?.harga_jual
+      })
+    })
+    setDetail(arr)
     setOpenDetail(true)
   }
   console.log(rows)
@@ -406,14 +415,14 @@ export default function MasterKatgori() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
     const handleChangeSearch = (event) => {
-      setSearch(event.target.value);
+      setSearched(event.target.value);
     };
   return (
     <div style={{
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Management User</h1>
+      <h1>Penerimaan dari Store ke Office</h1>
             <div
              style={{
                  position:"absolute",
@@ -421,7 +430,7 @@ export default function MasterKatgori() {
                  display:"flex"
              }}
             >
-            {/* <Button
+            <Button
                 style={{
                     background: "#E14C4C",
                     color: 'white',
@@ -435,20 +444,7 @@ export default function MasterKatgori() {
                 label="Hapus"
                 startIcon={<DeleteIcon/>}
            />
-           <Button
-                style={{
-                    background: "#828EED",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                label="Upload"
-                onClick={()=>setModalUplaod(true)}
-                startIcon={<CloudUploadIcon/>} 
-           />*/}
+           
             <Button
                 style={{
                     background: "#03fc35",
@@ -472,7 +468,7 @@ export default function MasterKatgori() {
       <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Cari</InputLabel>
           <OutlinedInput
-            value={search}
+            value={searched}
             onChange={handleChangeSearch}
             // onKeyUp={()=>{
             //   dispatch(getPenjualanOffice(`/search`))
@@ -533,23 +529,22 @@ export default function MasterKatgori() {
                        value={row?.check} 
                        checked={row?.check?row?.check:false} 
                        onChange={()=>{}} 
-                       onClick={(e)=>checkSingle(row,index)}/>
+                       onClick={(e)=>{console.log({row,index});checkSingle(row,index)}}/>
                        </TableCell>
                       <TableCell align="left">{row.id}</TableCell>
-                      <TableCell align="left">{row.userName}</TableCell>
-                      <TableCell align="left">{row.firstName} {row.lastName}</TableCell>
-                      <TableCell align="left">{row.email}</TableCell>
-                      <TableCell align="left">{row.phoneNumber}</TableCell>
+                      <TableCell align="left">{row.penerimaan_code}</TableCell>
+                      <TableCell align="left">{row.tanggal_penerimaan}</TableCell>
+                      <TableCell align="left">{convertOffice(row.id_office)}</TableCell>
                       <TableCell align="left">{row.lokasi_office}</TableCell>
+                      <TableCell align="left">{convertToko(row.id_store)}</TableCell>
                       <TableCell align="left">{row.lokasi_store}</TableCell>
-                      <TableCell align="left">{row.createdAt.replace('T',' ').split('.')[0]}</TableCell>
                       
                       <TableCell align="right">
                       <div style={{
                         
                       }}>
                       <IconButton onClick={()=>{
-                        handleOpenDetail(row)
+                        handleOpenDetail(row,row?.detailPengirimanList)
                       }}>
                           <RemoveRedEyeOutlinedIcon />
                         </IconButton>
@@ -581,67 +576,56 @@ export default function MasterKatgori() {
         />
       </Paper>
     </Box>
-    <ModalUpdateUser
+    <ModalPenerimaanUpdateStorekeOffice
     open={openDetail}
-    menu={menu}
-    store={store}
-    office={office}
     data={toBeSelected}
-    submit ={(firstName,
-      lastName,
-      password,
-      phoneNumber,
-      lokasi_office,
-      lokasi_store,
-      akses_modul,
-      userName,
-      id_store,
-      id_office,
-      email)=>submitUpdateUser(firstName,
-        lastName,
-        password,
-        phoneNumber,
-        lokasi_office,
-        lokasi_store,
-        akses_modul,
-        userName,
-        id_store,
-        id_office,
-        email)}
+  
+    store={dataToko}
+    ukuran={ukuran}
+    office={dataOffice}
+    submit ={(detail_pengiriman,
+      tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,
+  pengiriman)=>submitUpdateKategori( detail_pengiriman,
+    tanggal_pengiriman,
+id_store_asal,
+lokasi_store_asal,
+id_store_tujuan,
+lokasi_store_tujuan,
+pengiriman)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <ModalAddUser
+    <ModalPenerimaanAddStoreOffice 
     open={modal}
-    menu={menu}
-    store={store}
-    office={office}
-    submit ={(firstName,
-      lastName,
-      password,
-      phoneNumber,
-      lokasi_office,
-      lokasi_store,
-      akses_modul,
-      userName,
-      id_store,
+    store={dataToko}
+    ukuran={ukuran}
+    office={dataOffice}
+    submit ={(
+      detail_pengiriman,
+      tanggal_penerimaan,
       id_office,
-      email)=>submitUser(firstName,
-        lastName,
-        password,
-        phoneNumber,
-        lokasi_office,
-        lokasi_store,
-        akses_modul,
-        userName,
-        id_store,
-        id_office,
-        email)}
+      lokasi_office,
+      id_store,
+      lokasi_store,
+      pengiriman
+    )=>submitPenerimaanOffice(
+      detail_pengiriman,
+      tanggal_penerimaan,
+      id_office,
+      lokasi_office,
+      id_store,
+      lokasi_store,
+      pengiriman
+    )}
     onClickOpen = {()=>setModal(!modal)}
     />
-     <ModalUploadTipe
+     <ModalUploadKategori 
     open={modalUplaod}
     mutate={()=>getAllKategori()}
-    
+    submit ={(name)=>submitPenerimaanOffice(name)}
     onClickOpen = {()=>setModalUplaod(!modalUplaod)}
     />
     </div>

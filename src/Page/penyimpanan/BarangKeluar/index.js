@@ -13,9 +13,9 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddUser from '../../Component/modal/Modal-AddUser-Component'
-import ModalUpdateUser from '../../Component/modal/Modal-UpdateUser-Component'
-import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
+import ModalAddKategori from '../../../Component/modal/Modal-AddKategori-Component'
+import ModalUpdateKategori from '../../../Component/modal/Modal-UpdateKategori-Component'
+import ModalUploadKategori from '../../../Component/modal/Modal-UploadKategori-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -26,20 +26,20 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import Button from '../../Component/button/index'
-import Input from '../../Component/input/index'
+import Button from '../../../Component/button/index'
+import Input from '../../../Component/input/index'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search'
-import FormPembelian from '../../Page/FormPembelian/index'
+import FormPembelian from '../../../Page/FormPembelian/index'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import Gap from '../../Component/gap/index';
+import Gap from '../../../Component/gap/index';
 import clsx from 'clsx';
-import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
-import {addUser,getUser,getMenu,getOffice,getStore,updateUser,deleteTipe} from '../../Config/Api-new'
+import { getPembelian } from '../../../Config/Redux/action';
+import {alertSuccess} from '../../../Component/alert/sweetalert'
+import {getUkuran,getProduk,addKategori,getOffice,getPenyimpananKeluar,getPenyimpananKeluarSearch,updateKategori,deletePenyimpananKeluar} from '../../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -75,56 +75,81 @@ const headCells = [
  
     {
       id: "id",
-      label: "Type Id",
-      disablePadding: true,
-      numeric: false,
-    },
-   
-    {
-      id: "userName",
-      label: "User Name",
+      label: "Id",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "name",
-      label: "Name",
+      id: "kode_penerimaan",
+      label: "Kode penerimaan",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "email",
-      label: "Email",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "phone",
-      label: "Phone Number",
+      id: "artikel",
+      label: "Artikel",
       disablePadding: true,
       numeric: false,
     },
     {
       id: "office",
+      label: "Office",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "lokasi_office",
       label: "Lokasi Office",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "store",
-      label: "Lokasi Store",
+      id: "nama_barang",
+      label: "Nama barang",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "created_at",
-      label: "Tanggal Dibuat",
+      id: "kuantitas",
+      label: "Kuantitas",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "aksi",
-      label: "Aksi",
+      id: "ukuran",
+      label: "Ukuran",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "hpp",
+      label: "HPP",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "harga_jual",
+      label: "Harga Jual",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "kategori",
+      label: "Kategori",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "type",
+      label: "Type",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "ket",
+      label: "Keterangan",
+      disablePadding: true,
+      numeric: false,
     }
 ];
 
@@ -188,7 +213,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function MasterKatgori() {
+export default function BarangKeluar() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -200,50 +225,19 @@ export default function MasterKatgori() {
   const dataStore = useSelector((state)=> state.reducer.getPembelian.data)
   const [openDetail,setOpenDetail] = React.useState(false)
   const [rows, setRows] = React.useState(dataStore)
-  const [menu, setMenu] = React.useState([]);
-  const [store, setStore] = React.useState([]);
-  const [office, setOffice] = React.useState([]);
+  const [searched, setSearched] = React.useState();
+  const [cari, setCari] = React.useState();
   const [data,setData] = React.useState([]);
+  const [office,setOffice] = React.useState([]);
+  const [ukuran,setUkuran] = React.useState([]);
   const [modal, setModal] = React.useState();
-  const [search, setSearch] = React.useState('');
   const [modalUplaod, setModalUplaod] = React.useState();
   useEffect(()=>{
     getAllKategori()
   },[])
-  const submitUser =async(firstName,
-    lastName,
-    password,
-    phoneNumber,
-    lokasi_office,
-    lokasi_store,
-    akses_modul,
-    userName,
-    id_store,
-    id_office,
-    email)=>{
-      console.log({firstName,
-        lastName,
-        password,
-        phoneNumber,
-        lokasi_office,
-        lokasi_store,
-        akses_modul,
-        userName,
-        id_store,
-        id_office,
-        email})
+  const submitKategori =async(name)=>{
     setModal(false)
-    let res = await addUser(firstName,
-      lastName,
-      password,
-      phoneNumber,
-      lokasi_office,
-      lokasi_store,
-      akses_modul,
-      userName,
-      id_store,
-      id_office,
-      email)
+    let res = await addKategori(name)
     if(res?.status){
       alertSuccess('Success',res?.data)
       getAllKategori()
@@ -256,7 +250,7 @@ export default function MasterKatgori() {
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
-      await deleteTipe(array[i]?.id)
+      await deletePenyimpananKeluar(array[i]?.id)
     }
     
     
@@ -264,30 +258,10 @@ export default function MasterKatgori() {
     getAllKategori()
     alertSuccess('Success','Success delete data')
   }
-  const submitUpdateUser =async(firstName,
-    lastName,
-    password,
-    phoneNumber,
-    lokasi_office,
-    lokasi_store,
-    akses_modul,
-    userName,
-    id_store,
-    id_office,
-    email)=>{
+  const submitUpdateKategori =async(name)=>{
     setOpenDetail(false)
     settoBeSelected({})
-    let res = await updateUser(firstName,
-      lastName,
-      password,
-      phoneNumber,
-      lokasi_office,
-      lokasi_store,
-      akses_modul,
-      userName,
-      id_store,
-      id_office,
-      email,toBeSelected?.id)
+    let res = await updateKategori(name,toBeSelected?.id)
     if(res?.status){
       alertSuccess('Success',res?.data)
       getAllKategori()
@@ -296,23 +270,17 @@ export default function MasterKatgori() {
   }
   const getAllKategori =async()=>{
     
-    let res = await getUser(search)
-    let res1 = await getMenu()
-    let res2 = await getStore()
-    let res3 = await getOffice()
-    let arr = []
-    res1?.data?.map((d)=>{
-      arr.push({
-        value:d?.id,
-        label:d?.nama_menu
-      })
-    })
+    let res = await getPenyimpananKeluar()
+    let res1 = await getOffice()
+    let res2 = await getUkuran()
     setData(res?.data)
-    setMenu(arr)
-    setStore(res2?.data)
-    setOffice(res3?.data)
+    setOffice(res1?.data)
+    setUkuran(res2?.data)
     
-    
+  }
+  const convertOffice = (v) =>{
+    let idx = office?.findIndex(a=>a.id==v)
+    return office?office[idx]?.office_name:''
   }
   const checkSingle=(d,i)=>{
     let array = [...data]
@@ -336,10 +304,10 @@ export default function MasterKatgori() {
     setData(array)
 
   }
-  const searching =()=>{
-    getAllKategori()
-  //   let res = await getTipeSearch(searched)
-  //   setData(res?.data)
+  const searching =async()=>{
+    
+    let res = await getPenyimpananKeluarSearch(searched)
+    setData(res?.data)
     
   }
   useEffect(()=>{
@@ -347,7 +315,6 @@ export default function MasterKatgori() {
   },[dataStore])
   const handleOpenDetail=(dataStore)=>{
     settoBeSelected(dataStore)
-    console.log({dataStore})
     setOpenDetail(true)
   }
   console.log(rows)
@@ -406,14 +373,14 @@ export default function MasterKatgori() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
     const handleChangeSearch = (event) => {
-      setSearch(event.target.value);
+      setSearched(event.target.value);
     };
   return (
     <div style={{
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Management User</h1>
+      <h1>Barang Keluar</h1>
             <div
              style={{
                  position:"absolute",
@@ -447,8 +414,8 @@ export default function MasterKatgori() {
                 }}
                 label="Upload"
                 onClick={()=>setModalUplaod(true)}
-                startIcon={<CloudUploadIcon/>} 
-           />*/}
+                startIcon={<CloudUploadIcon/>}
+           />
             <Button
                 style={{
                     background: "#03fc35",
@@ -462,7 +429,7 @@ export default function MasterKatgori() {
                 label="Add"
                 onClick={()=>setModal(true)}
                 startIcon={<AddIcon/>}
-           />
+           /> */}
            </div>
       </div>
            <Gap height={15}/>
@@ -472,7 +439,7 @@ export default function MasterKatgori() {
       <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Cari</InputLabel>
           <OutlinedInput
-            value={search}
+            value={searched}
             onChange={handleChangeSearch}
             // onKeyUp={()=>{
             //   dispatch(getPenjualanOffice(`/search`))
@@ -536,15 +503,21 @@ export default function MasterKatgori() {
                        onClick={(e)=>checkSingle(row,index)}/>
                        </TableCell>
                       <TableCell align="left">{row.id}</TableCell>
-                      <TableCell align="left">{row.userName}</TableCell>
-                      <TableCell align="left">{row.firstName} {row.lastName}</TableCell>
-                      <TableCell align="left">{row.email}</TableCell>
-                      <TableCell align="left">{row.phoneNumber}</TableCell>
+                      {/* <TableCell align="left">{row.kategori_name}</TableCell> */}
+                      <TableCell align="left">{row.pengiriman_code}</TableCell>
+                      <TableCell align="left">{row.artikel}</TableCell>
+                      <TableCell align="left">{convertOffice(row.id_office)}</TableCell>
                       <TableCell align="left">{row.lokasi_office}</TableCell>
-                      <TableCell align="left">{row.lokasi_store}</TableCell>
-                      <TableCell align="left">{row.createdAt.replace('T',' ').split('.')[0]}</TableCell>
+                      <TableCell align="left">{row.nama_barang}</TableCell>
+                      <TableCell align="left">{row.kuantitas}</TableCell>
+                      <TableCell align="left">{row.ukuran}</TableCell>
+                      <TableCell align="left">{row.hpp}</TableCell>
+                      <TableCell align="left">{row.harga_jual}</TableCell>
+                      <TableCell align="left">{row.nama_kategori}</TableCell>
+                      <TableCell align="left">{row.type_name}</TableCell>
+                      <TableCell align="left">{row.keterangan}</TableCell>
                       
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                       <div style={{
                         
                       }}>
@@ -554,7 +527,7 @@ export default function MasterKatgori() {
                           <RemoveRedEyeOutlinedIcon />
                         </IconButton>
                       </div>
-                        </TableCell>
+                        </TableCell> */}
                     </TableRow>
                   );
                 })}
@@ -581,67 +554,22 @@ export default function MasterKatgori() {
         />
       </Paper>
     </Box>
-    <ModalUpdateUser
+    <ModalUpdateKategori
     open={openDetail}
-    menu={menu}
-    store={store}
-    office={office}
     data={toBeSelected}
-    submit ={(firstName,
-      lastName,
-      password,
-      phoneNumber,
-      lokasi_office,
-      lokasi_store,
-      akses_modul,
-      userName,
-      id_store,
-      id_office,
-      email)=>submitUpdateUser(firstName,
-        lastName,
-        password,
-        phoneNumber,
-        lokasi_office,
-        lokasi_store,
-        akses_modul,
-        userName,
-        id_store,
-        id_office,
-        email)}
+    submit ={(name)=>submitUpdateKategori(name)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <ModalAddUser
+    <ModalAddKategori 
     open={modal}
-    menu={menu}
-    store={store}
-    office={office}
-    submit ={(firstName,
-      lastName,
-      password,
-      phoneNumber,
-      lokasi_office,
-      lokasi_store,
-      akses_modul,
-      userName,
-      id_store,
-      id_office,
-      email)=>submitUser(firstName,
-        lastName,
-        password,
-        phoneNumber,
-        lokasi_office,
-        lokasi_store,
-        akses_modul,
-        userName,
-        id_store,
-        id_office,
-        email)}
+    ukuran={ukuran}
+    submit ={(name)=>submitKategori(name)}
     onClickOpen = {()=>setModal(!modal)}
     />
-     <ModalUploadTipe
+     <ModalUploadKategori 
     open={modalUplaod}
     mutate={()=>getAllKategori()}
-    
+    submit ={(name)=>submitKategori(name)}
     onClickOpen = {()=>setModalUplaod(!modalUplaod)}
     />
     </div>

@@ -345,10 +345,11 @@ export default function MasterKatgori() {
   }
   const checkSingle=(d,i)=>{
     let array = [...data]
+    let idx = array?.findIndex(a=>a.id==d?.id)
     if(!d?.check){
-      array[i]['check'] = true
+      array[idx]['check'] = true
     }else{
-      array[i]['check'] = false
+      array[idx]['check'] = false
     }
     
     setData(array)

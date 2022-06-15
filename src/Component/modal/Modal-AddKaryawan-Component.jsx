@@ -165,7 +165,7 @@ const ModalAddKaryawan =(props)=>{
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={idOffice}
-                            label="Store"
+                            label="Office"
                             onChange={(v)=>{setIdOffice(v?.target?.value)}}
                           >
                             {props?.office?.map((d,i)=>{

@@ -43,7 +43,7 @@ import {alertSuccess} from '../../Component/alert/sweetalert'
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-import {addProdukCustom,addProduk,getKategori,getTipe,getProduk,getProdukSearch,getProdukByType,getProdukBySKU,updateProduk,deleteProduk} from '../../Config/Api-new'
+import {getUkuran,addProdukCustom,addProduk,getKategori,getTipe,getProduk,getProdukSearch,getProdukByType,getProdukBySKU,updateProduk,deleteProduk} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -243,6 +243,7 @@ export default function MasterKatgori() {
   const [type, setType] = React.useState();
   const [kategori, setKategori] = React.useState();
   const [typeValue, setTypeValue] = React.useState();
+  const [ukuran,setUkuran] = React.useState([]);
   useEffect(()=>{
     getAllKategori()
   },[])
@@ -394,9 +395,11 @@ export default function MasterKatgori() {
     let res = await getProduk()
     let res1 = await getTipe()
     let res2 = await getKategori()
+    let res3 = await getUkuran()
     setType(res1?.data)
     setData(res?.data)
     setKategori(res2?.data)
+    setUkuran(res3?.data)
     
   }
   const convertImage = (v) => {
@@ -405,10 +408,11 @@ export default function MasterKatgori() {
   };
   const checkSingle=(d,i)=>{
     let array = [...data]
+    let idx = array?.findIndex(a=>a.id==d?.id)
     if(!d?.check){
-      array[i]['check'] = true
+      array[idx]['check'] = true
     }else{
-      array[i]['check'] = false
+      array[idx]['check'] = false
     }
     
     setData(array)
@@ -755,6 +759,7 @@ export default function MasterKatgori() {
     open={openDetail}
     data={toBeSelected}
     type={type}
+    ukuran={ukuran}
     kategori={kategori}
     submit ={(
       ukuran,
@@ -794,6 +799,7 @@ export default function MasterKatgori() {
     <ModalAddMasterProdukCostum
      open={modalCostum}
      type={type}
+     ukuran={ukuran}
      kategori={kategori}
      submit ={(
       artikel_frame_ns,
@@ -841,6 +847,7 @@ export default function MasterKatgori() {
     <ModalAddMasterProduk
     open={modal}
     type={type}
+    ukuran={ukuran}
     kategori={kategori}
     submit ={(
       ukuran,

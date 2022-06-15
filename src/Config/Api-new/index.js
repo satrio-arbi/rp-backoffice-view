@@ -493,6 +493,15 @@ export const getProdukBySKU = async (id) => {
   return res
   
 }
+export const getProdukByArtikel = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `master/product/getByArticle?article=${id}`, {})
+  
+  return res
+  
+}
 export const getProdukByType = async (id) => {
   // const formData = new FormData();  
   //   formData.append('id',id)
@@ -513,6 +522,829 @@ export const uploadProduct = async (file) => {
   const formData = new FormData();  
     formData.append('file',file)
   const res = await NET("POST", `master/product/import`, formData, '', '',true)
+  
+  return res
+  
+}
+
+//Pengiriman store ke store
+
+export const addPengirimanStorekeStore = async (
+  detailPengirimanList,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan
+) => {
+  
+  const res = await NET("POST", `pengirimanStore/add`, 
+  {
+    detailPengirimanList,
+    tanggal_pengiriman,
+    id_store_asal,
+    lokasi_store_asal,
+    id_store_tujuan,
+    lokasi_store_tujuan
+  }
+  )
+  
+  return res
+  
+}
+export const updatePengirimanStorekeStore = async (
+  detailPengirimanList,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,
+  pengiriman_code,
+  id) => {
+  
+   
+  const res = await NET("POST", `pengirimanStore/update`, {
+    detailPengirimanList,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,
+  pengiriman_code,
+  rowstatus:1,
+  id
+  })
+  
+  return res
+  
+}
+export const deletePengirimanStorekeStore = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `pengirimanStore/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const getPengirimanStorekeStore = async () => {
+
+  const res = await NET("GET", `pengirimanStore/all`, {})
+  
+  return res
+  
+}
+export const getPengirimanStorekeStoreSearch = async (search) => {
+
+  const res = await NET("GET", `pengirimanStore/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+
+
+//Pengiriman Office ke store
+
+export const addPengirimanOfficekeStore = async (
+  detailPengirimanList,
+  tanggal_pengiriman,
+  id_office,
+  lokasi_office,
+  id_store,
+  lokasi_store
+) => {
+  
+  const res = await NET("POST", `pengirimanOffice/add`, {
+    detailPengirimanList,
+    tanggal_pengiriman,
+    id_office,
+    lokasi_office,
+    id_store,
+    lokasi_store
+  })
+  
+  return res
+  
+}
+export const updatePengirimanOfficekeStore = async (
+  detailPengirimanList,
+  tanggal_pengiriman,
+  id_office,
+  lokasi_office,
+  id_store,
+  lokasi_store,
+  pengiriman_code,
+  id) => {
+  console.log({
+    detailPengirimanList,
+    tanggal_pengiriman,
+    id_office,
+    lokasi_office,
+    id_store,
+    lokasi_store,
+    pengiriman_code,
+    rowstatus:1,
+    id
+  })
+   
+  const res = await NET("POST", `pengirimanOffice/update`, {
+    detailPengirimanList,
+    tanggal_pengiriman,
+    id_office,
+    lokasi_office,
+    id_store,
+    lokasi_store,
+    pengiriman_code,
+    rowstatus:1,
+    id
+  })
+  
+  return res
+  
+}
+export const deletePengirimanOfficekeStore = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `pengirimanOffice/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const getPengirimanOfficekeStore = async () => {
+
+  const res = await NET("GET", `pengirimanOffice/all`, {})
+  
+  return res
+  
+}
+export const getPengirimanOfficekeStoreSearch = async (search) => {
+
+  const res = await NET("GET", `pengirimanOffice/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const getPengirimanOfficekeStoreTransferRequest = async (search) => {
+
+  const res = await NET("GET", `pengirimanOffice/transferRequest?pengiriman_code=${search}`, {})
+  
+  return res
+  
+}
+
+//ukuran
+
+export const getUkuran = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `master/ukuran/all`, {})
+  
+  return res
+  
+}
+//Penerimaan office
+
+export const addPenenrimaanOffice = async (
+  detailPenerimaanList,
+  tanggal_penerimaan,
+  id_office,
+  lokasi_office,
+  id_store,
+  lokasi_store,
+  pengiriman_code
+) => {
+
+  const res = await NET("POST", `penerimaanFromOffice/add`, {
+    detailPenerimaanList,
+    tanggal_penerimaan,
+    id_office,
+  lokasi_office,
+  id_store,
+  lokasi_store,
+  pengiriman_code
+  })
+  
+  return res
+  
+}
+export const updatePenerimaanOffice = async (
+  detailPenerimaanList,
+  tanggal_penerimaan,
+  id_office,
+  lokasi_office,
+  id_store,
+  lokasi_store,
+  pengiriman_code,
+  penerimaan_code
+  ,id) => {
+  
+   console.log({ detailPenerimaanList,
+    tanggal_penerimaan,
+    id_office,
+    lokasi_office,
+    id_store,
+    lokasi_store,
+    pengiriman_code,
+    penerimaan_code ,
+    rowstatus:1,
+    id})
+  const res = await NET("POST", `penerimaanFromOffice/update`, {
+  
+    detailPenerimaanList,
+    tanggal_penerimaan,
+    id_office,
+    lokasi_office,
+    id_store,
+    lokasi_store,
+    pengiriman_code,
+    penerimaan_code ,
+    rowstatus:1,
+    id
+  })
+  
+  return res
+  
+}
+export const deletePenenrimaanOffice = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `penerimaanFromOffice/delete?penerimaan_code=${id}`, {})
+  
+  return res
+  
+}
+export const getPenenrimaanOffice = async () => {
+
+  const res = await NET("GET", `penerimaanFromOffice/all`, {})
+  
+  return res
+  
+}
+export const getPenenrimaanOfficeSearch = async (search) => {
+
+  const res = await NET("GET", `penerimaanFromOffice/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const uploadPenenrimaanOffice = async (file) => {
+  const formData = new FormData();  
+    formData.append('file',file)
+  const res = await NET("POST", `penerimaanFromOffice/import`, formData, '', '',true)
+  
+  return res
+  
+}
+
+//Penerimaan  office store
+
+export const addPenenrimaanStoreOffice = async (
+  detailPenerimaanList,
+  tanggal_penerimaan,
+  id_office,
+  lokasi_office,
+  id_store,
+  lokasi_store,
+  retur_code
+) => {
+
+  const res = await NET("POST", `penerimaanStore/add`, {
+    detailPenerimaanList,
+    tanggal_penerimaan,
+    id_office,
+  lokasi_office,
+  id_store,
+  lokasi_store,
+  retur_code
+  })
+  
+  return res
+  
+}
+export const updatePenerimaanStoreOffice = async (
+  detailPenerimaanList,
+  tanggal_penerimaan,
+  id_office,
+  lokasi_office,
+  id_store,
+  lokasi_store,
+  retur_code,
+  penerimaan_code
+  ,id) => {
+  
+   
+  const res = await NET("POST", `penerimaanStore/update`, {
+  
+    detailPenerimaanList,
+    tanggal_penerimaan,
+    id_office,
+    lokasi_office,
+    id_store,
+    lokasi_store,
+    retur_code,
+    penerimaan_code ,
+    rowstatus:1,
+    id
+  })
+  
+  return res
+  
+}
+export const deletePenenrimaanStoreOffice = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `penerimaanStore/delete?penerimaan_code=${id}`, {})
+  
+  return res
+  
+}
+export const getPenenrimaanStoreOffice = async () => {
+
+  const res = await NET("GET", `penerimaanStore/all`, {})
+  
+  return res
+  
+}
+export const getPenenrimaanStoreOfficeSearch = async (search) => {
+
+  const res = await NET("GET", `penerimaanStore/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const uploadPenenrimaanStoreOffice = async (file) => {
+  const formData = new FormData();  
+    formData.append('file',file)
+  const res = await NET("POST", `penerimaanStore/import`, formData, '', '',true)
+  
+  return res
+  
+}
+
+//Penerimaan store
+
+export const addPenenrimaanStore = async (
+  detailPenerimaanList,
+  tanggal_penerimaan,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,
+  pengiriman_code
+) => {
+  
+  const res = await NET("POST", `penerimaanStoreFromStore/add`, {
+    detailPenerimaanList,
+    tanggal_penerimaan,
+    id_store_asal,
+    lokasi_store_asal,
+    id_store_tujuan,
+    lokasi_store_tujuan,
+    pengiriman_code
+  })
+  
+  return res
+  
+}
+export const updatePenenrimaanStore = async (
+  detailPenerimaanList,
+  tanggal_penerimaan,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,
+  pengiriman_code,
+  penerimaan_code,
+  id) => {
+  console.log({ detailPenerimaanList,
+    tanggal_penerimaan,
+    id_store_asal,
+    lokasi_store_asal,
+    id_store_tujuan,
+    lokasi_store_tujuan,
+    pengiriman_code,
+    penerimaan_code,
+    rowstatus:1,
+    id})
+   
+  const res = await NET("POST", `penerimaanStoreFromStore/update`, {
+    detailPenerimaanList,
+    tanggal_penerimaan,
+    id_store_asal,
+    lokasi_store_asal,
+    id_store_tujuan,
+    lokasi_store_tujuan,
+    pengiriman_code,
+    penerimaan_code,
+    rowstatus:1,
+    id
+  })
+  
+  return res
+  
+}
+export const deletePenenrimaanStore = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `penerimaanStoreFromStore/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const getPenenrimaanStore = async () => {
+
+  const res = await NET("GET", `penerimaanStoreFromStore/all`, {})
+  
+  return res
+  
+}
+export const getPenenrimaanStoreSearch = async (search) => {
+
+  const res = await NET("GET", `penerimaanStoreFromStore/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const uploadPenenrimaanStore = async (file) => {
+  const formData = new FormData();  
+    formData.append('file',file)
+  const res = await NET("POST", `penerimaanStoreFromStore/import`, formData, '', '',true)
+  
+  return res
+  
+}
+
+
+//Penerimaan suplier
+
+export const addPenenrimaanSuplier = async (
+  detailPenerimaanList,
+  tanggal_penerimaan,
+  id_supplier,
+  nama_supplier,
+  pembelian_code
+) => {
+  
+  const res = await NET("POST", `penerimaanSupplier/add`, {
+    detailPenerimaanList,
+    tanggal_penerimaan,
+    id_supplier,
+    nama_supplier,
+    pembelian_code
+  })
+  
+  return res
+  
+}
+export const updatePenenrimaanSuplier = async (
+  detailPenerimaanList,
+  tanggal_penerimaan,
+  id_supplier,
+  nama_supplier,
+  pembelian_code,id) => {
+  
+   
+  const res = await NET("POST", `penerimaanSupplier/update`, {
+    detailPenerimaanList,
+  tanggal_penerimaan,
+  id_supplier,
+  nama_supplier,
+  pembelian_code,id
+  })
+  
+  return res
+  
+}
+export const deletePenenrimaanSuplier = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `penerimaanSupplier/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const getPenenrimaanSuplier = async () => {
+
+  const res = await NET("GET", `penerimaanSupplier/all`, {})
+  
+  return res
+  
+}
+export const getPenenrimaanSuplierSearch = async (search) => {
+
+  const res = await NET("GET", `penerimaanSupplier/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const uploadPenenrimaanSuplier = async (file) => {
+  const formData = new FormData();  
+    formData.append('file',file)
+  const res = await NET("POST", `penerimaanSupplier/import`, formData, '', '',true)
+  
+  return res
+  
+}
+
+//Penyimpanan keluar
+
+export const addPenyimpananKeluar = async (
+  detail_pengiriman,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan
+) => {
+  
+  const res = await NET("POST", `penyimpananKeluar/add`, {
+    detail_pengiriman,
+    tanggal_pengiriman,
+    id_store_asal,
+    lokasi_store_asal,
+    id_store_tujuan,
+    lokasi_store_tujuan
+  })
+  
+  return res
+  
+}
+export const updatePenyimpananKeluar = async (
+  detail_pengiriman,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,id) => {
+  
+   
+  const res = await NET("POST", `penyimpananKeluar/update`, {
+    detail_pengiriman,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,id
+  })
+  
+  return res
+  
+}
+export const deletePenyimpananKeluar = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `penyimpananKeluar/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const getPenyimpananKeluar = async () => {
+
+  const res = await NET("GET", `penyimpananKeluar/all`, {})
+  
+  return res
+  
+}
+export const getPenyimpananKeluarSearch = async (search) => {
+
+  const res = await NET("GET", `penyimpananKeluar/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+
+//Penyimpanan Masuk
+
+export const addPenyimpananMasuk = async (
+  detail_pengiriman,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan
+) => {
+  
+  const res = await NET("POST", `penyimpananMasuk/add`, {
+    detail_pengiriman,
+    tanggal_pengiriman,
+    id_store_asal,
+    lokasi_store_asal,
+    id_store_tujuan,
+    lokasi_store_tujuan
+  })
+  
+  return res
+  
+}
+export const updatePenyimpananMasuk = async (
+  detail_pengiriman,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,id) => {
+  
+   
+  const res = await NET("POST", `penyimpananMasuk/update`, {
+    detail_pengiriman,
+  tanggal_pengiriman,
+  id_store_asal,
+  lokasi_store_asal,
+  id_store_tujuan,
+  lokasi_store_tujuan,id
+  })
+  
+  return res
+  
+}
+export const deletePenyimpananMasuk = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `penyimpananMasuk/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const getPenyimpananMasuk = async () => {
+
+  const res = await NET("GET", `penyimpananMasuk/all`, {})
+  
+  return res
+  
+}
+export const getPenyimpananMasukSearch = async (search) => {
+
+  const res = await NET("GET", `penyimpananMasuk/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+
+//Stock Opname
+
+export const addStockOpname = async (
+  artikel,
+  kategori,
+  nama_barang,
+  nama_kategori,
+  sku_code,
+  stock_opname,
+  type,
+  type_name
+) => {
+  const formData = new FormData();  
+    formData.append('artikel',artikel)
+    formData.append('kategori',kategori)
+    formData.append('nama_barang',nama_barang)
+    formData.append('nama_kategori',nama_kategori)
+    formData.append('sku_code',sku_code)
+    formData.append('stock_opname',stock_opname)
+    formData.append('type',type)
+    formData.append('type_name',type_name)
+  const res = await NET("POST", `stockOpname/add`, formData)
+  
+  return res
+  
+}
+export const updateStockOpnameMasuk = async (
+  artikel,
+  kategori,
+  nama_barang,
+  nama_kategori,
+  sku_code,
+  stock_opname,
+  type,
+  type_name,
+  id
+  ) => {
+    const formData = new FormData();  
+    formData.append('artikel',artikel)
+    formData.append('kategori',kategori)
+    formData.append('nama_barang',nama_barang)
+    formData.append('nama_kategori',nama_kategori)
+    formData.append('sku_code',sku_code)
+    formData.append('stock_opname',stock_opname)
+    formData.append('type',type)
+    formData.append('type_name',type_name)
+    formData.append('id',id)
+   
+  const res = await NET("POST", `stockOpname/update`, formData)
+  
+  return res
+  
+}
+export const deleteStockOpnameMasuk = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `stockOpname/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const getStockOpnameMasuk = async () => {
+
+  const res = await NET("GET", `stockOpname/all`, {})
+  
+  return res
+  
+}
+export const getStockOpnameSearch = async (search) => {
+
+  const res = await NET("GET", `stockOpname/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+
+//Retur Gudang
+
+export const addReturGudang = async (
+  detail_pengiriman,
+  tanggal_retur,
+  id_store_asal,
+  lokasi_store_asal,
+  id_office_tujuan,
+  lokasi_office_tujuan
+) => {
+ 
+  const res = await NET("POST", `returGudang/add`, 
+  {detail_pengiriman,
+    tanggal_retur,
+    id_store_asal,
+    lokasi_store_asal,
+    id_office_tujuan,
+    lokasi_office_tujuan})
+  
+  return res
+  
+}
+export const updateReturGudang = async (
+  detail_pengiriman,
+  tanggal_retur,
+  id_store_asal,
+  lokasi_store_asal,
+  id_office_tujuan,
+  lokasi_office_tujuan,
+  pengiriman_code,
+  id
+  ) => {
+ 
+   
+  const res = await NET("POST", `returGudang/update`, 
+    {
+      detail_pengiriman,
+      tanggal_retur,
+      id_store_asal,
+      lokasi_store_asal,
+      id_office_tujuan,
+      lokasi_office_tujuan,
+      pengiriman_code,
+      rowstatus:1,
+      id
+    }
+  )
+  
+  return res
+  
+}
+export const deleteReturGudang = async (id) => {
+  // const formData = new FormData();  
+  //   formData.append('id',id)
+  //   formData.append('kategori_name',kategori_name)
+  const res = await NET("GET", `returGudang/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const getReturGudang = async () => {
+
+  const res = await NET("GET", `returGudang/all`, {})
+  
+  return res
+  
+}
+export const getReturGudangSearch = async (search) => {
+
+  const res = await NET("GET", `returGudang/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+
+//pembelian
+
+export const getPembelian = async (search) => {
+
+  const res = await NET("GET", `pembelian/getPembelian?pembelian_code=${search}`, {})
   
   return res
   
