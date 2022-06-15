@@ -24,10 +24,10 @@ const ModalPenerimaanUpdateOfficekeStore =(props)=>{
    const [listDetail,setListDetail] = useState([])
    const data = props?.data
    useEffect(()=>{
-     console.log({data})
+     
        setTanggal_pengiriman(moment(new Date(data?.tanggal_penerimaan)).format('YYYY-MM-DD'))
        setId_office(data?.id_office)
-       setPengiriman(data?.pengiriman_code)
+       setPengiriman(data?.retur_code)
        setUkuran('')
        setListDetail(data?.detailPenerimaanList) 
        setDetail('')

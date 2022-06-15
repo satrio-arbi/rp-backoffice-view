@@ -25,6 +25,7 @@ const ModalEditSupplier =(props)=>{
    const [pengiriman,setPengiriman] = useState('')
    const [nama_supplier,setNama_supplier] = useState('')
    const data = props?.data
+  //  console.log({supl:'sss',data})
    useEffect(()=>{
        setTanggal_pengiriman(moment(data?.tanggal_penerimaan).format('YYYY-MM-DD'))
        setId_office('')
@@ -36,6 +37,7 @@ const ModalEditSupplier =(props)=>{
        setArticle('')
        setId_store('')
        setKuantitas('')
+       setDetail(data)
    },[props?.open])
    const getSKU = async (e)=>{
      

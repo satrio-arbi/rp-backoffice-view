@@ -14,7 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
 import ModalPenerimaanAddStoreOffice from '../../Component/modal/Modal-AddPenerimaStorekeOffice-Component'
-import ModalPenerimaanUpdateStorekeOffice from '../../Component/modal/Modal-AddPenerimaanStorekeStore-Component'
+import ModalPenerimaanUpdateStorekeOffice from '../../Component/modal/Modal-EditPenerimaanStorekeOffice-Component'
 
 import ModalUploadKategori from '../../Component/modal/Modal-UploadKategori-Component'
 import Paper from '@mui/material/Paper';

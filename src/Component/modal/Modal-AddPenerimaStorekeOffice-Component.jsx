@@ -44,7 +44,7 @@ const ModalPenerimaanAddOfficeStore =(props)=>{
      // console.log({a:res?.data[0]?.detailPengirimanList,b:res?.data})
      setDetail(res?.data)
        let arr = []
-       res?.data[0]?.detailPengirimanList?.map((d,i)=>{
+       res?.data[0]?.detail_pengiriman?.map((d,i)=>{
          arr.push({
            id:d?.id,
            sku_code:d?.sku_code,
@@ -152,7 +152,7 @@ const ModalPenerimaanAddOfficeStore =(props)=>{
                                disable={false}
                                // type='date'
                                onKeyPress={(e)=>getSKU(e)}
-                               label={'Kode Pengiriman'}
+                               label={'Kode Retur Gudang'}
                                onChange={(v)=>setPengiriman(v?.target?.value)}
                                style={{width:'100%'}}
                                />

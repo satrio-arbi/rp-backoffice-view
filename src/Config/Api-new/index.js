@@ -771,7 +771,7 @@ export const deletePenenrimaanOffice = async (id) => {
   // const formData = new FormData();  
   //   formData.append('id',id)
   //   formData.append('kategori_name',kategori_name)
-  const res = await NET("GET", `penerimaanFromOffice/delete?penerimaan_code=${id}`, {})
+  const res = await NET("GET", `penerimaanFromOffice/delete?id=${id}`, {})
   
   return res
   
@@ -810,7 +810,15 @@ export const addPenenrimaanStoreOffice = async (
   lokasi_store,
   retur_code
 ) => {
-
+console.log({
+  detailPenerimaanList,
+  tanggal_penerimaan,
+  id_office,
+  lokasi_office,
+  id_store,
+  lokasi_store,
+  retur_code
+})
   const res = await NET("POST", `penerimaanStore/add`, {
     detailPenerimaanList,
     tanggal_penerimaan,
@@ -989,7 +997,11 @@ export const addPenenrimaanSuplier = async (
   nama_supplier,
   pembelian_code
 ) => {
-  
+  console.log({ detailPenerimaanList,
+    tanggal_penerimaan,
+    id_supplier,
+    nama_supplier,
+    pembelian_code})
   const res = await NET("POST", `penerimaanSupplier/add`, {
     detailPenerimaanList,
     tanggal_penerimaan,
@@ -1006,15 +1018,27 @@ export const updatePenenrimaanSuplier = async (
   tanggal_penerimaan,
   id_supplier,
   nama_supplier,
-  pembelian_code,id) => {
-  
+  pembelian_code,
+  penerimaan_code,
+  id) => {
+  // console.log({detailPenerimaanList,
+  //   tanggal_penerimaan,
+  //   id_supplier,
+  //   nama_supplier,
+  //   pembelian_code,
+  //   penerimaan_code,
+  //   rowstatus:1,
+  //   id})
    
   const res = await NET("POST", `penerimaanSupplier/update`, {
     detailPenerimaanList,
   tanggal_penerimaan,
   id_supplier,
   nama_supplier,
-  pembelian_code,id
+  pembelian_code,
+  penerimaan_code,
+  rowstatus:1,
+  id
   })
   
   return res

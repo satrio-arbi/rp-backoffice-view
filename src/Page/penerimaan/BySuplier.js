@@ -116,6 +116,10 @@ const headCells = [
       label: "Supplier",
       disablePadding: true,
       numeric: false,
+    },
+    {
+      id: "aksi",
+      label: "Aksi",
     }
 ];
 
@@ -258,7 +262,7 @@ export default function PengirimanStoreStore() {
       tanggal_pengiriman,
       id_supplier,
       nama_supplier,
-      pengiriman,toBeSelected?.id)
+      pengiriman,toBeSelected?.penerimaan_code,toBeSelected?.id)
     if(res?.status){
       alertSuccess('Success',res?.data)
       getAllKategori()
@@ -529,7 +533,7 @@ export default function PengirimanStoreStore() {
                       <TableCell align="left">{row.nama_supplier}</TableCell>
                      
                       
-                      {/* <TableCell align="right">
+                      <TableCell align="right">
                       <div style={{
                         
                       }}>
@@ -539,7 +543,7 @@ export default function PengirimanStoreStore() {
                           <RemoveRedEyeOutlinedIcon />
                         </IconButton>
                       </div>
-                        </TableCell> */}
+                        </TableCell>
                     </TableRow>
                   );
                 })}
@@ -568,7 +572,7 @@ export default function PengirimanStoreStore() {
     </Box>
     <ModalEditSupplier
     open={openDetail}
-    // data={toBeSelected}
+    data={toBeSelected}
     // store={dataToko}
     // ukuran={ukuran}
     detail={detail}
