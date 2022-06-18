@@ -147,7 +147,7 @@ const ModaEditReturGudang =(props)=>{
        overflow: "hidden",
          overflowY: "scroll",
        transform: 'translate(-50%, -50%)',
-       width: 1000,
+       width: '90%',
        height:500,
        bgcolor: 'background.paper',
        border: '2px solid #000',
@@ -373,7 +373,7 @@ const ModaEditReturGudang =(props)=>{
                                }}>Delete</th>
                            </tr>
                            <tbody>
-                             {listDetail.map((d,i)=>{return(
+                             {listDetail?.map((d,i)=>{return(
                                <>
                              {d?.id&&d?.rowstatus!==0?
                                <tr key={i}>

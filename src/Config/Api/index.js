@@ -123,7 +123,7 @@ const logoutEvent = () => {
   
 	if(typeof window === 'undefined') return;
 	localStorage.clear()
-	// window.location.href = "/";
+	window.location.href = "/";
   }
 const defaultHeaders = {
 	'Content-Type': 'application/json',

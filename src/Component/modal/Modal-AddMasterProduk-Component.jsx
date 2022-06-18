@@ -83,7 +83,7 @@ const ModalAddMasterProduk =(props)=>{
                 transform: 'translate(-50%, -50%)',
                 overflow: "hidden",
                 overflowY: "scroll",
-                width: 700,
+                width: '90%',
                 height:500,
                 bgcolor: 'background.paper',
                 border: '2px solid #000',

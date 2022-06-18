@@ -131,7 +131,7 @@ const ModalPenerimaanAddSupplier =(props)=>{
        overflow: "hidden",
          overflowY: "scroll",
        transform: 'translate(-50%, -50%)',
-       width: 1000,
+       width: '90%',
        height:500,
        bgcolor: 'background.paper',
        border: '2px solid #000',

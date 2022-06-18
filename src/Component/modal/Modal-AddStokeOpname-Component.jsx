@@ -104,13 +104,13 @@ const ModalAddStokeOpname =(props)=>{
         overflow: "hidden",
           overflowY: "scroll",
         transform: 'translate(-50%, -50%)',
-        width: 1000,
+        width: '90%',
         height:500,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Add Pengiriman Store ke Store</h2>
+                <h2 id="parent-modal-title">Add Stock Opname</h2>
                 <div>
                     {/* <p>Tanggal Pengiriman</p> */}
                    
