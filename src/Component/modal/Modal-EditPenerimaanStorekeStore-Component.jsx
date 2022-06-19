@@ -43,6 +43,8 @@ const ModalPenerimaanAddStorekeStore =(props)=>{
       let res = await getPengirimanStorekeStoreSearch(pengiriman)
       // console.log({a:res?.data[0]?.detailPengirimanList,b:res?.data})
       setDetail(res?.data)
+      setId_store_asal(res?.data[0]?.id_store_asal)
+      setId_store_tujuan(res?.data[0]?.id_store_tujuan)
         let arr = []
         res?.data[0]?.detailPengirimanList?.map((d,i)=>{
           arr.push({

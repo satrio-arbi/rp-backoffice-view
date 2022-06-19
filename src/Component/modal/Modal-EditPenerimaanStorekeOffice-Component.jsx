@@ -43,6 +43,8 @@ const ModalPenerimaanUpdateOfficekeStore =(props)=>{
      let res = await getReturGudangSearch(pengiriman)
      // console.log({a:res?.data[0]?.detailPengirimanList,b:res?.data})
      setDetail(res?.data)
+     setId_store(res?.data[0]?.id_store_asal)
+     setId_office(res?.data[0]?.id_office_tujuan)
        let arr = []
        res?.data[0]?.detailPengirimanList?.map((d,i)=>{
          arr.push({

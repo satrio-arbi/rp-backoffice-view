@@ -232,7 +232,7 @@ const ModalAddOfficeStore =(props)=>{
                             id="demo-simple-select"
                             value={ukuran}
                             label="Select Toko Tujuan"
-                            onChange={(v)=>{ukuran(v?.target?.value)}}
+                            onChange={(v)=>{setUkuran(v?.target?.value)}}
                           >
                             {props?.ukuran?.map((d,i)=>{
                               return(

@@ -44,6 +44,8 @@ const ModalPenerimaanAddOfficeStore =(props)=>{
       // console.log({a:res?.data[0]?.detailPengirimanList,b:res?.data})
       setDetail(res?.data)
         let arr = []
+        setId_store(res?.data[0]?.id_store)
+        setId_office(res?.data[0]?.id_office)
         res?.data[0]?.detailPengirimanList?.map((d,i)=>{
           arr.push({
             id:d?.id,
