@@ -451,16 +451,16 @@ export const updateProduk = async (
     formData.append('kategori',kategori)
     formData.append('type',type)
     formData.append('kuantitas',kuantitas)
-    formData.append('artikel_produk',artikel_produk)
+    formData.append('artikel_product',artikel_produk)
     formData.append('artikel_frame',artikel_frame)
-    formData.append('nama_produk',nama_produk)
+    formData.append('nama_product',nama_produk)
     formData.append('artikel_lens',artikel_lens)
     formData.append('harga_jual',harga_jual)
     formData.append('sku_code',sku_code)
     formData.append('remarks',remarks)
     formData.append('nama_kategori',nama_kategori)
     formData.append('image',image)
-  const res = await NET("POST", `api/auth/updateUser`, formData)
+  const res = await NET("POST", `master/product/update`, formData)
   
   return res
   

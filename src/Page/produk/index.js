@@ -568,7 +568,7 @@ export default function MasterKatgori() {
            />
            <Button
                 style={{
-                    background: "#03fc35",
+                    background: "#FFA500",
                     color: 'white',
                     textTransform: 'capitalize',
                     marginRight:"15px",
@@ -576,7 +576,7 @@ export default function MasterKatgori() {
                     padding:"1em",
                     borderRadius:"14px"
                 }}
-                label="Add Costum"
+                label="Add custom"
                 onClick={()=>setModalCostum(true)}
                 startIcon={<AddIcon/>}
            />

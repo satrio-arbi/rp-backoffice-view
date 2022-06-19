@@ -143,7 +143,7 @@ import {
                  boxShadow: 24,
                  p: 4, 
          }}>
-                 <h2 id="parent-modal-title">Add Master Produk Costum</h2>
+                 <h2 id="parent-modal-title">Add Master Produk Custom </h2>
                  <div>
                  <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
                            <InputLabel id="demo-simple-select-label">Select Type</InputLabel>
