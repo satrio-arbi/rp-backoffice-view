@@ -135,20 +135,8 @@ const headCells = [
       numeric: false,
     },
     {
-      id: "alamat_store",
-      label: "Alamat Store",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
       id: "office",
       label: "Office",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "alamat_office",
-      label: "Alamat Office",
       disablePadding: true,
       numeric: false,
     },
@@ -633,14 +621,11 @@ export default function MasterKatgori() {
                       <TableCell align="left">{row.tanggal_lahir}</TableCell>
                       <TableCell align="left">{row.tanggal_join}</TableCell>
                       <TableCell align="left">{convertStore(row.id_store)}</TableCell>
-                      <TableCell align="left">{row.lokasi_store}</TableCell>
                       <TableCell align="left">{convertOffice(row.id_office)}</TableCell>
-                      <TableCell align="left">{row.lokasi_office}</TableCell>
                       <TableCell align="left">{row.total_transaksi}</TableCell>
                       <TableCell align="left"><img src={convertImage(row.image)} width="50px" height="50px" /></TableCell>
                       <TableCell align="right">
                       <div style={{
-                        
                       }}>
                       <IconButton onClick={()=>{
                         handleOpenDetail(row)
