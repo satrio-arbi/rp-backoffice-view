@@ -84,7 +84,7 @@ const ModalAddMasterProduk =(props)=>{
                 overflow: "hidden",
                 overflowY: "scroll",
                 width: '90%',
-                height:500,
+                height:'90%',
                 bgcolor: 'background.paper',
                 border: '2px solid #000',
                 boxShadow: 24,
