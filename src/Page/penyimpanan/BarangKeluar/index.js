@@ -581,6 +581,7 @@ export default function BarangKeluar() {
    open={modal}
    submit ={(start,end)=>donwloadReport(start,end)}
    title={'Penyimpanan Keluar'}
+   onClickOpen = {()=>setModal(!modal)}
     />
      <ModalUploadKategori 
     open={modalUplaod}

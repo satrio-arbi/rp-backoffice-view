@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -40,7 +41,8 @@ import Gap from '../../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../../Config/Redux/action';
 import {alertSuccess} from '../../../Component/alert/sweetalert'
-import {getUkuran,addPengirimanStorekeStore,getStore,getPengirimanStorekeStore,getPengirimanStorekeStoreSearch,updatePengirimanStorekeStore,deletePengirimanStorekeStore} from '../../../Config/Api-new'
+import ModalDownloadReport from '../../../Component/modal/Modal-DownloadReport-Component'
+import {geReportPengirimanStoretoStore,getUkuran,addPengirimanStorekeStore,getStore,getPengirimanStorekeStore,getPengirimanStorekeStoreSearch,updatePengirimanStorekeStore,deletePengirimanStorekeStore} from '../../../Config/Api-new'
 import { set } from 'date-fns/esm';
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -202,6 +204,7 @@ export default function PengirimanStoreStore() {
   const [dataToko,setDataToko] = React.useState([]);
   const [detailToko,setDetailToko] = React.useState([]);
   const [modal, setModal] = React.useState();
+  const [modalReport, setModalReport] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
   const [detail, setDetail] = React.useState([]);
   useEffect(()=>{
@@ -249,6 +252,16 @@ export default function PengirimanStoreStore() {
     }
     getAllKategori()
     alertSuccess('Success','Success delete data')
+  }
+  const donwloadReport =async(start,end)=>{
+    setModal(false)
+    let res = await geReportPengirimanStoretoStore(start,end)
+    if(res?.status){
+      // ,res?.data
+      alertSuccess('Success')
+      // getAllKategori()
+    }
+    console.log({res:res})
   }
   const submitUpdateKategori =async( detail_pengiriman,
     tanggal_pengiriman,
@@ -418,6 +431,20 @@ export default function PengirimanStoreStore() {
                  display:"flex"
              }}
             >
+               <Button
+                style={{
+                    background: "#0384fc",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                onClick={()=>setModalReport(true)}
+                label="Report"
+                startIcon={<SummarizeIcon/>}
+           />
             <Button
                 style={{
                     background: "#E14C4C",
@@ -582,6 +609,12 @@ export default function PengirimanStoreStore() {
         id_store_tujuan,
         lokasi_store_tujuan)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
+    />
+    <ModalDownloadReport 
+    open={modalReport}
+    submit ={(start,end)=>donwloadReport(start,end)}
+    title={'Pengiriman Store to Store'}
+    onClickOpen = {()=>setModalReport(!modalReport)}
     />
     <ModalAddStorekeStore 
     open={modal}

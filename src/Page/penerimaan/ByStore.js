@@ -29,6 +29,7 @@ import { visuallyHidden } from '@mui/utils';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Button from '../../Component/button/index'
 import Input from '../../Component/input/index'
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search'
@@ -40,7 +41,8 @@ import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess} from '../../Component/alert/sweetalert'
-import {getOffice,getUkuran,addPenenrimaanStore,getStore,getPenenrimaanStore,getPenenrimaanStoreSearch,updatePenerimaanOffice,deletePenenrimaanStore} from '../../Config/Api-new'
+import ModalDownloadReport from '../../Component/modal/Modal-DownloadReport-Component'
+import {geReportPenerimaanFromStore,getOffice,getUkuran,addPenenrimaanStore,getStore,getPenenrimaanStore,getPenenrimaanStoreSearch,updatePenerimaanOffice,deletePenenrimaanStore} from '../../Config/Api-new'
 import { set } from 'date-fns/esm';
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -204,6 +206,7 @@ export default function PengirimanStoreStore() {
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
   const [detail, setDetail] = React.useState([]);
+  const [modalReport, setModalReport] = React.useState();
   const [dataOffice,setDataOffice] = React.useState([])
   useEffect(()=>{
     getAllKategori()
@@ -288,6 +291,16 @@ export default function PengirimanStoreStore() {
     let idx = dataOffice?.findIndex(a=>a.id==v)
     
     return dataOffice?dataOffice[idx]?.office_name:''
+  }
+  const donwloadReport =async(start,end)=>{
+    setModal(false)
+    let res = await geReportPenerimaanFromStore(start,end)
+    if(res?.status){
+      // ,res?.data
+      alertSuccess('Success')
+      // getAllKategori()
+    }
+    console.log({res:res})
   }
   const getAllKategori =async()=>{
     
@@ -431,6 +444,20 @@ export default function PengirimanStoreStore() {
                  display:"flex"
              }}
             >
+               <Button
+                style={{
+                    background: "#0384fc",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                onClick={()=>setModalReport(true)}
+                label="Report"
+                startIcon={<SummarizeIcon/>}
+           />
             <Button
                 style={{
                     background: "#E14C4C",
@@ -577,6 +604,12 @@ export default function PengirimanStoreStore() {
         />
       </Paper>
     </Box>
+    <ModalDownloadReport 
+    open={modalReport}
+    submit ={(start,end)=>donwloadReport(start,end)}
+    title={'Penerimaan Store'}
+    onClickOpen = {()=>setModalReport(!modalReport)}
+    />
     <ModalEditPenerimaanStorekeStore
     open={openDetail}
     data={toBeSelected}

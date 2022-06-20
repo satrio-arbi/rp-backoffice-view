@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -39,7 +40,8 @@ import Gap from '../../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../../Config/Redux/action';
 import {alertSuccess} from '../../../Component/alert/sweetalert'
-import {addPengirimanOfficekeStore,getUkuran,getStore,getOffice,getPengirimanOfficekeStore,getPengirimanOfficekeStoreSearch,updatePengirimanOfficekeStore,deletePengirimanOfficekeStore} from '../../../Config/Api-new'
+import ModalDownloadReport from '../../../Component/modal/Modal-DownloadReport-Component'
+import {geReportPengirimanOfficetoStore,addPengirimanOfficekeStore,getUkuran,getStore,getOffice,getPengirimanOfficekeStore,getPengirimanOfficekeStoreSearch,updatePengirimanOfficekeStore,deletePengirimanOfficekeStore} from '../../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -202,6 +204,7 @@ export default function PengirimanOfficeStore() {
   const [dataOffice,setDataOffice] = React.useState([]);
   const [ukuran,setUkuran] = React.useState([]);
   const [detail, setDetail] = React.useState([]);
+  const [modalReport, setModalReport] = React.useState();
   useEffect(()=>{
     getAllKategori()
   },[])
@@ -258,6 +261,16 @@ export default function PengirimanOfficeStore() {
     if(res?.status){
       alertSuccess('Success',res?.data)
       getAllKategori()
+    }
+    console.log({res:res})
+  }
+  const donwloadReport =async(start,end)=>{
+    setModal(false)
+    let res = await geReportPengirimanOfficetoStore(start,end)
+    if(res?.status){
+      // ,res?.data
+      alertSuccess('Success')
+      // getAllKategori()
     }
     console.log({res:res})
   }
@@ -407,6 +420,20 @@ export default function PengirimanOfficeStore() {
                  display:"flex"
              }}
             >
+               <Button
+                style={{
+                    background: "#0384fc",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                onClick={()=>setModalReport(true)}
+                label="Report"
+                startIcon={<SummarizeIcon/>}
+           />
             <Button
                 style={{
                     background: "#E14C4C",
@@ -585,6 +612,12 @@ export default function PengirimanOfficeStore() {
         id_store,
         lokasi_store)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
+    />
+    <ModalDownloadReport 
+    open={modalReport}
+    submit ={(start,end)=>donwloadReport(start,end)}
+    title={'Pengiriman Office to Store'}
+    onClickOpen = {()=>setModalReport(!modalReport)}
     />
     <ModalAddPengirimanOfficeStore 
     open={modal}

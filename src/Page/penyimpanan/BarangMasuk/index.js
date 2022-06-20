@@ -563,7 +563,7 @@ export default function BarangMasuk() {
     open={modal}
     submit ={(start,end)=>donwloadReport(start,end)}
     title={'Penyimpanan Masuk'}
-    // onClickOpen = {()=>setModal(!modal)}
+    onClickOpen = {()=>setModal(!modal)}
     />
      <ModalUploadKategori 
     open={modalUplaod}

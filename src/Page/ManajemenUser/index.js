@@ -535,14 +535,14 @@ export default function MasterKatgori() {
                        onChange={()=>{}} 
                        onClick={(e)=>checkSingle(row,index)}/>
                        </TableCell>
-                      <TableCell align="left">{row.id}</TableCell>
-                      <TableCell align="left">{row.userName}</TableCell>
-                      <TableCell align="left">{row.firstName} {row.lastName}</TableCell>
-                      <TableCell align="left">{row.email}</TableCell>
-                      <TableCell align="left">{row.phoneNumber}</TableCell>
-                      <TableCell align="left">{row.lokasi_office}</TableCell>
-                      <TableCell align="left">{row.lokasi_store}</TableCell>
-                      <TableCell align="left">{row.createdAt.replace('T',' ').split('.')[0]}</TableCell>
+                      <TableCell align="left">{row?.id}</TableCell>
+                      <TableCell align="left">{row?.userName}</TableCell>
+                      <TableCell align="left">{row?.firstName} {row?.lastName}</TableCell>
+                      <TableCell align="left">{row?.email}</TableCell>
+                      <TableCell align="left">{row?.phoneNumber}</TableCell>
+                      <TableCell align="left">{row?.lokasi_office}</TableCell>
+                      <TableCell align="left">{row?.lokasi_store}</TableCell>
+                      <TableCell align="left">{row?.createdAt?row?.createdAt?.replace('T',' ')?.split('.')[0]:null}</TableCell>
                       
                       <TableCell align="right">
                       <div style={{
