@@ -4,6 +4,7 @@ import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
@@ -13,7 +14,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddKategori from '../../../Component/modal/Modal-AddKategori-Component'
+import ModalDownloadReport from '../../../Component/modal/Modal-DownloadReport-Component'
 import ModalUpdateKategori from '../../../Component/modal/Modal-UpdateKategori-Component'
 import ModalUploadKategori from '../../../Component/modal/Modal-UploadKategori-Component'
 import Paper from '@mui/material/Paper';
@@ -39,7 +40,7 @@ import Gap from '../../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../../Config/Redux/action';
 import {alertSuccess} from '../../../Component/alert/sweetalert'
-import {getUkuran,getProduk,addKategori,getOffice,getPenyimpananKeluar,getPenyimpananKeluarSearch,updateKategori,deletePenyimpananKeluar} from '../../../Config/Api-new'
+import {getUkuran,geReportBarangKeluar,addKategori,getOffice,getPenyimpananKeluar,getPenyimpananKeluarSearch,updateKategori,deletePenyimpananKeluar} from '../../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -235,12 +236,13 @@ export default function BarangKeluar() {
   useEffect(()=>{
     getAllKategori()
   },[])
-  const submitKategori =async(name)=>{
+  const donwloadReport =async(start,end)=>{
     setModal(false)
-    let res = await addKategori(name)
+    let res = await geReportBarangKeluar(start,end)
     if(res?.status){
-      alertSuccess('Success',res?.data)
-      getAllKategori()
+      // ,res?.data
+      alertSuccess('Success')
+      // getAllKategori()
     }
     console.log({res:res})
   }
@@ -388,6 +390,20 @@ export default function BarangKeluar() {
                  display:"flex"
              }}
             >
+               <Button
+                style={{
+                    background: "#0384fc",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                onClick={()=>setModal(true)}
+                label="Report"
+                startIcon={<SummarizeIcon/>}
+           />
             {/* <Button
                 style={{
                     background: "#E14C4C",
@@ -560,16 +576,16 @@ export default function BarangKeluar() {
     submit ={(name)=>submitUpdateKategori(name)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <ModalAddKategori 
-    open={modal}
-    ukuran={ukuran}
-    submit ={(name)=>submitKategori(name)}
-    onClickOpen = {()=>setModal(!modal)}
+    
+    <ModalDownloadReport 
+   open={modal}
+   submit ={(start,end)=>donwloadReport(start,end)}
+   title={'Penyimpanan Keluar'}
     />
      <ModalUploadKategori 
     open={modalUplaod}
     mutate={()=>getAllKategori()}
-    submit ={(name)=>submitKategori(name)}
+    submit ={(name)=>donwloadReport(name)}
     onClickOpen = {()=>setModalUplaod(!modalUplaod)}
     />
     </div>

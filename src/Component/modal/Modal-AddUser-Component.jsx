@@ -179,6 +179,7 @@ const ModalAddUser =(props)=>{
                         <Selects 
                         onChange={(v)=>change(v)}
                         value={menu}
+                        placeholder={'Menu'}
                         isMulti
                         options={props?.menu}
                         />

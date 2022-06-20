@@ -1373,3 +1373,95 @@ export const getPembelian = async (search) => {
   return res
   
 }
+
+//report 
+export const geReportBarangMasuk = async (start,end) => {
+
+  const res = await NET("GET", `report/penyimpananMasuk?date_from=${start}&date_to=${end}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `barang_masuk_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportBarangKeluar = async (start,end) => {
+
+  const res = await NET("GET", `report/penyimpananKeluar?date_from=${start}&date_to=${end}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `barang_keluar_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportPengirimanStoretoStore = async (start,end) => {
+
+  const res = await NET("GET", `report/pengirimanStoreToStore?date_from=${start}&date_to=${end}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `pengiriman_store_to_store_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportPengirimanOfficetoStore = async (start,end) => {
+
+  const res = await NET("GET", `report/pengirimanGudangToStore?date_from=${start}&date_to=${end}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `pengiriman_office_to_store_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportPenerimaanFromStore = async (start,end) => {
+
+  const res = await NET("GET", `report/penerimaanByStore?date_from=${start}&date_to=${end}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `penerimaan_store_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportPenerimaanFromSupplier = async (start,end) => {
+
+  const res = await NET("GET", `report/penerimaanBySupplier?date_from=${start}&date_to=${end}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `penerimaan_supplier_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}

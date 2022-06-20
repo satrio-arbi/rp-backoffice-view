@@ -33,7 +33,8 @@ export const NET = async (tipe, url, data, token, pin, isMultipart, isStream) =>
       method : tipe,      
       url : (BASE_URL+url),      
       data,
-      responseType : (isStream)?"stream":"json",
+      // responseType : (isStream)?"stream":"json",\
+      responseType : (isStream)?isStream:"json",
       headers : {
         'Content-Type' : (isMultipart)?"multipart/form-data; boundary=awek":"application/json",
         // 'Authorization-pin' : pin,

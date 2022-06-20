@@ -109,7 +109,7 @@ const ModalUpdateUser =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Add User</h2>
+                <h2 id="parent-modal-title">Update User</h2>
                 <div>
                     {/* <p>Nama Kategori</p> */}
                     <Input 
@@ -195,6 +195,7 @@ const ModalUpdateUser =(props)=>{
                         <Selects 
                         onChange={(v)=>change(v)}
                         value={menu}
+                        placeholder={'Menu'}
                         isMulti
                         options={props?.menu}
                         />
