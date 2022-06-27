@@ -1,8 +1,9 @@
 
 import {
-   Modal,Box,Button
+   Modal,Box,Button,IconButton
   } from "@mui/material";
-  
+  import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
   import React,{useState,useEffect} from 'react';
   import Selects from 'react-select';
   import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -15,14 +16,18 @@ const ModalAddUser =(props)=>{
     const [password,setPassword] = useState('')
     const [phoneNumber,setPhoneNumber] = useState('')
     const [lokasi_office,setLokasi_office] = useState('')
+    const [showPassword, setShowPassword] = React.useState(false);
     const [lokasi_store,setLokasi_store] = useState('')
     const [akses_modul,setAkses_modul] = useState([])
+
     const [userName,setUserName] = useState('')
     const [id_store,setId_store] = useState('')
     const [id_office,setId_office] = useState('')
     const [email,setEmail] = useState('')
     const [menu,setMenu] = useState(null)
     const [menuOption,setMenuOption] = useState([])
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
     useEffect(()=>{
         setFirstName('')
         setLastName('')
@@ -135,8 +140,21 @@ const ModalAddUser =(props)=>{
                     value={password}
                     disable={false}
                     label={'password'}
-                    type='password'
+                    type={showPassword ? 'text' : 'password'}
                     onChange={(v)=>setPassword(v?.target?.value)}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                     style={{width:'100%',marginTop:10}}
                     />
                    

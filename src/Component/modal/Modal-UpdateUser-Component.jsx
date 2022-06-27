@@ -1,9 +1,11 @@
 
 import {
-   Modal,Box,Button
+   Modal,Box,Button,IconButton
   } from "@mui/material";
   
   import React,{useState,useEffect} from 'react';
+  import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
   import Selects from 'react-select';
   import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,20 +16,24 @@ const ModalUpdateUser =(props)=>{
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
     const [password,setPassword] = useState('')
+    const [showPassword, setShowPassword] = React.useState(false);
     const [phoneNumber,setPhoneNumber] = useState('')
     const [lokasi_office,setLokasi_office] = useState('')
     const [lokasi_store,setLokasi_store] = useState('')
     const [akses_modul,setAkses_modul] = useState([])
+    
     const [userName,setUserName] = useState('')
     const [id_store,setId_store] = useState('')
     const [id_office,setId_office] = useState('')
     const [email,setEmail] = useState('')
     const [menu,setMenu] = useState(null)
     const [menuOption,setMenuOption] = useState([])
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
     useEffect(()=>{
         setFirstName(data?.firstName)
         setLastName(data?.lastName)
-        setPassword(data?.password)
+        setPassword('')
         // setMenuOption([])
         // setMenu(null)
         setPhoneNumber(data?.phoneNumber)
@@ -151,9 +157,22 @@ const ModalUpdateUser =(props)=>{
                     value={password}
                     disable={false}
                     label={'password'}
-                    type='password'
+                    type={showPassword ? 'text' : 'password'}
                     onChange={(v)=>setPassword(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                     />
                    
                       <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
