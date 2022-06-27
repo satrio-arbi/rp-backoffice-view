@@ -11,7 +11,7 @@ import {
  import {getProduk, getProdukByType} from '../../Config/Api-new'
  const ModalAddMasterProdukCostum =(props)=>{
      const [ukuran,setUkuran] = useState('')
-     const [type_name,setType_name] = useState('')
+     const [custom,setCustom] = useState('')
      const [hpp,setHpp] = useState('')
      const [kategori,setKategori] = useState('')
      const [type,setType] = useState('')
@@ -62,6 +62,22 @@ import {
      useEffect(()=>{
         getFrame()
     },[sku_code_s,sku_code_f])
+    useEffect(()=>{
+      getArtProd()
+    },[artikel_lens_ns])
+    const getArtProd =()=>{
+      if(prodOption){
+          if(artikel_lens_ns!==''||artikel_lens_ns!==null){
+          let frm = frame?.findIndex(a=>a.value==artikel_frame_ns)
+          let lns = lens?.findIndex(a=>a.value==artikel_lens_ns)
+          let prd = prodOption?.findIndex(a=>a.id==sku_code_f)
+          let s = prodOption[prd]?.artikel_product?.substring(0, 4);
+          setArtikel_frame(frame[frm]?.label)
+          setArtikel_lens(lens[lns]?.label)
+          setArtikel_produk(s+frame[frm]?.label+lens[lns]?.label)
+        }
+      }
+    }
     const getFrame = (v) =>{
         let idx = prodOption?.findIndex(a=>a.id==sku_code_f)
         let idx1 = prodOption?.findIndex(a=>a.id==sku_code_s)
@@ -151,7 +167,7 @@ import {
                              labelId="demo-simple-select-label"
                              id="demo-simple-select"
                              value={type}
-                             label="Store"
+                             label="Select Type"
                              onChange={(v)=>{setType(v?.target?.value);}}
                            >
                              {props?.type?.map((d,i)=>{
@@ -243,13 +259,26 @@ import {
                          </FormControl>
                          </>:null
                          }
-                 <Input 
+                         <div style={{flexDirection: 'row' ,display: 'flex',width:'100%'}}>
+                         <div style={{width:'100%',marginRight:10}}>
+                      <Input 
                          value={artikel_produk}
                          disable={false}
                          label={'Produk Artikel'}
                          onChange={(v)=>setArtikel_produk(v?.target?.value)}
                          style={{width:'100%',marginTop:10}}
                          />
+                         </div>
+                         <div style={{width:'100%',marginRight:10}}>
+                         <Input 
+                         value={custom}
+                         disable={false}
+                         label={'Custom code'}
+                         onChange={(v)=>v?.target?.value.length>4?alert('Custom code tidak bisa lebih dari 4 karakter'):setCustom(v?.target?.value)}
+                         style={{width:'100%',marginTop:10}}
+                         />
+                         </div>
+                         </div>
                      <Input 
                          value={nama_produk}
                          disable={false}
@@ -376,7 +405,7 @@ import {
                              kategori,
                              type,
                              kuantitas,
-                             artikel_produk,
+                             artikel_produk+'-'+custom.toString(),
                              artikel_frame,
                              nama_produk,
                              artikel_lens,
