@@ -491,10 +491,14 @@ export default function PersistentDrawerLeft() {
                     }}>
                       <ListItemText primary="Master Ukuran" />
                     </ListItem>
-                    <ListItem>
+                    <ListItem onClick={() => {
+                      history.push('/master/store')
+                    }}>
                       <ListItemText primary="Master Store" />
                     </ListItem>
-                    <ListItem>
+                    <ListItem onClick={() => {
+                      history.push('/master/office')
+                    }}>
                       <ListItemText primary="Master Office" />
                     </ListItem>
                     <ListItem>

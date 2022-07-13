@@ -229,6 +229,34 @@ export const getStore = async () => {
   return res
   
 }
+export const getStoreSearch = async (search) => {
+
+  const res = await NET("GET", `master/store/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const getStoreAdd = async (data) => {
+
+  const res = await NET("POST", `master/store/add`, data)
+  
+  return res
+  
+}
+export const getStoreUpdate = async (data) => {
+
+  const res = await NET("POST", `master/store/update`, data)
+  
+  return res
+  
+}
+export const getStoreDelete = async (id) => {
+
+  const res = await NET("GET", `master/store/delete?id=${id}`, {})
+  
+  return res
+  
+}
 //office
 export const getOffice = async () => {
 
@@ -237,7 +265,34 @@ export const getOffice = async () => {
   return res
   
 }
+export const getOfficeSearch = async (search) => {
 
+  const res = await NET("GET", `master/office/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const getOfficeAdd = async (data) => {
+
+  const res = await NET("POST", `master/office/add`, data)
+  
+  return res
+  
+}
+export const getOfficeUpdate = async (data) => {
+
+  const res = await NET("POST", `master/office/update`, data)
+  
+  return res
+  
+}
+export const getOfficeDelete = async (id) => {
+
+  const res = await NET("GET", `master/office/delete?id=${id}`, {})
+  
+  return res
+  
+}
 //manajemen user
 export const addUser = async (
   firstName,

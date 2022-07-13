@@ -10,7 +10,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useDispatch } from 'react-redux';
 import { login } from '../../Config/Redux/action';
-
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 function Login(props) {
     const dispatch = useDispatch()
     const [showPassword, setShowPassword] = React.useState(false);
@@ -38,12 +38,21 @@ function Login(props) {
                     password:values.password
                 }
                 const resp = await dispatch(login(user))
+                console.log({resp:resp?.payload?.status})
                 if (resp.type === 'LOGIN_SUCCESS'){
+                    await alertSuccess('Success','Login berhasil !')
                     history.push('/dashboard')
                     window.location.reload()
                 }else{
-                    alert('gagal')
-                    console.log('ini login')
+                    if(resp?.payload?.status===401){
+                        await alertError('Fail','Username atau Password anda salah')
+                        return
+                    }else{
+                       await  alertError('Fail','Internal server error')
+                       return
+                    }
+                    // alert('gagal')
+                    // console.log('ini login')
                 }
                 setSubmitting(false);
             }}

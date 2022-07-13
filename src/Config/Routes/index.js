@@ -8,6 +8,8 @@ import FormPenjualanOffice from '../../Page/FormPenjualan';
 import Pembelian from '../../Page/pembelian';
 import MasterKatgori from '../../Page/MasterKategori';
 import MasterTipe from '../../Page/MasterTipe';
+import MasterStore from '../../Page/MasterStore';
+import MasterOffice from '../../Page/MasterOffice';
 import MasterUkuran from '../../Page/MasterUkuran';
 import Pelanggan from '../../Page/pelanggan';
 import Karyawan from '../../Page/karyawan';
@@ -65,6 +67,8 @@ function Routes() {
         <PrivateRoute exact path='/master/kategori' component={MasterKatgori}/>
         <PrivateRoute exact path='/master/tipe' component={MasterTipe}/>
         <PrivateRoute exact path='/master/ukuran' component={MasterUkuran}/>
+        <PrivateRoute exact path='/master/store' component={MasterStore}/>
+        <PrivateRoute exact path='/master/office' component={MasterOffice}/>
         <PrivateRoute exact path='/pelanggan' component={Pelanggan}/>
         <PrivateRoute exact path='/karyawan' component={Karyawan}/>
         <PrivateRoute exact path='/pemasok' component={Pemasok}/>
