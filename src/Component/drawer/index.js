@@ -433,32 +433,12 @@ export default function PersistentDrawerLeft() {
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
                     <ListItem onClick={() => {
-                      history.push('/master/kategori')
+                      history.push('/laporan/all')
                     }}>
-                      <ListItemText primary="Laporan Penjualan Store" />
+                      <ListItemText primary="Semua laporan" />
                     </ListItem>
                   </List>
-                  <List style={{cursor:"pointer"}}>
-                    <ListItem onClick={() => {
-                      history.push('/master/kategori')
-                    }}>
-                      <ListItemText primary="Laporan Penjualan Office" />
-                    </ListItem>
-                  </List>
-                  <List style={{cursor:"pointer"}}>
-                    <ListItem onClick={() => {
-                      history.push('/master/kategori')
-                    }}>
-                      <ListItemText primary="Laporan Best Article" />
-                    </ListItem>
-                  </List>
-                  <List style={{cursor:"pointer"}}>
-                    <ListItem onClick={() => {
-                      history.push('/master/kategori')
-                    }}>
-                      <ListItemText primary="Laporan Inventory" />
-                    </ListItem>
-                  </List>
+               
                 </AccordionDetails>
               </Accordion>
               <Accordion>
@@ -501,12 +481,23 @@ export default function PersistentDrawerLeft() {
                     }}>
                       <ListItemText primary="Master Office" />
                     </ListItem>
-                    <ListItem>
+                    <ListItem
+                     onClick={() => {
+                      history.push('/master/project')
+                    }}
+                    >
                       <ListItemText primary="Master Project" />
                     </ListItem>
-                    <ListItem>
-                      <ListItemText primary="Master Accessories" />
+                    <ListItem
+                     onClick={() => {
+                      history.push('/master/bank')
+                    }}
+                    >
+                      <ListItemText primary="Master Bank" />
                     </ListItem>
+                    {/* <ListItem>
+                      <ListItemText primary="Master Accessories" />
+                    </ListItem> */}
                   </List>
                 </AccordionDetails>
               </Accordion>

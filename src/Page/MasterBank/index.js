@@ -13,10 +13,9 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddPelanggan from '../../Component/modal/Modal-AddPelanggan-Component'
-import ModalUpdatePelanggan from '../../Component/modal/Modal-UpdatePelanggan-Component'
-import ModalUploadPelanggan from '../../Component/modal/Modal-UploadPelanggan-Component'
-import SummarizeIcon from '@mui/icons-material/Summarize';
+import ModalAddBank from '../../Component/modal/Modal-AddBank-Component'
+import ModalUpdateBank from '../../Component/modal/Modal-UpdateBank-Component'
+// import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -41,11 +40,7 @@ import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess} from '../../Component/alert/sweetalert'
 
-import {getPelanggan,getPelangganSearch,getPelangganAdd,
-  getPelangganUpdate,getPelangganDelete
-  ,
-  getDownloadPelanggan
-} from '../../Config/Api-new'
+import {getBank,getBankSearch,getBankAdd,getBankUpdate,getBankDelete} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -86,50 +81,26 @@ const headCells = [
       numeric: false,
     },
     {
+      id: "bank_name",
+      label: "Nama Bank",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "acc_number",
+      label: "Account Number",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "owner_name",
+      label: "Owner Name",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
       id: "alamat",
       label: "Alamat",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "email",
-      label: "Email",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "kuantitas",
-      label: "Kuantitas",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "nama_pelanggan",
-      label: "Nama pelanggan",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "no_hp",
-      label: "No Hp",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "pembelian",
-      label: "Pembelian",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "poin",
-      label: "Poin",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "total_kunjungan",
-      label: "Total kunjungan",
       disablePadding: true,
       numeric: false,
     },
@@ -217,24 +188,19 @@ export default function MasterKatgori() {
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
   useEffect(()=>{
-    getAllPelanggan()
+    getAllBank()
   },[])
-  const submitPelanggan =async(alamat,email,kuantitas,nama_pelanggan,
-    no_hp,pembelian,poin,total_kunjungan)=>{
+  const submitBank =async(acc_number,owner_name,bank_name,image)=>{
     setModal(false)
     const formData = new FormData();  
-    formData.append('alamat',alamat)
-    formData.append('email',email)
-    formData.append('kuantitas',kuantitas)
-    formData.append('nama_pelanggan',nama_pelanggan)
-    formData.append('no_hp',no_hp)
-    formData.append('pembelian',pembelian)
-    formData.append('poin',poin)
-    formData.append('total_kunjungan',total_kunjungan)
-    let res = await getPelangganAdd(formData)
+    formData.append('acc_number',acc_number)
+    formData.append('owner_name ',owner_name)
+    formData.append('bank_name',bank_name)
+    formData.append('image ',image)
+    let res = await getBankAdd(formData)
     if(res?.status){
       alertSuccess('Success',res?.data)
-      getAllPelanggan()
+      getAllBank()
     }
     console.log({res:res})
   }
@@ -244,38 +210,33 @@ export default function MasterKatgori() {
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
-      await getPelangganDelete(array[i]?.id)
+      await getBankDelete(parseInt(array[i]?.id))
     }
     
     
     }
-    getAllPelanggan()
+    getAllBank()
     alertSuccess('Success','Success delete data')
   }
-  const submitUpdatePelanggan =async(alamat,email,kuantitas,nama_pelanggan,
-    no_hp,pembelian,poin,total_kunjungan)=>{
+  const submitUpdateBank =async(acc_number,owner_name,bank_name,image)=>{
     setOpenDetail(false)
     settoBeSelected({})
     const formData = new FormData();  
-    formData.append('alamat',alamat)
-    formData.append('email',email)
-    formData.append('kuantitas',kuantitas)
-    formData.append('nama_pelanggan',nama_pelanggan)
-    formData.append('no_hp',no_hp)
-    formData.append('pembelian',pembelian)
-    formData.append('poin',poin)
-    formData.append('total_kunjungan',total_kunjungan)
+    formData.append('acc_number',acc_number)
+    formData.append('owner_name ',owner_name)
+    formData.append('bank_name',bank_name)
+    formData.append('image ',image)
     formData.append('id',toBeSelected?.id)
-    let res = await getPelangganUpdate(formData)
+    let res = await getBankUpdate(formData)
     if(res?.status){
       alertSuccess('Success',res?.data)
-      getAllPelanggan()
+      getAllBank()
     }
     console.log({res:res})
   }
-  const getAllPelanggan =async()=>{
+  const getAllBank =async()=>{
     
-    let res = await getPelanggan()
+    let res = await getBank()
     setData(res?.data)
     
   }
@@ -303,7 +264,7 @@ export default function MasterKatgori() {
   }
   const searching =async()=>{
     
-    let res = await getPelangganSearch(searched)
+    let res = await getBankSearch(searched)
     setData(res?.data)
     
   }
@@ -359,7 +320,10 @@ export default function MasterKatgori() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
- 
+  const convertImage = (v) => {
+    
+    return 'data:image/png;base64,'+v
+  };
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
@@ -372,22 +336,12 @@ export default function MasterKatgori() {
     const handleChangeSearch = (event) => {
       setSearched(event.target.value);
     };
-    const donwloadReport =async()=>{
-      setModal(false)
-      let res = await getDownloadPelanggan()
-      if(res?.status){
-        // ,res?.data
-        alertSuccess('Success')
-        // getAllKategori()
-      }
-      console.log({res:res})
-    }
   return (
     <div style={{
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Data Pelanggan</h1>
+      <h1>Master Bank</h1>
             <div
              style={{
                  position:"absolute",
@@ -422,21 +376,7 @@ export default function MasterKatgori() {
                 label="Upload"
                 onClick={()=>setModalUplaod(true)}
                 startIcon={<CloudUploadIcon/>} 
-           /> */}
-               {/* <Button
-                style={{
-                    background: "#0384fc",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                onClick={()=>donwloadReport()}
-                label="Download"
-                startIcon={<SummarizeIcon/>}
-           /> */}
+           />*/}
             <Button
                 style={{
                     background: "#03fc35",
@@ -524,15 +464,12 @@ export default function MasterKatgori() {
                        onClick={(e)=>checkSingle(row,index)}/>
                        </TableCell>
                       <TableCell align="left">{index+1}</TableCell>
-                      <TableCell align="left">{row.alamat}</TableCell>
-                      <TableCell align="left">{row.email}</TableCell>
-                      <TableCell align="left">{row.kuantitas}</TableCell>
-                      <TableCell align="left">{row.nama_pelanggan}</TableCell>
-                      <TableCell align="left">{row.no_hp}</TableCell>
-                      <TableCell align="left">{row.total_pembelian}</TableCell>
-                      <TableCell align="left">{row.poin}</TableCell>
-                      <TableCell align="left">{row.total_kunjungan}</TableCell>
-                      
+                      <TableCell align="left">{row.bank_name}</TableCell>
+                      <TableCell align="left">{row.acc_number}</TableCell>
+                      <TableCell align="left">{row.owner_name}</TableCell>
+                      <TableCell align="left">
+                        <img src={convertImage(row.image)} style={{width:50,height:50}} />
+                      </TableCell>
                       <TableCell align="right">
                       <div style={{
                         
@@ -570,27 +507,23 @@ export default function MasterKatgori() {
         />
       </Paper>
     </Box>
-    <ModalUpdatePelanggan
+    <ModalUpdateBank
     open={openDetail}
     data={toBeSelected}
-    submit ={(alamat,email,kuantitas,nama_pelanggan,
-      no_hp,pembelian,poin,total_kunjungan)=>submitUpdatePelanggan(alamat,email,kuantitas,nama_pelanggan,
-        no_hp,pembelian,poin,total_kunjungan)}
+    submit ={(acc_number,owner_name,bank_name,image)=>submitUpdateBank(acc_number,owner_name,bank_name,image)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <ModalAddPelanggan
+    <ModalAddBank
     open={modal}
-    submit ={(alamat,email,kuantitas,nama_pelanggan,
-      no_hp,pembelian,poin,total_kunjungan)=>submitPelanggan(alamat,email,kuantitas,nama_pelanggan,
-        no_hp,pembelian,poin,total_kunjungan)}
+    submit ={(acc_number,owner_name,bank_name,image)=>submitBank(acc_number,owner_name,bank_name,image)}
     onClickOpen = {()=>setModal(!modal)}
     />
-      <ModalUploadPelanggan
+     {/* <ModalUploadTipe
     open={modalUplaod}
-    mutate={()=>getAllPelanggan()}
-    
+    mutate={()=>getAllBank()}
+    submit ={(name)=>submitBank(name)}
     onClickOpen = {()=>setModalUplaod(!modalUplaod)}
-    /> 
+    /> */}
     </div>
       );
 }

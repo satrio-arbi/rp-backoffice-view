@@ -10,24 +10,42 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import ModalAddPemasok from '../../Component/modal/Modal-AddPemasok-Component'
+import ModalUpdatePemasok from '../../Component/modal/Modal-UpdatePemasok-Component'
+import ModalUploadPemasok from '../../Component/modal/Modal-UploadPemasok-Component'
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import Paper from '@mui/material/Paper';
+import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Button from '../../Component/button/index'
+import Input from '../../Component/input/index'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search'
+import FormPembelian from '../../Page/FormPembelian/index'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
-import { getPemasok } from '../../Config/Redux/action';
-import { FormPemasok } from '..';
-import Add from '@mui/icons-material/Add';
+import clsx from 'clsx';
+import { getPembelian } from '../../Config/Redux/action';
+import {alertSuccess} from '../../Component/alert/sweetalert'
 
-
+import {getPemasok,getPemasokSearch,getPemasokAdd,
+  getPemasokUpdate,getPemasokDelete
+  ,
+  getDownloadPemasok
+} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -55,37 +73,27 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
+  console.log({stabilizedThis})
   return stabilizedThis.map((el) => el[0]);
 }
 
 const headCells = [
+ 
     {
-      id: "tanggal_join",
-      label: "Tanggal Join",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "nama_pemasok",
-      label: "Nama Pemasok",
+      id: "No",
+      label: "No",
       disablePadding: true,
       numeric: false,
     },
     {
       id: "alamat",
       label: "Alamat",
-      numeric: true,
       disablePadding: true,
+      numeric: false,
     },
     {
       id: "email",
       label: "Email",
-      numeric: true,
-      disablePadding: true,
-    },
-    {
-      id: "no_hp",
-      label: "Nomor Hp",
       disablePadding: true,
       numeric: false,
     },
@@ -96,8 +104,20 @@ const headCells = [
       numeric: false,
     },
     {
-      id: "harga_jual",
-      label: "Harga Jual",
+      id: "nama_pemasok",
+      label: "Nama pemasok",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "no_hp",
+      label: "No Hp",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "tgl_join",
+      label: "Tanggal join",
       disablePadding: true,
       numeric: false,
     },
@@ -108,21 +128,39 @@ const headCells = [
       numeric: false,
     },
     {
+      id: "harga_jual",
+      label: "Harga Jual",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
       id: "aksi",
       label: "Aksi",
     }
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
+  const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
+  const checkAll =()=>{
+    checkAllList(!check)
+    setCheck(!check)
+  }
   return (
     <TableHead>
       <TableRow>
+      <TableCell
+            key={'check'}
+            // align="center"
+            // padding={'normal'}
+            // sortDirection={orderBy === headCell.id ? order : false}
+          >
+           <input type="checkbox" checked={check} onClick={()=>checkAll()} />
+          </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -151,6 +189,8 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
+  data: PropTypes.any,
+  checkAllList: PropTypes.func,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -159,7 +199,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function Pemasok() {
+export default function MasterKatgori() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -168,19 +208,107 @@ export default function Pemasok() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [toBeSelected, settoBeSelected] = React.useState({});
   const dispatch = useDispatch();
-  const dataStore = useSelector((state)=> state.reducer.getPemasok.data)
+  const dataStore = useSelector((state)=> state.reducer.getPembelian.data)
   const [openDetail,setOpenDetail] = React.useState(false)
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
-  const [openDetailAdd,setOpenDetailAdd] = React.useState(false)
   const [cari, setCari] = React.useState();
+  const [data,setData] = React.useState([]);
+  const [modal, setModal] = React.useState();
+  const [modalUplaod, setModalUplaod] = React.useState();
   useEffect(()=>{
-    dispatch(getPemasok())
+    getAllPelanggan()
   },[])
+  const submitPemasok =async(alamat,email,harga_jual,nama_pemasok,
+    no_hp,kode_pemasok,hpp)=>{
+    setModal(false)
+    const formData = new FormData();  
+    formData.append('alamat',alamat)
+    formData.append('email',email)
+    formData.append('harga_jual',harga_jual)
+    formData.append('nama_pemasok',nama_pemasok)
+    formData.append('no_hp',no_hp)
+    formData.append('kode_pemasok',kode_pemasok)
+    formData.append('hpp',hpp)
+    
+    let res = await getPemasokAdd(formData)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllPelanggan()
+    }
+    console.log({res:res})
+  }
+  const deleteData = async ()=>{
+    let array = [...data]
+    console.log({array:array?.length})
+    for(let i = 0;i<array?.length;i++){
+      if(array[i]?.check===true){
+        
+      await getPemasokDelete(array[i]?.id)
+    }
+    
+    
+    }
+    getAllPelanggan()
+    alertSuccess('Success','Success delete data')
+  }
+  const submitUpdatePemasok =async(alamat,email,harga_jual,nama_pemasok,
+    no_hp,kode_pemasok,hpp)=>{
+    setOpenDetail(false)
+    settoBeSelected({})
+    const formData = new FormData();  
+    formData.append('alamat',alamat)
+    formData.append('email',email)
+    formData.append('harga_jual',harga_jual)
+    formData.append('nama_pemasok',nama_pemasok)
+    formData.append('no_hp',no_hp)
+    formData.append('kode_pemasok',kode_pemasok)
+    formData.append('hpp',hpp)
+    formData.append('id',toBeSelected?.id)
+    let res = await getPemasokUpdate(formData)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllPelanggan()
+    }
+    console.log({res:res})
+  }
+  const getAllPelanggan =async()=>{
+    
+    let res = await getPemasok()
+    setData(res?.data)
+    
+  }
+  const checkSingle=(d,i)=>{
+    let array = [...data]
+    let idx = array?.findIndex(a=>a.id==d?.id)
+    if(!d?.check){
+      array[idx]['check'] = true
+    }else{
+      array[idx]['check'] = false
+    }
+    
+    setData(array)
+
+  }
+  const checkSemua=(v)=>{
+    let array = [...data]
+    array?.map((d,i)=>{
+      array[i]['check'] = v
+    })
+  
+    
+    setData(array)
+
+  }
+  const searching =async()=>{
+    
+    let res = await getPemasokSearch(searched)
+    setData(res?.data)
+    
+  }
   useEffect(()=>{
     setRows(dataStore)
   },[dataStore])
-  console.log(dataStore)
   const handleOpenDetail=(dataStore)=>{
     settoBeSelected(dataStore)
     setOpenDetail(true)
@@ -201,7 +329,7 @@ export default function Pemasok() {
     }
     setSelected([]);
   };
-
+  
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -230,7 +358,7 @@ export default function Pemasok() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+ 
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
@@ -243,12 +371,22 @@ export default function Pemasok() {
     const handleChangeSearch = (event) => {
       setSearched(event.target.value);
     };
+    const donwloadReport =async()=>{
+      setModal(false)
+      let res = await getDownloadPemasok()
+      if(res?.status){
+        // ,res?.data
+        alertSuccess('Success')
+        // getAllKategori()
+      }
+      console.log({res:res})
+    }
   return (
     <div style={{
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Pemasok</h1>
+      <h1>Data Pelanggan</h1>
             <div
              style={{
                  position:"absolute",
@@ -258,7 +396,7 @@ export default function Pemasok() {
             >
             <Button
                 style={{
-                    background: "rgb(81, 94, 193)",
+                    background: "#E14C4C",
                     color: 'white',
                     textTransform: 'capitalize',
                     marginRight:"15px",
@@ -266,13 +404,11 @@ export default function Pemasok() {
                     padding:"1em",
                     borderRadius:"14px"
                 }}
-                label="Tambah"
-                startIcon={<Add/>}
-                onClick={()=>{
-                  setOpenDetailAdd(true)
-                }}
+                onClick={()=>deleteData()}
+                label="Hapus"
+                startIcon={<DeleteIcon/>}
            />
-           <Button
+           {/* <Button
                 style={{
                     background: "#828EED",
                     color: 'white',
@@ -283,7 +419,36 @@ export default function Pemasok() {
                     borderRadius:"14px"
                 }}
                 label="Upload"
-                startIcon={<CloudUploadIcon/>}
+                onClick={()=>setModalUplaod(true)}
+                startIcon={<CloudUploadIcon/>} 
+           /> */}
+               {/* <Button
+                style={{
+                    background: "#0384fc",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                onClick={()=>donwloadReport()}
+                label="Download"
+                startIcon={<SummarizeIcon/>}
+           /> */}
+            <Button
+                style={{
+                    background: "#03fc35",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                label="Add"
+                onClick={()=>setModal(true)}
+                startIcon={<AddIcon/>}
            />
            </div>
       </div>
@@ -306,7 +471,7 @@ export default function Pemasok() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon/>
+                 <SearchIcon onClick={()=>searching()}/>
                 </IconButton>
               </InputAdornment>
             }
@@ -323,7 +488,9 @@ export default function Pemasok() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
+              checkAllList={(v)=>checkSemua(v)}
               numSelected={selected.length}
+              data={data}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
@@ -331,7 +498,7 @@ export default function Pemasok() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -347,21 +514,28 @@ export default function Pemasok() {
                       key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell align="left">{row.tanggal_join}</TableCell>
-                      <TableCell align="left">{row.nama_pemasok}</TableCell>
+                       <TableCell align="left">
+                      <input 
+                       type="checkbox" 
+                       value={row?.check} 
+                       checked={row?.check?row?.check:false} 
+                       onChange={()=>{}} 
+                       onClick={(e)=>checkSingle(row,index)}/>
+                       </TableCell>
+                      <TableCell align="left">{index+1}</TableCell>
                       <TableCell align="left">{row.alamat}</TableCell>
                       <TableCell align="left">{row.email}</TableCell>
-                      <TableCell align="left">{row.no_hp}</TableCell>
                       <TableCell align="left">{row.kode_pemasok}</TableCell>
-                      <TableCell align="left">{row.harga_jual}</TableCell>
+                      <TableCell align="left">{row.nama_pemasok}</TableCell>
+                      <TableCell align="left">{row.no_hp}</TableCell>
+                      <TableCell align="left">{row.tanggal_join}</TableCell>
                       <TableCell align="left">{row.hpp}</TableCell>
+                      <TableCell align="left">{row.harga_jual}</TableCell>
+                      
                       <TableCell align="right">
-                      <div  style={{display:"flex"}}>
-                      <IconButton onClick={()=>{
-                        handleOpenDetail(row)
+                      <div style={{
+                        
                       }}>
-                          <DeleteIcon />
-                        </IconButton>
                       <IconButton onClick={()=>{
                         handleOpenDetail(row)
                       }}>
@@ -387,7 +561,7 @@ export default function Pemasok() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -395,19 +569,27 @@ export default function Pemasok() {
         />
       </Paper>
     </Box>
-    <FormPemasok
+    <ModalUpdatePemasok
     open={openDetail}
     data={toBeSelected}
-    onClose={()=>{
-      setOpenDetail(false)
-    }}
+    submit ={(alamat,email,kuantitas,nama_pelanggan,
+      no_hp,pembelian,poin,total_kunjungan)=>submitUpdatePemasok(alamat,email,kuantitas,nama_pelanggan,
+        no_hp,pembelian,poin,total_kunjungan)}
+    onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <FormPemasok
-    open={openDetailAdd}
-    onClose={()=>{
-      setOpenDetailAdd(false)
-    }}
+    <ModalAddPemasok
+    open={modal}
+    submit ={(alamat,email,harga_jual,nama_pemasok,
+      no_hp,kode_pemasok,hpp)=>submitPemasok(alamat,email,harga_jual,nama_pemasok,
+        no_hp,kode_pemasok,hpp)}
+    onClickOpen = {()=>setModal(!modal)}
     />
+      <ModalUploadPemasok
+    open={modalUplaod}
+    mutate={()=>getAllPelanggan()}
+    
+    onClickOpen = {()=>setModalUplaod(!modalUplaod)}
+    /> 
     </div>
       );
 }

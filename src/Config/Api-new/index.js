@@ -293,6 +293,304 @@ export const getOfficeDelete = async (id) => {
   return res
   
 }
+//project
+export const getProject = async () => {
+
+  const res = await NET("GET", `master/project/all`, {})
+  
+  return res
+  
+}
+export const getProjectSearch = async (search) => {
+
+  const res = await NET("GET", `master/project/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const getProjectAdd = async (data) => {
+
+  const res = await NET("POST", `master/project/add`, data)
+  
+  return res
+  
+}
+export const getProjectUpdate = async (data) => {
+
+  const res = await NET("POST", `master/project/update`, data)
+  
+  return res
+  
+}
+export const getProjectDelete = async (id) => {
+
+  const res = await NET("GET", `master/project/delete?id=${id}`, {})
+  
+  return res
+  
+}
+//bank
+export const getBank = async () => {
+
+  const res = await NET("GET", `master/bank/all`, {})
+  
+  return res
+  
+}
+export const getBankSearch = async (search) => {
+
+  const res = await NET("GET", `master/bank/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const getBankAdd = async (data) => {
+
+  const res = await NET("POST", `master/bank/add`, data)
+  
+  return res
+  
+}
+export const getBankUpdate = async (data) => {
+
+  const res = await NET("POST", `master/bank/update`, data)
+  
+  return res
+  
+}
+export const getBankDelete = async (id) => {
+
+  const res = await NET("GET", `master/bank/delete?id=${id}`, {})
+  
+  return res
+  
+}
+//pelanggan
+export const getPelanggan = async () => {
+
+  const res = await NET("GET", `pelanggan/all`, {})
+  
+  return res
+  
+}
+export const getPelangganSearch = async (search) => {
+
+  const res = await NET("GET", `pelanggan/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const getPelangganAdd = async (data) => {
+
+  const res = await NET("POST", `pelanggan/add`, data)
+  
+  return res
+  
+}
+export const getPelangganUpdate = async (data) => {
+
+  const res = await NET("POST", `pelanggan/update`, data)
+  
+  return res
+  
+}
+export const getPelangganDelete = async (id) => {
+
+  const res = await NET("GET", `pelanggan/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const uploadPelanggan = async (file) => {
+  const formData = new FormData();  
+    formData.append('file',file)
+  const res = await NET("POST", `pelanggan/import`, formData, '', '',true)
+  
+  return res
+  
+}
+export const getDownloadPelanggan = async () => {
+
+  const res = await NET("GET", `pelanggan/download`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `pelanggan_${new Date()}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+//pemasok
+export const getPemasok = async () => {
+
+  const res = await NET("GET", `pemasok/all`, {})
+  
+  return res
+  
+}
+export const getPemasokSearch = async (search) => {
+
+  const res = await NET("GET", `pemasok/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const getPemasokAdd = async (data) => {
+
+  const res = await NET("POST", `pemasok/add`, data)
+  
+  return res
+  
+}
+export const getPemasokUpdate = async (data) => {
+
+  const res = await NET("POST", `pemasok/update`, data)
+  
+  return res
+  
+}
+export const getPemasokDelete = async (id) => {
+
+  const res = await NET("GET", `pemasok/delete?id=${id}`, {})
+  
+  return res
+  
+}
+export const uploadPemasok = async (file) => {
+  const formData = new FormData();  
+    formData.append('file',file)
+  const res = await NET("POST", `pemasok/import`, formData, '', '',true)
+  
+  return res
+  
+}
+export const getDownloadPemasok = async () => {
+
+  const res = await NET("GET", `pemasok/download`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `pemasok_${new Date()}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+//penjualan office
+export const getPenjualanOffice = async () => {
+
+  const res = await NET("GET", `office/penjualan`, {})
+  
+  return res
+  
+}
+export const getPenjualanOfficeSearch = async (search) => {
+
+  const res = await NET("GET", `office/search?keyword=${search}`, {})
+  
+  return res
+  
+}
+export const getPenjualanOfficeAdd = async (data) => {
+
+  const res = await NET("POST", `office/add`, data)
+  
+  return res
+  
+}
+export const getPenjualanOfficeUpdate = async (data) => {
+
+  const res = await NET("POST", `office/update`, data)
+  
+  return res
+  
+}
+export const getPenjualanOfficeDelete = async (id) => {
+
+  const res = await NET("GET", `office/delete?id=${id}`, {})
+  
+  return res
+  
+}
+//dashboard
+export const getBiaya = async () => {
+
+  const res = await NET("GET", `dashboard/biaya`, {})
+  
+  return res
+  
+}
+export const getBiayaPembelian = async () => {
+
+  const res = await NET("GET", `dashboard/biayaPembelian`, {})
+  
+  return res
+  
+}
+export const getJmlCostumer = async () => {
+
+  const res = await NET("GET", `dashboard/jmlCustomer`, {})
+  
+  return res
+  
+}
+export const getJmlProduct = async () => {
+
+  const res = await NET("GET", `dashboard/jmlProduct`, {})
+  
+  return res
+  
+}
+export const getJmlSupplier = async () => {
+
+  const res = await NET("GET", `dashboard/jmlSupplier`, {})
+  
+  return res
+  
+}
+export const getKeuntungan = async () => {
+
+  const res = await NET("GET", `dashboard/keuntungan`, {})
+  
+  return res
+  
+}
+export const getPembelianDashboard = async () => {
+
+  const res = await NET("GET", `dashboard/pembelian`, {})
+  
+  return res
+  
+}
+export const getPendapatan = async () => {
+
+  const res = await NET("GET", `dashboard/pendapatan`, {})
+  
+  return res
+  
+}
+export const getPenjualan = async () => {
+
+  const res = await NET("GET", `dashboard/penjualan`, {})
+  
+  return res
+  
+}
+export const getStockStore = async () => {
+
+  const res = await NET("GET", `dashboard/stockStore`, {})
+  
+  return res
+  
+}
+
 //manajemen user
 export const addUser = async (
   firstName,
@@ -1428,8 +1726,87 @@ export const getPembelian = async (search) => {
   return res
   
 }
+export const getPembelianAll = async () => {
 
+  const res = await NET("GET", `pembelian/all`, {})
+  
+  return res
+  
+}
+export const deletePembelianAll = async () => {
+
+  const res = await NET("GET", `pembelian/deletePembelian`, {})
+  
+  return res
+  
+}
+export const getPembelianAdd = async () => {
+
+  const res = await NET("POST", `pembelian/add`, {})
+  
+  return res
+  
+}
+export const getPembelianSearch = async () => {
+
+  const res = await NET("GET", `pembelian/search`, {})
+  
+  return res
+  
+}
+export const getPembelianUpdate = async () => {
+
+  const res = await NET("POST", `pembelian/update`, {})
+  
+  return res
+  
+}
 //report 
+export const geReportBestArticleByOffice = async (start,end,id) => {
+
+  const res = await NET("GET", `report/bestArticleByOffice?date_from=${start}&date_to=${end}&id_office=${id}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `best_article_by_office_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportBestArticleByStore = async (start,end,id) => {
+
+  const res = await NET("GET", `report/bestArticleByStore?date_from=${start}&date_to=${end}&id_store=${id}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `best_article_by_store_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportLaporanPembelian = async (start,end) => {
+
+  const res = await NET("GET", `report/laporanPembelian?date_from=${start}&date_to=${end}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `laporan_pembelian_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
 export const geReportBarangMasuk = async (start,end) => {
 
   const res = await NET("GET", `report/penyimpananMasuk?date_from=${start}&date_to=${end}`, {}
@@ -1515,6 +1892,97 @@ export const geReportPenerimaanFromSupplier = async (start,end) => {
   const link = document.createElement('a');
   link.href = url;
   link.setAttribute('download', `penerimaan_supplier_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+
+export const geReportPengirimanGudangToStore = async (start,end) => {
+
+  const res = await NET("GET", `report/pengirimanGudangToStore?date_from=${start}&date_to=${end}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `pengiriman_gudang_to_store_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportPengirimanStoreToStore = async (start,end) => {
+
+  const res = await NET("GET", `report/pengirimanStoreToStore?date_from=${start}&date_to=${end}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `pengiriman_store_to_store_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportPurchaseStoreByArticle = async (start,end,artikel) => {
+
+  const res = await NET("GET", `report/purchaseStoreByArticle?date_from=${start}&date_to=${end}&artikel=${artikel}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `purchase_store_by_artikel_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportPurchaseStoreBySummary= async (start,end,hp) => {
+
+  const res = await NET("GET", `report/purchaseStoreBySummary?date_from=${start}&date_to=${end}&no_hp_pelanggan=${hp}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `purchase_store_by_summary_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportSalesByOffice= async (start,end,id) => {
+
+  const res = await NET("GET", `report/salesByOffice?date_from=${start}&date_to=${end}&id_office=${id}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `sales_by_office_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  console.log({link})
+  
+}
+export const geReportStockOpname= async (start,end) => {
+
+  const res = await NET("GET", `report/stockOpname?date_from=${start}&date_to=${end}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `stock_opname_${start}_${end}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
   console.log({link})

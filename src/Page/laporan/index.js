@@ -1,214 +1,132 @@
-import * as React from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
-import Button from "../../Component/button";
-import Input from "../../Component/input";
-import rows from "../../Component/table/dummyData.json";
-import { IconButton, InputAdornment, Typography } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import EditIcon from "@mui/icons-material/Edit";
-// import FormPembelian from "../FormPembelian";
+import * as React from 'react';
 
-export default function BarangMasuk() {
-  const columns = [
-    { field: "id", headerName: "ID", width: 100 },
-    {
-      field: "TanggalTransaksi",
-      headerName: "Tanggal Transaksi",
-      width: 200,
-      editable: true,
-    },
-    {
-      field: "Artikel",
-      headerName: "Artikel",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "Kategori",
-      headerName: "Kategori",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "tipe",
-      headerName: "Tipe",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "NamaBarang",
-      headerName: "Nama Barang",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "Kualitas",
-      headerName: "Kuantitas",
-      // description: 'This column has a value getter and is not sortable.',
-      sortable: true,
-      width: 140,
-    },
-    {
-      field: "ukuran",
-      headerName: "Ukuran",
-      // description: 'This column has a value getter and is not sortable.',
-      sortable: true,
-      width: 130,
-    },
-    {
-        field: "Total",
-        headerName: "HPP",
-        // description: 'This column has a value getter and is not sortable.',
-        sortable: true,
-        width: 160,
-      },
-    {
-      field: "keterangan",
-      headerName: "Keterangan",
-      // description: 'This column has a value getter and is not sortable.',
-      sortable: true,
-      width: 160,
-    },
-    {
-      field: "Total",
-      headerName: "Total",
-      // description: 'This column has a value getter and is not sortable.',
-      sortable: true,
-      width: 140,
-    },
-    {
-      field: "Action",
-      headerName: "Action",
-      // description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 120,
-      renderCell: () => {
-        return (
-          <div style={{ display: "flex" }}>
-            <Button
-              style={{
-                color: "black",
-                textTransform: "capitalize",
-              }}
-              startIcon={<EditIcon />}
-              onClick={() => {
-                setOpenDetail(true);
-              }}
-            />
-            <Button
-              style={{
-                color: "black",
-                textTransform: "capitalize",
-              }}
-              startIcon={<RemoveRedEyeOutlinedIcon />}
-              onClick={() => {
-                setOpenDetail(true);
-              }}
-            />
-          </div>
-        );
-      },
-    },
-  ];
-  const [openDetail, setOpenDetail] = React.useState(false);
+import Box from '@mui/material/Box';
+
+import Paper from '@mui/material/Paper';
+import ModalReport from '../../Component/modal/Modal-Report-Component'
+import {
+  getOffice,
+  getStore,
+  getProduk,
+  getPelanggan,
+geReportBestArticleByOffice,geReportBestArticleByStore,
+geReportLaporanPembelian,geReportBarangMasuk,geReportBarangKeluar,
+geReportPengirimanStoretoStore,geReportPengirimanOfficetoStore,
+geReportPenerimaanFromStore,geReportPenerimaanFromSupplier,
+geReportPengirimanGudangToStore,geReportPengirimanStoreToStore,
+geReportPurchaseStoreByArticle,geReportPurchaseStoreBySummary,
+geReportSalesByOffice,geReportStockOpname
+} from '../../Config/Api-new'
+export default function MasterKatgori() {
+  const [modal,setModal] = React.useState({st:false,i:'',v:''})
+  const [office,setOffice] = React.useState([])
+  const [store,setStore] = React.useState([])
+  const [product,setProduct] = React.useState([])
+  const [pelanggan,setPelanggan] = React.useState([])
+  const reprot =[
+'Report Best Article By Office','Report Best Article By Store',
+'Report Laporan Pembelian','Report Barang Masuk',
+'Report Barang Keluar','Report Pengiriman Store To Store',
+'Report Pengiriman Office To Store','Report Penerimaan From Store',
+'Report Penerimaan From Supplier','Report Pengiriman Gudang To Store',
+'Report Pengiriman Store To Store','Report Purchase Store By Article',
+'Report Purchase Store By Summary','Report Sales By Office',
+'Report Stock Opname'
+  ]
+  
+  React.useEffect(()=>{
+    getData()
+  },[])
+  const getData = async () => {
+    let resOffice = await getOffice()
+    let resStore = await getStore()
+    let resProd = await getProduk()
+    let resPel = await getPelanggan()
+    setOffice(resOffice?.data)
+    setProduct(resProd?.data)
+    setStore(resStore?.data)
+    setPelanggan(resPel?.data)
+  }
+  const showModal = (st,i,v)=>{
+    setModal({st,i,v})
+  }
+  const submit =async (v)=>{
+    console.log({v})
+    if(modal.i===0){
+      await geReportBestArticleByOffice(v?.start,v?.end,v?.idOffice)
+    }else if(modal.i===1){
+      await geReportBestArticleByStore(v?.start,v?.end,v?.idStore)
+    }if(modal.i===2){
+      await geReportLaporanPembelian(v?.start,v?.end)
+    }if(modal.i===3){
+      await geReportBarangMasuk(v?.start,v?.end)
+    }if(modal.i===4){
+      await geReportBarangKeluar(v?.start,v?.end)
+    }if(modal.i===5){
+      await geReportPengirimanStoretoStore(v?.start,v?.end)
+    }if(modal.i===6){
+      await geReportPengirimanOfficetoStore(v?.start,v?.end)
+    }if(modal.i===7){
+      await geReportPenerimaanFromStore(v?.start,v?.end)
+    }if(modal.i===8){
+      await geReportPenerimaanFromSupplier(v?.start,v?.end)
+    }if(modal.i===9){
+      await geReportPengirimanGudangToStore(v?.start,v?.end)
+    }if(modal.i===10){
+      await geReportPengirimanStoreToStore(v?.start,v?.end)
+    }if(modal.i===11){
+      await geReportPurchaseStoreByArticle(v?.start,v?.end,v?.article)
+    }if(modal.i===12){
+      await geReportPurchaseStoreBySummary(v?.start,v?.end,v?.hp)
+    }if(modal.i===13){
+      await geReportSalesByOffice(v?.start,v?.end,v?.idOffice)
+    }if(modal.i===14){
+      await geReportStockOpname(v?.start,v?.end)
+    }
+  }
   return (
-    <div style={{ marginTop: "50px" }} align="left">
-      <div
-        style={{
-          margin: "25px",
-          marginTop: "55px",
-          display: "flex",
-        }}
-      >
-        <h1>Penyimpanan Barang Masuk</h1>
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            display: "flex",
-          }}
-        >
-          <Button
-            style={{
-              background: "#E14C4C",
-              color: "white",
-              textTransform: "capitalize",
-              marginRight: "15px",
-              width: "100%",
-              padding: "1em",
-              borderRadius: "14px",
-            }}
-            label="Hapus"
-            startIcon={<DeleteIcon />}
-          />
-          <Button
-            style={{
-              background: "rgb(81, 94, 193)",
-              color: "white",
-              textTransform: "capitalize",
-              marginRight: "15px",
-              width: "100%",
-              padding: "1em",
-              borderRadius: "14px",
-            }}
-            label="Tambah"
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => {
-              setOpenDetail(true);
-            }}
-          />
-          <Button
-            style={{
-              background: "#828EED",
-              color: "white",
-              textTransform: "capitalize",
-              marginRight: "15px",
-              width: "100%",
-              padding: "1em",
-              borderRadius: "14px",
-            }}
-            label="Upload"
-            startIcon={<CloudUploadIcon />}
-          />
-        </div>
+    <div style={{
+      marginTop:"5%"
+    }}>
+      <div style={{display:'flex'}}>
+      <h1>Semua Laporan</h1>
+            <div
+             style={{
+                 position:"absolute",
+                 right:0,
+                 display:"flex"
+             }}
+            >
+         
+           </div>
       </div>
-      <div style={{ height: 700, width: "100%" }}>
-        <div>
-          <Input
-            style={{
-              borderRadius: "4px",
-              marginBottom: "15px",
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton aria-label="toggle password visibility">
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-          checkboxSelection
-          disableSelectionOnClick
-        />
-        {/* <FormPembelian
-              open={openDetail}
-              onClose={()=>{
-                setOpenDetail(false)
-              }}
-            /> */}
-      </div>
+           {/* <Gap height={15}/> */}
+<Box sx={{ width: '100%'}}>
+      <Paper sx={{ width: '100%' }}>
+        <ul>
+          {reprot?.map((v,i)=>{
+            return(
+              
+                
+                  <li onClick={()=>showModal(true,i,v)} style={{	cursor: 'pointer'}} key={i}>
+                    <p style={{textAlign: 'left',padding: '5px',paddingLeft:'20px'}}>{v}</p>
+                  </li>
+              
+            )
+          })}
+        </ul>
+      </Paper>
+    </Box>
+    <ModalReport 
+    open={modal?.st} 
+    d={modal}
+    office={office}
+    store={store}
+    prod={product}
+    pelanggan={pelanggan}
+    onClickOpen = {()=>setModal({st:!modal?.st,i:'',v:''})}
+    submit={(v)=>submit(v)}
+    />
     </div>
-  );
+      );
 }

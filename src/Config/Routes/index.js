@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 // import { Redirect } from 'react-router';
 import { Login,Dashboard,DetailPenjualanStore } from '../../Page';
 import PenjualanStore from '../../Component/table/PenjualanStore/index'
-import PenjualanOffice from '../../Component/table/PenjualanOffice';
+import PenjualanOffice from '../../Page/PenjualanOffice';
+import LaporanAll from '../../Page/laporan';
 import FormPenjualanOffice from '../../Page/FormPenjualan';
 import Pembelian from '../../Page/pembelian';
 import MasterKatgori from '../../Page/MasterKategori';
@@ -26,6 +27,8 @@ import PenyimpananBarangMasuk from '../../Page/penyimpanan/BarangMasuk';
 import PenyimpananBarangKeluar from '../../Page/penyimpanan/BarangKeluar';
 import PenyimpananBarangOpname from '../../Page/penyimpanan/StockOpname';
 import Produk from '../../Page/produk';
+import MasterBank from '../../Page/MasterBank';
+import MasterProject from '../../Page/MasterProject';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
 	const accessToken = localStorage.getItem("rd-prjt");
@@ -62,13 +65,15 @@ function Routes() {
         <PrivateRoute exact path='/dashboard' component={Dashboard} />
         <PrivateRoute exact path='/penjualan-store' component={PenjualanStore}/>
         <PrivateRoute exact path='/penjualan-office' component={PenjualanOffice}/>
-    
+        <PrivateRoute exact path='/laporan/all' component={LaporanAll}/>
         <PrivateRoute exact path='/pembelian' component={Pembelian}/>
         <PrivateRoute exact path='/master/kategori' component={MasterKatgori}/>
         <PrivateRoute exact path='/master/tipe' component={MasterTipe}/>
         <PrivateRoute exact path='/master/ukuran' component={MasterUkuran}/>
         <PrivateRoute exact path='/master/store' component={MasterStore}/>
         <PrivateRoute exact path='/master/office' component={MasterOffice}/>
+        <PrivateRoute exact path='/master/bank' component={MasterBank}/>
+        <PrivateRoute exact path='/master/project' component={MasterProject}/>
         <PrivateRoute exact path='/pelanggan' component={Pelanggan}/>
         <PrivateRoute exact path='/karyawan' component={Karyawan}/>
         <PrivateRoute exact path='/pemasok' component={Pemasok}/>
