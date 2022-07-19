@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -12,6 +13,10 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import ModalAddPembelian from '../../Component/modal/Modal-AddPembelian-Component'
+import ModalUpdatePembelian from '../../Component/modal/Modal-UpdatePembelian-Component'
+import ModalDownloadReport from '../../Component/modal/Modal-DownloadReport-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -33,9 +38,12 @@ import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
-import { deletePembelian, getPembelian } from '../../Config/Redux/action';
+import { getPembelian } from '../../Config/Redux/action';
+import {alertSuccess} from '../../Component/alert/sweetalert'
 
-
+import {geReportLaporanPembelian,getUkuran,getPemasok,getKategori,getTipe,getPembelianAll,
+  getPembelianSearch,getPembelianAdd,getPembelianUpdate,
+  deletePembelianAll} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -63,76 +71,36 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
+  console.log({stabilizedThis})
   return stabilizedThis.map((el) => el[0]);
 }
 
 const headCells = [
-  {
-    id: "id_supplier",
-    label: "Id Supplier",
-    disablePadding: true,
-    numeric: false,
-  },
-  {
-    id: "nama_supplier",
-    label: "Nama Supplier",
-    disablePadding: true,
-    numeric: false,
-  },
-  {
-    id: "pembelian_code",
-    label: "Pembelian Code",
-    disablePadding: true,
-    numeric: false,
-  },
+ 
     {
-      id: "tanggal_transaksi",
-      label: "Tanggal Transaksi",
+      id: "No",
+      label: "No",
       disablePadding: true,
       numeric: false,
     },
-    // {
-    //   id: "kategori",
-    //   label: "Kategori",
-    //   disablePadding: true,
-    //   numeric: false,
-    // },
-    // {
-    //   id: "tipe",
-    //   label: "Tipe",
-    //   disablePadding: true,
-    //   numeric: false,
-    // },
-    // {
-    //   id: "nama_barang",
-    //   label: "Nama Barang",
-    //   disablePadding: true,
-    //   numeric: false,
-    // },
-    // {
-    //   id: "kuantitas",
-    //   label: "Kuantitas",
-    //   numeric: true,
-    //   disablePadding: true,
-    // },
-    // {
-    //   id: "ukuran",
-    //   label: "Ukuran",
-    //   numeric: true,
-    //   disablePadding: true,
-    // },
-    // {
-    //   id: "hpp",
-    //   label: "HPP",
-    //   numeric: true,
-    //   disablePadding: true,
-    // },
-    // {
-    //   id: "total",
-    //   label: "Total",
-    //   numeric: true,
-    //   disablePadding: true,
-    // },
+    {
+      id: "pembelian_code",
+      label: "Kode Pembelian",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "tanggal_transaksi",
+      label: "Tanggal transaksi",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "nama_supplier",
+      label: "Supplier Name",
+      disablePadding: true,
+      numeric: false,
+    },
     {
       id: "aksi",
       label: "Aksi",
@@ -140,15 +108,27 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
+  const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
+  const checkAll =()=>{
+    checkAllList(!check)
+    setCheck(!check)
+  }
   return (
     <TableHead>
       <TableRow>
+      <TableCell
+            key={'check'}
+            // align="center"
+            // padding={'normal'}
+            // sortDirection={orderBy === headCell.id ? order : false}
+          >
+           <input type="checkbox" checked={check} onClick={()=>checkAll()} />
+          </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -177,6 +157,8 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
+  data: PropTypes.any,
+  checkAllList: PropTypes.func,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -199,18 +181,111 @@ export default function Pembelian() {
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
   const [cari, setCari] = React.useState();
+  const [data,setData] = React.useState([]);
+  const [modal, setModal] = React.useState();
+  const [modalUplaod, setModalUplaod] = React.useState();
+  const [pemasok, setPemasok] = React.useState([]);
+  const [kategori, setKategori] = React.useState([]);
+  const [tipe, setTipe] = React.useState([]);
+  const [ukuran, setUkuran] = React.useState([]);
+  const [modalReport, setModalReport] = React.useState();
   useEffect(()=>{
-    dispatch(getPembelian())
+    getAllPembelian()
   },[])
-  const requestSearch = (searchedVal) => {
-    const filteredRows = dataStore.filter((data) => {
-      return Object.keys(data).some((key) =>
-      (typeof data[key] === 'string' || typeof data[key] ==='number') && 
-      data[key].toString().toLowerCase().includes(searchedVal.target.value)
-      );
-    });
-    setRows(filteredRows);    
-  };
+  const submitPembelian =async(v)=>{
+    setModal(false)
+    // const formData = new FormData();  
+    // formData.append('acc_number',acc_number)
+    // formData.append('owner_name ',owner_name)
+    // formData.append('bank_name',bank_name)
+    // formData.append('image ',image)
+    let res = await getPembelianAdd(v)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllPembelian()
+    }
+    console.log({res:res})
+  }
+  const deleteData = async ()=>{
+    let array = [...data]
+    console.log({array:array?.length})
+    for(let i = 0;i<array?.length;i++){
+      if(array[i]?.check===true){
+        
+      await deletePembelianAll(parseInt(array[i]?.id))
+    }
+    
+    
+    }
+    getAllPembelian()
+    alertSuccess('Success','Success delete data')
+  }
+  const submitUpdatePembelian =async(v)=>{
+    setOpenDetail(false)
+    settoBeSelected({})
+    // const formData = new FormData();  
+    // formData.append('acc_number',acc_number)
+    // formData.append('owner_name ',owner_name)
+    // formData.append('bank_name',bank_name)
+    // formData.append('image ',image)
+    let arr = {
+      detail_pembelian:v?.detail_pembelian,
+      id_supplier:v?.id_supplier,
+      nama_supplier:v?.nama_supplier,
+      tanggal_transaksi:v?.tanggal_transaksi,
+      rowstatus:'1',
+      id:toBeSelected?.id
+    }
+    // formData.append('id',toBeSelected?.id)
+    let res = await getPembelianUpdate(arr)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      getAllPembelian()
+    }
+    console.log({res:res})
+  }
+  const getAllPembelian =async()=>{
+    
+    let res = await getPembelianAll()
+    let res1 = await getPemasok()
+    let res2 = await getKategori()
+    let res3 = await getTipe()
+    let res4 = await getUkuran()
+    setPemasok(res1?.data)
+    setKategori(res2?.data)
+    setTipe(res3?.data)
+    setData(res?.data)
+    setUkuran(res4?.data)
+    
+  }
+  const checkSingle=(d,i)=>{
+    let array = [...data]
+    let idx = array?.findIndex(a=>a.id==d?.id)
+    if(!d?.check){
+      array[idx]['check'] = true
+    }else{
+      array[idx]['check'] = false
+    }
+    
+    setData(array)
+
+  }
+  const checkSemua=(v)=>{
+    let array = [...data]
+    array?.map((d,i)=>{
+      array[i]['check'] = v
+    })
+  
+    
+    setData(array)
+
+  }
+  const searching =async()=>{
+    
+    let res = await getPembelianSearch(searched)
+    setData(res?.data)
+    
+  }
   useEffect(()=>{
     setRows(dataStore)
   },[dataStore])
@@ -234,7 +309,7 @@ export default function Pembelian() {
     }
     setSelected([]);
   };
-
+  
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -263,7 +338,10 @@ export default function Pembelian() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const convertImage = (v) => {
+    
+    return 'data:image/png;base64,'+v
+  };
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
@@ -276,6 +354,16 @@ export default function Pembelian() {
     const handleChangeSearch = (event) => {
       setSearched(event.target.value);
     };
+    const donwloadReport =async(start,end)=>{
+      setModal(false)
+      let res = await geReportLaporanPembelian(start,end)
+      if(res?.status){
+        // ,res?.data
+        alertSuccess('Success')
+        // getAllKategori()
+      }
+      console.log({res:res})
+    }
   return (
     <div style={{
       marginTop:"5%"
@@ -289,7 +377,7 @@ export default function Pembelian() {
                  display:"flex"
              }}
             >
-            {/* <Button
+            <Button
                 style={{
                     background: "#E14C4C",
                     color: 'white',
@@ -299,9 +387,10 @@ export default function Pembelian() {
                     padding:"1em",
                     borderRadius:"14px"
                 }}
+                onClick={()=>deleteData()}
                 label="Hapus"
                 startIcon={<DeleteIcon/>}
-           /> */}
+           />
            {/* <Button
                 style={{
                     background: "#828EED",
@@ -313,8 +402,37 @@ export default function Pembelian() {
                     borderRadius:"14px"
                 }}
                 label="Upload"
-                startIcon={<CloudUploadIcon/>}
-           /> */}
+                onClick={()=>setModalUplaod(true)}
+                startIcon={<CloudUploadIcon/>} 
+           />*/}
+             <Button
+                style={{
+                    background: "#0384fc",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                onClick={()=>setModalReport(true)}
+                label="Report"
+                startIcon={<SummarizeIcon/>}
+           />
+            <Button
+                style={{
+                    background: "#03fc35",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                label="Add"
+                onClick={()=>setModal(true)}
+                startIcon={<AddIcon/>}
+           />
            </div>
       </div>
            <Gap height={15}/>
@@ -325,7 +443,7 @@ export default function Pembelian() {
           <InputLabel htmlFor="outlined-adornment-password">Cari</InputLabel>
           <OutlinedInput
             value={searched}
-            onChange={(searchVal)=> requestSearch(searchVal)}
+            onChange={handleChangeSearch}
             // onKeyUp={()=>{
             //   dispatch(getPenjualanOffice(`/search`))
             // }}
@@ -336,7 +454,7 @@ export default function Pembelian() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon/>
+                 <SearchIcon onClick={()=>searching()}/>
                 </IconButton>
               </InputAdornment>
             }
@@ -353,7 +471,9 @@ export default function Pembelian() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
+              checkAllList={(v)=>checkSemua(v)}
               numSelected={selected.length}
+              data={data}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
@@ -361,7 +481,7 @@ export default function Pembelian() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -377,33 +497,28 @@ export default function Pembelian() {
                       key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell align="left">{row.id_supplier}</TableCell>
+                       <TableCell align="left">
+                      <input 
+                       type="checkbox" 
+                       value={row?.check} 
+                       checked={row?.check?row?.check:false} 
+                       onChange={()=>{}} 
+                       onClick={(e)=>checkSingle(row,index)}/>
+                       </TableCell>
+                      <TableCell align="left">{index+1}</TableCell>
                       <TableCell align="left">{row.pembelian_code}</TableCell>
                       <TableCell align="left">{row.tanggal_transaksi}</TableCell>
                       <TableCell align="left">{row.nama_supplier}</TableCell>
-                      <TableCell align="center">
+                   
+                      <TableCell align="right">
                       <div style={{
-                        display:"flex"
+                        
                       }}>
-                      <div>
                       <IconButton onClick={()=>{
                         handleOpenDetail(row)
                       }}>
                           <RemoveRedEyeOutlinedIcon />
                         </IconButton>
-                      </div>
-                      <div>
-                      <IconButton onClick={async()=>{
-                       const resp = await dispatch(deletePembelian(row.id_supplier))
-                       if (resp.type === 'DELETE_PEMBELIAN_SUCCESS'){
-                        window.location.reload()
-                       }else{
-                          alert("Error Delete")
-                       }
-                      }}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </div>
                       </div>
                         </TableCell>
                     </TableRow>
@@ -424,7 +539,7 @@ export default function Pembelian() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -432,13 +547,38 @@ export default function Pembelian() {
         />
       </Paper>
     </Box>
-    <FormPembelian
+    <ModalUpdatePembelian
     open={openDetail}
     data={toBeSelected}
-    onClose={()=>{
-      setOpenDetail(false)
-    }}
+    pemasok={pemasok}
+    tipe={tipe}
+    kategori={kategori}
+    ukuran={ukuran}
+    submit ={(v)=>submitUpdatePembelian(v)}
+    onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
+    <ModalAddPembelian
+    open={modal}
+    pemasok={pemasok}
+    tipe={tipe}
+    kategori={kategori}
+    ukuran={ukuran}
+    submit ={(v)=>submitPembelian(v)}
+    onClickOpen = {()=>setModal(!modal)}
+    />
+     <ModalDownloadReport 
+    open={modalReport}
+    submit ={(start,end)=>donwloadReport(start,end)}
+    title={'Penerimaan Store'}
+    onClickOpen = {()=>setModalReport(!modalReport)}
+    />
+    
+     {/* <ModalUploadTipe
+    open={modalUplaod}
+    mutate={()=>getAllPembelian()}
+    submit ={(name)=>submitPembelian(name)}
+    onClickOpen = {()=>setModalUplaod(!modalUplaod)}
+    /> */}
     </div>
       );
 }

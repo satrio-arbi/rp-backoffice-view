@@ -99,8 +99,8 @@ const headCells = [
       numeric: false,
     },
     {
-      id: "alamat",
-      label: "Alamat",
+      id: "gambar",
+      label: "Gambar",
       disablePadding: true,
       numeric: false,
     },

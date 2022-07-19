@@ -121,18 +121,18 @@ const headCells = [
       disablePadding: true,
       numeric: false,
     },
-    {
-      id: "hpp",
-      label: "HPP",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "harga_jual",
-      label: "Harga Jual",
-      disablePadding: true,
-      numeric: false,
-    },
+    // {
+    //   id: "hpp",
+    //   label: "HPP",
+    //   disablePadding: true,
+    //   numeric: false,
+    // },
+    // {
+    //   id: "harga_jual",
+    //   label: "Harga Jual",
+    //   disablePadding: true,
+    //   numeric: false,
+    // },
     {
       id: "aksi",
       label: "Aksi",
@@ -529,8 +529,8 @@ export default function MasterKatgori() {
                       <TableCell align="left">{row.nama_pemasok}</TableCell>
                       <TableCell align="left">{row.no_hp}</TableCell>
                       <TableCell align="left">{row.tanggal_join}</TableCell>
-                      <TableCell align="left">{row.hpp}</TableCell>
-                      <TableCell align="left">{row.harga_jual}</TableCell>
+                      {/* <TableCell align="left">{row.hpp}</TableCell>
+                      <TableCell align="left">{row.harga_jual}</TableCell> */}
                       
                       <TableCell align="right">
                       <div style={{

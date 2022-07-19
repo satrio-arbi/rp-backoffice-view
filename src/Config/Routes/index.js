@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 // import { Redirect } from 'react-router';
 import { Login,Dashboard,DetailPenjualanStore } from '../../Page';
-import PenjualanStore from '../../Component/table/PenjualanStore/index'
+import PenjualanStore from '../../Page/PenjualanStore'
 import PenjualanOffice from '../../Page/PenjualanOffice';
 import LaporanAll from '../../Page/laporan';
 import FormPenjualanOffice from '../../Page/FormPenjualan';

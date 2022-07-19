@@ -18,10 +18,10 @@ const ModalUpdatePemasok =(props)=>{
     useEffect(()=>{
         setAlamat(data?.alamat)
         setEmail(data?.email)
-        setHarga_jual(data?.kode_pemasok)
+        setHarga_jual(data?.harga_jual)
         setNama_pemasok(data?.nama_pemasok)
         setNo_hp(data?.no_hp)
-        setKode_pemasok(data?.harga_jual)
+        setKode_pemasok(data?.kode_pemasok)
         setHpp(data?.hpp)
         
     },[props?.open])
@@ -86,7 +86,7 @@ const ModalUpdatePemasok =(props)=>{
                     style={{width:'100%',marginTop:10}}
                     />
                    
-                     <Input 
+                     {/* <Input 
                     value={harga_jual}
                     disable={false}
                     label={'harga jual'}
@@ -100,7 +100,7 @@ const ModalUpdatePemasok =(props)=>{
                     onChange={(v)=>setHpp(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
                     />
-                    
+                     */}
                   
                     
                     

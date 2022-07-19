@@ -483,6 +483,21 @@ export const getDownloadPemasok = async () => {
   console.log({link})
   
 }
+//penjualan store
+export const getPenjualanStore = async () => {
+
+  const res = await NET("GET", `store/penjualan`, {})
+  
+  return res
+  
+}
+export const getPenjualanStorePerStore = async (id) => {
+
+  const res = await NET("GET", `store/penjualanPerStore?id_store=${id}`, {})
+  
+  return res
+  
+}
 //penjualan office
 export const getPenjualanOffice = async () => {
 
@@ -1733,30 +1748,30 @@ export const getPembelianAll = async () => {
   return res
   
 }
-export const deletePembelianAll = async () => {
+export const deletePembelianAll = async (id) => {
 
-  const res = await NET("GET", `pembelian/deletePembelian`, {})
+  const res = await NET("GET", `pembelian/deletePembelian?id=${id}`, {})
   
   return res
   
 }
-export const getPembelianAdd = async () => {
+export const getPembelianAdd = async (data) => {
 
-  const res = await NET("POST", `pembelian/add`, {})
+  const res = await NET("POST", `pembelian/add`, data)
   
   return res
   
 }
-export const getPembelianSearch = async () => {
+export const getPembelianSearch = async (search) => {
 
-  const res = await NET("GET", `pembelian/search`, {})
+  const res = await NET("GET", `pembelian/search?keyword=${search}`, {})
   
   return res
   
 }
-export const getPembelianUpdate = async () => {
+export const getPembelianUpdate = async (data) => {
 
-  const res = await NET("POST", `pembelian/update`, {})
+  const res = await NET("POST", `pembelian/update`, data)
   
   return res
   

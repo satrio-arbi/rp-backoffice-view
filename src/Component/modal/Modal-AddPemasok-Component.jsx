@@ -86,7 +86,7 @@ const ModalAddPemasok =(props)=>{
                     style={{width:'100%',marginTop:10}}
                     />
                    
-                     <Input 
+                     {/* <Input 
                     value={harga_jual}
                     disable={false}
                     label={'harga jual'}
@@ -100,7 +100,7 @@ const ModalAddPemasok =(props)=>{
                     onChange={(v)=>setHpp(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
                     />
-                    
+                     */}
                   
                     
                     

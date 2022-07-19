@@ -8,19 +8,26 @@ import Gap from "../../Component/gap";
 import Button from "../../Component/button";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { LocalizationProvider, MobileDatePicker } from "@mui/lab";
+// import {
+//   getDashboardBiaya,
+//   getDashboardBiayaPembelian,
+//   getDashboardJumlahCustomer,
+//   getDashboardJumlahProduct,
+//   getDashboardJumlahSupplier,
+//   getDashboardKeuntungan,
+//   getDashboardPembelian,
+//   getDashboardPendapatan,
+//   getDashboardStockOffice,
+//   getDashboardPenjualan,
+//   getDashboardStockStore,
+// } from "../../Config/Redux/action";
 import {
-  getDashboardBiaya,
-  getDashboardBiayaPembelian,
-  getDashboardJumlahCustomer,
-  getDashboardJumlahProduct,
-  getDashboardJumlahSupplier,
-  getDashboardKeuntungan,
-  getDashboardPembelian,
-  getDashboardPendapatan,
-  getDashboardStockOffice,
-  getDashboardPenjualan,
-  getDashboardStockStore,
-} from "../../Config/Redux/action";
+  getBiaya,getBiayaPembelian,getJmlCostumer,
+  getJmlProduct,getJmlSupplier,getKeuntungan,
+  getPembelianDashboard,getPendapatan,
+  getPenjualan,getStockStore
+
+} from '../../Config/Api-new'
 import { useDispatch, useSelector } from "react-redux";
 
 const data = {
@@ -118,53 +125,80 @@ const Item = styled(Paper)(({ theme }) => ({
 function Dashboard(props) {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState(null);
+  const [datas, setDatas] = React.useState({});
   const [isForcePickerOpen, setIsOpen] = React.useState(false);
-  const Biaya = useSelector((state) => state.reducer.getDashboardBiaya.data);
-  const BiayaPembelian = useSelector(
-    (state) => state.reducer.getDashboardBiayaPembelian.data
-  );
-  const JumlahCustomer = useSelector(
-    (state) => state.reducer.getDashboardJumlahCustomer.data
-  );
-  const JumlahProduct = useSelector(
-    (state) => state.reducer.getDashboardJumlahProduct.data
-  );
-  const JumlahSupplier = useSelector(
-    (state) => state.reducer.getDashboardJumlahSupplier.data
-  );
-  const Keuntungan = useSelector(
-    (state) => state.reducer.getDashboardKeuntungan.data
-  );
-  const Pembelian = useSelector(
-    (state) => state.reducer.getDashboardPembelian.data
-  );
-  const Pendapatan = useSelector(
-    (state) => state.reducer.getDashboardPendapatan.data
-  );
-  const Penjualan = useSelector(
-    (state) => state.reducer.getDashboardPenjualan.data
-  );
-  const StockOffice = useSelector(
-    (state) => state.reducer.getDashboardStockOffice.data
-  );
-  const StockStoreiaya = useSelector(
-    (state) => state.reducer.getDashboardStockStore.data
-  );
+  // const Biaya = useSelector((state) => state.reducer.getDashboardBiaya.data);
+  // const BiayaPembelian = useSelector(
+  //   (state) => state.reducer.getDashboardBiayaPembelian.data
+  // );
+  // const JumlahCustomer = useSelector(
+  //   (state) => state.reducer.getDashboardJumlahCustomer.data
+  // );
+  // const JumlahProduct = useSelector(
+  //   (state) => state.reducer.getDashboardJumlahProduct.data
+  // );
+  // const JumlahSupplier = useSelector(
+  //   (state) => state.reducer.getDashboardJumlahSupplier.data
+  // );
+  // const Keuntungan = useSelector(
+  //   (state) => state.reducer.getDashboardKeuntungan.data
+  // );
+  // const Pembelian = useSelector(
+  //   (state) => state.reducer.getDashboardPembelian.data
+  // );
+  // const Pendapatan = useSelector(
+  //   (state) => state.reducer.getDashboardPendapatan.data
+  // );
+  // const Penjualan = useSelector(
+  //   (state) => state.reducer.getDashboardPenjualan.data
+  // );
+  // const StockOffice = useSelector(
+  //   (state) => state.reducer.getDashboardStockOffice.data
+  // );
+  // const StockStoreiaya = useSelector(
+  //   (state) => state.reducer.getDashboardStockStore.data
+  // );
   const createdDate = new Date(value);
   useEffect(() => {
-    dispatch(getDashboardBiaya());
-    dispatch(getDashboardBiayaPembelian());
-    dispatch(getDashboardJumlahCustomer());
-    dispatch(getDashboardJumlahProduct());
-    dispatch(getDashboardJumlahSupplier());
-    dispatch(getDashboardKeuntungan());
-    dispatch(getDashboardPembelian());
-    dispatch(getDashboardPenjualan());
-    dispatch(getDashboardStockOffice());
-    dispatch(getDashboardStockStore());
-    dispatch(getDashboardPendapatan());
+    // dispatch(getDashboardBiaya());
+    // dispatch(getDashboardBiayaPembelian());
+    // dispatch(getDashboardJumlahCustomer());
+    // dispatch(getDashboardJumlahProduct());
+    // dispatch(getDashboardJumlahSupplier());
+    // dispatch(getDashboardKeuntungan());
+    // dispatch(getDashboardPembelian());
+    // dispatch(getDashboardPenjualan());
+    // dispatch(getDashboardStockOffice());
+    // dispatch(getDashboardStockStore());
+    // dispatch(getDashboardPendapatan());
+    getData()
   }, []);
-  
+  const getData =async()=>{
+    let biaya = await getBiaya()
+    let biayaPembelian = await getBiayaPembelian()
+    let jmlCostumer = await getJmlCostumer()
+    let jmlProduct = await getJmlProduct()
+    let jmlSupplier = await getJmlSupplier()
+    let keuntungan = await getKeuntungan()
+    let pembelian = await getPembelianDashboard()
+    let pendapatan = await getPendapatan()
+    let penjualan = await getPenjualan()
+    let stockStore = await getStockStore()
+    setDatas(
+      {
+        biaya:biaya?.data,
+        biayaPembelian:biayaPembelian?.data,
+        jmlCostumer:jmlCostumer?.data,
+        jmlProduct:jmlProduct?.data,
+        jmlSupplier:jmlSupplier?.data,
+        keuntungan:keuntungan?.data,
+        pembelian:pembelian?.data,
+        pendapatan:pendapatan?.data,
+        penjualan:penjualan?.data,
+        stockStore:stockStore?.data
+      }
+    )
+  }
   return (
     <div style={{ marginTop: "100px" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -237,7 +271,11 @@ function Dashboard(props) {
                       />{" "}
                       <div align="left">
                         <Typography fontSize={15}>Total Penjualan</Typography>
-                        <Typography fontSize={20}>{Penjualan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                        <Typography fontSize={20}>
+                          {/* {Penjualan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                          {datas?.penjualan?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        
+                          </Typography>
                       </div>
                     </div>
                     <div style={{ display: "flex" }}>
@@ -251,7 +289,12 @@ function Dashboard(props) {
                       />{" "}
                       <div align="left">
                         <Typography fontSize={15}>Biaya</Typography>
-                        <Typography fontSize={20}>{Biaya.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                        <Typography fontSize={20}>
+                          {/* {Biaya.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                          {datas?.biaya?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                         
+      
+                          </Typography>
                       </div>
                     </div>
                   </div>
@@ -267,7 +310,11 @@ function Dashboard(props) {
                       />{" "}
                       <div align="left">
                         <Typography fontSize={15}>Pendapatan</Typography>
-                        <Typography fontSize={20}>Rp {Pendapatan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                        <Typography fontSize={20}>Rp 
+                        {/* {Pendapatan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                        {datas?.pendapatan?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                       
+                        </Typography>
                       </div>
                     </div>
                     <div style={{ display: "flex" }}>
@@ -281,7 +328,11 @@ function Dashboard(props) {
                       />{" "}
                       <div align="left">
                         <Typography fontSize={15}>Keuntungan</Typography>
-                        <Typography fontSize={20}>Rp {Keuntungan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                        <Typography fontSize={20}>Rp 
+                        {/* {Keuntungan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                        {datas?.keuntungan?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                       
+                        </Typography>
                       </div>
                     </div>
                   </div>
@@ -309,7 +360,12 @@ function Dashboard(props) {
                       />{" "}
                       <div align="left">
                         <Typography fontSize={15}>Total Pembelian</Typography>
-                        <Typography fontSize={20}>{Pembelian.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                        <Typography fontSize={20}>
+                          {/* {Pembelian.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                          {datas?.pembelian?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+
+                        
+                          </Typography>
                       </div>
                     </div>
                     <div style={{ display: "flex" }}>
@@ -323,12 +379,16 @@ function Dashboard(props) {
                       />{" "}
                       <div align="left">
                         <Typography fontSize={15}>Biaya</Typography>
-                        <Typography fontSize={20}>Rp {BiayaPembelian.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                        <Typography fontSize={20}>Rp 
+                        {/* {BiayaPembelian.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                        {datas?.biayaPembelian?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                       
+                        </Typography>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <div style={{ display: "flex" }}>
+                    {/* <div style={{ display: "flex" }}>
                       <Icon
                         icon="ri:refund-2-line"
                         style={{
@@ -355,7 +415,7 @@ function Dashboard(props) {
                         <Typography fontSize={15}>Pembatalan</Typography>
                         <Typography fontSize={20}>45</Typography>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -378,7 +438,12 @@ function Dashboard(props) {
                       }}
                     />{" "}
                     <div align="left">
-                      <Typography fontSize={20}>{JumlahProduct.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                      <Typography fontSize={20}>
+                        {/* {JumlahProduct.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                        {datas?.jmlProduct?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        
+        
+                        </Typography>
                     </div>
                   </div>
                   <div
@@ -393,7 +458,11 @@ function Dashboard(props) {
                       }}
                     />{" "}
                     <div align="left">
-                      <Typography fontSize={20}>Rp {Pendapatan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                      <Typography fontSize={20}>Rp 
+                      {/* {Pendapatan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                      {datas?.pendapatan?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                     
+                      </Typography>
                     </div>
                   </div>
                   <div
@@ -408,7 +477,30 @@ function Dashboard(props) {
                       }}
                     />{" "}
                     <div align="left">
-                      <Typography fontSize={20}>{Pembelian.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                      <Typography fontSize={20}>
+                        {/* {Pembelian.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                        {datas?.pembelian?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                     
+                        </Typography>
+                    </div>
+                  </div>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Icon
+                      icon="fluent:box-edit-24-filled"
+                      style={{
+                        fontSize: "50px",
+                        marginBottom: "15px",
+                        color: "rgb(81 94 193)",
+                      }}
+                    />{" "}
+                    <div align="left">
+                      <Typography fontSize={20}>
+                        {/* {Pembelian.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                        {datas?.stockStore?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        
+                        </Typography>
                     </div>
                   </div>
                 </div>
@@ -435,7 +527,11 @@ function Dashboard(props) {
                     />
                     <div align="left">
                       <Typography fontSize={15}>Costumers</Typography>
-                      <Typography fontSize={50}>{JumlahCustomer.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                      <Typography fontSize={50}>
+                        {/* {JumlahCustomer.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                        {datas?.jmlCostumer?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                       
+                        </Typography>
                     </div>
                   </div>
                   <div style={{ display: "flex" }}>
@@ -450,7 +546,15 @@ function Dashboard(props) {
                     />
                     <Typography fontSize={15}>Supplier</Typography>{" "}
                     <div align="left">
-                      <Typography fontSize={50}>{JumlahSupplier.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Typography>
+                      <Typography fontSize={50}>
+                        {/* {JumlahSupplier.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+                        {datas?.jmlSupplier?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        
+       
+       
+       
+       
+                        </Typography>
                     </div>
                   </div>
                 </div>

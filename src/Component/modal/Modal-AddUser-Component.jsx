@@ -33,6 +33,7 @@ const ModalAddUser =(props)=>{
         setLastName('')
         setPassword('')
         // setMenuOption([])
+        console.log({s:props?.menu})
         setMenu(null)
         setPhoneNumber('')
         setLokasi_office('')
