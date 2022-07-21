@@ -542,6 +542,13 @@ export const getBiaya = async () => {
   return res
   
 }
+export const getPenukaran = async () => {
+
+  const res = await NET("GET", `dashboard/penukaran`, {})
+  
+  return res
+  
+}
 export const getBiayaPembelian = async () => {
 
   const res = await NET("GET", `dashboard/biayaPembelian`, {})

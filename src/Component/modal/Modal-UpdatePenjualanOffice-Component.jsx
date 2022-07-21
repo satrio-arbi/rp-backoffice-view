@@ -11,7 +11,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import {getProdukBySKU,getProdukByArtikel} from '../../Config/Api-new'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
-const ModalAddPenjualanOffice =(props)=>{
+const ModalUpdatePenjualanOffice =(props)=>{
    // const [detail_pengiriman,setDetail_pengiriman] = useState([])
    const [tanggal_transaksi,setTanggal_transaksi] = useState(moment(new Date()).format('YYYY-MM-DD'))
    const [id_office,setId_office] = useState('')
@@ -26,19 +26,20 @@ const ModalAddPenjualanOffice =(props)=>{
    const [harga_satuan_barang,setHarga_satuan_barang] = useState('')
    const [ongkos_kirim,setOngkos_kirim] = useState('')
    const [pajak,setPajak] = useState('')
-  
+   const data = props?.data
    useEffect(()=>{
+    console.log({data})
       setHarga_satuan_barang('')
       setOngkos_kirim('')
       setPajak('')
-       setTanggal_transaksi(moment(new Date()).format('YYYY-MM-DD'))
-       setId_office('')
+       setTanggal_transaksi(data?.tanggal_transaksi)
+       setId_office(data?.id_office)
        setSku('')
        setUkuran('')
-       setListDetail([])
+       setListDetail(data?.detail_penjualan)
        setDetail('')
        setArticle('')
-       setId_pelanggan('')
+       setId_pelanggan(convertPelangganFromHp(data?.no_hp_pelanggan))
        setKuantitas('')
        setBank('')
    },[props?.open])
@@ -71,6 +72,11 @@ const ModalAddPenjualanOffice =(props)=>{
        
        return {hp:props?.pelanggan?props?.pelanggan[idx]?.no_hp:'',nama:props?.pelanggan?props?.pelanggan[idx]?.nama_pelanggan:''}
      }
+     const convertPelangganFromHp = (v) =>{
+      let idx = props?.pelanggan?.findIndex(a=>a.no_hp==v)
+      
+      return props?.pelanggan?props?.pelanggan[idx]?.id:''
+    }
      const convertOffice=(v) =>{
        let idx = props?.office?.findIndex(a=>a.id==v)
        
@@ -100,11 +106,11 @@ const ModalAddPenjualanOffice =(props)=>{
        pajak_biaya:pajak,
        total:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim)
      })
-    //  console.log({
-    //   tot:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim),
-    //   pajak:(parseInt(harga_satuan_barang)*parseInt(kuantitas)),
+     console.log({
+      tot:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim),
+      pajak:(parseInt(harga_satuan_barang)*parseInt(kuantitas)),
       
-    // })
+    })
      setListDetail(arr)
    }
    const deleteData = (idx)=>{
@@ -511,4 +517,4 @@ const ModalAddPenjualanOffice =(props)=>{
    )
 
 }
-export default ModalAddPenjualanOffice
+export default ModalUpdatePenjualanOffice

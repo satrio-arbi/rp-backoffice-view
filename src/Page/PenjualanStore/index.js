@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -13,9 +14,11 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddBank from '../../Component/modal/Modal-AddBank-Component'
-import ModalUpdateBank from '../../Component/modal/Modal-UpdateBank-Component'
-// import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import ModalAddPenjualanOffice from '../../Component/modal/Modal-AddPenjualanOffice-Component'
+import ModalUpdatePenjualanOffice from '../../Component/modal/Modal-UpdatePenjualanOffice-Component'
+import ModalDownloadReport from '../../Component/modal/Modal-DownloadReport-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -40,7 +43,12 @@ import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess} from '../../Component/alert/sweetalert'
 
-import {getPenjualanOffice,getPenjualanOfficeSearch,getPenjualanOfficeAdd,getPenjualanOfficeUpdate,getPenjualanOfficeDelete} from '../../Config/Api-new'
+import {getBank,getStore,geReportLaporanPembelian,getUkuran,
+  getPelanggan,getKategori,
+  getTipe,getPenjualanStore,getPenjualanStorePerStore,
+  getPenjualanOfficeSearch,getPenjualanOfficeAdd,
+  getPenjualanOfficeUpdate,
+  getPenjualanOfficeDelete} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -81,33 +89,93 @@ const headCells = [
       numeric: false,
     },
     {
-      id: "bank_name",
-      label: "Nama Bank",
+      id: "id_transaksi",
+      label: "Id Transaksi",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "acc_number",
-      label: "Account Number",
+      id: "lokasi_store",
+      label: "Lokasi store",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "owner_name",
-      label: "Owner Name",
+      id: "nama_pelanggan",
+      label: "Nama pelanggan",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "alamat",
-      label: "Alamat",
+      id: "no_hp_pelanggan",
+      label: "No.hp pelanggan",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "aksi",
-      label: "Aksi",
-    }
+      id: "nama_karyawan",
+      label: "Nama Karyawan",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "disc",
+      label: "Diskon",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "metode_bayar",
+      label: "Metode Bayar",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "bank",
+      label: "Bank",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "no_rek",
+      label: "No. Rekening",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "ekspedisi",
+      label: "Ekspedisi",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "ongkir",
+      label: "Ongkos kirim",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "total",
+      label: "Total",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "kembalian",
+      label: "Kembalian",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "sum",
+      label: "Jumlah kuantitas",
+      disablePadding: true,
+      numeric: false,
+    },
+    // {
+    //   id: "aksi",
+    //   label: "Aksi",
+    // }
 ];
 
 function EnhancedTableHead(props) {
@@ -170,7 +238,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function MasterKatgori() {
+export default function Pembelian() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -187,20 +255,29 @@ export default function MasterKatgori() {
   const [data,setData] = React.useState([]);
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
+  const [pelanggan, setPelanggan] = React.useState([]);
+  const [kategori, setKategori] = React.useState([]);
+  const [tipe, setTipe] = React.useState([]);
+  const [ukuran, setUkuran] = React.useState([]);
+  const [store, setStore] = React.useState([]);
+  const [bank, setBank] = React.useState([]);
+  const [storeFilter, setStoreFilter] = React.useState([]);
+  const [id_store, setId_store] = React.useState(0);
+  const [modalReport, setModalReport] = React.useState();
   useEffect(()=>{
-    getAllBank()
+    getAllPembelian()
   },[])
-  const submitBank =async(acc_number,owner_name,bank_name,image)=>{
+  const submitPenjualan =async(v)=>{
     setModal(false)
-    const formData = new FormData();  
-    formData.append('acc_number',acc_number)
-    formData.append('owner_name ',owner_name)
-    formData.append('bank_name',bank_name)
-    formData.append('image ',image)
-    let res = await getPenjualanOfficeAdd(formData)
+    // const formData = new FormData();  
+    // formData.append('acc_number',acc_number)
+    // formData.append('owner_name ',owner_name)
+    // formData.append('bank_name',bank_name)
+    // formData.append('image ',image)
+    let res = await getPenjualanOfficeAdd(v)
     if(res?.status){
       alertSuccess('Success',res?.data)
-      getAllBank()
+      getAllPembelian()
     }
     console.log({res:res})
   }
@@ -215,29 +292,56 @@ export default function MasterKatgori() {
     
     
     }
-    getAllBank()
+    getAllPembelian()
     alertSuccess('Success','Success delete data')
   }
-  const submitUpdateBank =async(acc_number,owner_name,bank_name,image)=>{
+  const submitUpdatePenjualan =async(v)=>{
     setOpenDetail(false)
     settoBeSelected({})
-    const formData = new FormData();  
-    formData.append('acc_number',acc_number)
-    formData.append('owner_name ',owner_name)
-    formData.append('bank_name',bank_name)
-    formData.append('image ',image)
-    formData.append('id',toBeSelected?.id)
-    let res = await getPenjualanOfficeUpdate(formData)
+    // const formData = new FormData();  
+    // formData.append('acc_number',acc_number)
+    // formData.append('owner_name ',owner_name)
+    // formData.append('bank_name',bank_name)
+    // formData.append('image ',image)
+    let arr = {
+      detail_penjualan:v?.detail_penjualan,
+      id_office:v?.id_office,
+      lokasi_office:v?.lokasi_office,
+      nama_pelanggan:v?.nama_pelanggan,
+      no_hp_pelanggan:v?.no_hp_pelanggan,
+      tanggal_transaksi:v?.tanggal_transaksi,
+      rowstatus:'1',
+      id:toBeSelected?.id
+    }
+    // formData.append('id',toBeSelected?.id)
+    let res = await getPenjualanOfficeUpdate(arr)
     if(res?.status){
       alertSuccess('Success',res?.data)
-      getAllBank()
+      getAllPembelian()
     }
     console.log({res:res})
   }
-  const getAllBank =async()=>{
+  const getAllPembelian =async()=>{
     
-    let res = await getPenjualanOffice()
+    let res = await getPenjualanStore()
+    let res1 = await getPelanggan()
+    let res2 = await getKategori()
+    let res3 = await getTipe()
+    let res4 = await getUkuran()
+    let res5 = await getStore()
+    let res6 = await getBank()
+    let a =[{id:0,store_name:'All'}]
+    setPelanggan(res1?.data)
+    setKategori(res2?.data)
+    setTipe(res3?.data)
     setData(res?.data)
+    setUkuran(res4?.data)
+    setStore(res5?.data)
+    res5?.data?.map((d)=>{
+      a.push(d)
+    })
+    setStoreFilter(a)
+    setBank(res6?.data)
     
   }
   const checkSingle=(d,i)=>{
@@ -262,9 +366,22 @@ export default function MasterKatgori() {
     setData(array)
 
   }
+  useEffect(()=>{
+    if(id_store!==0){
+      searchingByIdStore()
+    }else{
+      getAllPembelian()
+    }
+  },[id_store])
+  const searchingByIdStore =async()=>{
+    
+    let res = await getPenjualanStorePerStore(id_store)
+    setData(res?.data)
+    
+  }
   const searching =async()=>{
     
-    let res = await getPenjualanOfficeSearch(searched)
+    let res = await getPenjualanStorePerStore(id_store)
     setData(res?.data)
     
   }
@@ -336,6 +453,16 @@ export default function MasterKatgori() {
     const handleChangeSearch = (event) => {
       setSearched(event.target.value);
     };
+    const donwloadReport =async(start,end)=>{
+      setModal(false)
+      let res = await geReportLaporanPembelian(start,end)
+      if(res?.status){
+        // ,res?.data
+        alertSuccess('Success')
+        // getAllKategori()
+      }
+      console.log({res:res})
+    }
   return (
     <div style={{
       marginTop:"5%"
@@ -349,7 +476,7 @@ export default function MasterKatgori() {
                  display:"flex"
              }}
             >
-            <Button
+            {/* <Button
                 style={{
                     background: "#E14C4C",
                     color: 'white',
@@ -362,7 +489,7 @@ export default function MasterKatgori() {
                 onClick={()=>deleteData()}
                 label="Hapus"
                 startIcon={<DeleteIcon/>}
-           />
+           /> */}
            {/* <Button
                 style={{
                     background: "#828EED",
@@ -377,6 +504,20 @@ export default function MasterKatgori() {
                 onClick={()=>setModalUplaod(true)}
                 startIcon={<CloudUploadIcon/>} 
            />*/}
+             {/* <Button
+                style={{
+                    background: "#0384fc",
+                    color: 'white',
+                    textTransform: 'capitalize',
+                    marginRight:"15px",
+                    width:"100%",
+                    padding:"1em",
+                    borderRadius:"14px"
+                }}
+                onClick={()=>setModalReport(true)}
+                label="Report"
+                startIcon={<SummarizeIcon/>}
+           />
             <Button
                 style={{
                     background: "#03fc35",
@@ -390,14 +531,14 @@ export default function MasterKatgori() {
                 label="Add"
                 onClick={()=>setModal(true)}
                 startIcon={<AddIcon/>}
-           />
+           /> */}
            </div>
       </div>
            <Gap height={15}/>
 <Box sx={{ width: '100%', marginTop:"20px" }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
       <div align='left'>
-      <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+      {/* <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Cari</InputLabel>
           <OutlinedInput
             value={searched}
@@ -418,7 +559,25 @@ export default function MasterKatgori() {
             }
             label="Cari"
           />
-        </FormControl>
+        </FormControl> */}
+        <FormControl sx={{ marginTop:2, width: '25ch' }} variant="outlined">
+                         <InputLabel id="demo-simple-select-label">Select store</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={id_store}
+                  label="Select Toko Tujuan"
+                  onChange={(v)=>{setId_store(v?.target?.value)}}
+                >
+                  {storeFilter?.map((d,i)=>{
+                    return(
+                      
+                        <MenuItem value={d?.id} >{d?.store_name}</MenuItem>
+                      
+                    )
+                  })}
+                </Select>
+              </FormControl>
       </div>
       
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
@@ -464,13 +623,22 @@ export default function MasterKatgori() {
                        onClick={(e)=>checkSingle(row,index)}/>
                        </TableCell>
                       <TableCell align="left">{index+1}</TableCell>
+                      <TableCell align="left">{row.id_transaksi}</TableCell>
+                      <TableCell align="left">{row.lokasi_store}</TableCell>
+                      <TableCell align="left">{row.nama_pelanggan}</TableCell>
+                      <TableCell align="left">{row.no_hp_pelanggan}</TableCell>
+                      
+                      <TableCell align="left">{row.nama_karyawan}</TableCell>
+                      <TableCell align="left">{row.diskon}</TableCell>
+                      <TableCell align="left">{row.metode_bayar}</TableCell>
                       <TableCell align="left">{row.bank_name}</TableCell>
-                      <TableCell align="left">{row.acc_number}</TableCell>
-                      <TableCell align="left">{row.owner_name}</TableCell>
-                      <TableCell align="left">
-                        <img src={convertImage(row.image)} style={{width:50,height:50}} />
-                      </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="left">{row.no_rek}</TableCell>
+                      <TableCell align="left">{row.ekspedisi}</TableCell>
+                      <TableCell align="left">{row.ongkir}</TableCell>
+                      <TableCell align="left">{row.total}</TableCell>
+                      <TableCell align="left">{row.kembalian}</TableCell>
+                      <TableCell align="left">{row.sum_qty}</TableCell>
+                      {/* <TableCell align="right">
                       <div style={{
                         
                       }}>
@@ -480,7 +648,7 @@ export default function MasterKatgori() {
                           <RemoveRedEyeOutlinedIcon />
                         </IconButton>
                       </div>
-                        </TableCell>
+                        </TableCell> */}
                     </TableRow>
                   );
                 })}
@@ -507,21 +675,40 @@ export default function MasterKatgori() {
         />
       </Paper>
     </Box>
-    <ModalUpdateBank
+    <ModalUpdatePenjualanOffice
     open={openDetail}
     data={toBeSelected}
-    submit ={(acc_number,owner_name,bank_name,image)=>submitUpdateBank(acc_number,owner_name,bank_name,image)}
+    bank={bank}
+    pelanggan={pelanggan}
+    store={store}
+    tipe={tipe}
+    kategori={kategori}
+    ukuran={ukuran}
+    submit ={(v)=>submitUpdatePenjualan(v)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <ModalAddBank
+    <ModalAddPenjualanOffice
     open={modal}
-    submit ={(acc_number,owner_name,bank_name,image)=>submitBank(acc_number,owner_name,bank_name,image)}
+    bank={bank}
+    pelanggan={pelanggan}
+    store={store}
+    tipe={tipe}
+    kategori={kategori}
+    ukuran={ukuran}
+    submit ={(v)=>submitPenjualan(v)}
     onClickOpen = {()=>setModal(!modal)}
     />
+     <ModalDownloadReport 
+    open={modalReport}
+    submit ={(start,end)=>donwloadReport(start,end)}
+    title={'Penerimaan Store'}
+    onClickOpen = {()=>setModalReport(!modalReport)}
+    />
+    
      {/* <ModalUploadTipe
     open={modalUplaod}
-    mutate={()=>getAllBank()}
-    submit ={(name)=>submitBank(name)}
+    mutate={()=>getAllPembelian()}
+    submit ={(name)=>submitPenjualan(name)}
     onClickOpen = {()=>setModalUplaod(!modalUplaod)}
     /> */}
     </div>

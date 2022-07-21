@@ -25,7 +25,7 @@ import {
   getBiaya,getBiayaPembelian,getJmlCostumer,
   getJmlProduct,getJmlSupplier,getKeuntungan,
   getPembelianDashboard,getPendapatan,
-  getPenjualan,getStockStore
+  getPenjualan,getStockStore,getPenukaran
 
 } from '../../Config/Api-new'
 import { useDispatch, useSelector } from "react-redux";
@@ -184,8 +184,10 @@ function Dashboard(props) {
     let pendapatan = await getPendapatan()
     let penjualan = await getPenjualan()
     let stockStore = await getStockStore()
+    let penukaran = await getPenukaran()
     setDatas(
       {
+        penukaran:penukaran?.data,
         biaya:biaya?.data,
         biayaPembelian:biayaPembelian?.data,
         jmlCostumer:jmlCostumer?.data,
@@ -416,6 +418,21 @@ function Dashboard(props) {
                         <Typography fontSize={20}>45</Typography>
                       </div>
                     </div> */}
+                    <div style={{ display: "flex" }}>
+                    <Icon
+                        icon="fluent:box-dismiss-24-regular"
+                        style={{
+                          fontSize: "50px",
+                          marginBottom: "25px",
+                          color: "rgb(81 94 193)",
+                        }}
+                      />{" "}
+                      <div align="left">
+                        <Typography fontSize={15}>Penukaran</Typography>
+                        <Typography fontSize={20}>{datas?.penukaran?datas?.penukaran?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","):0}</Typography>
+                      </div>
+                    </div>
+                    
                   </div>
                 </div>
               </div>
