@@ -27,7 +27,7 @@ import { Avatar, Menu, MenuItem, Paper } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import {getDataUserLogin} from '../../Config/helper/localStorage'
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -83,7 +83,8 @@ export default function PersistentDrawerLeft() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenu = Boolean(anchorEl);
   const Name = JSON.parse(localStorage.getItem("rd-prjt"));
-  // console.log(Name.namaPengguna)
+  const usr = getDataUserLogin()
+  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -97,7 +98,7 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+console.log({aks:usr?.akses_modul})
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -176,7 +177,8 @@ export default function PersistentDrawerLeft() {
                 <Icon icon="bx:bxs-dashboard" style={{ fontSize: "25px", marginRight: "5px" }} />
                 <Typography>Dashboard</Typography>
               </ListItem>
-              <Accordion>
+              {usr?.akses_modul?.includes('MM-1')?
+                <Accordion>
                 <div style={{ position: "relative", width: "100%" }}>
                   <AccordionSummary
                     aria-controls="panel1a-content"
@@ -191,26 +193,36 @@ export default function PersistentDrawerLeft() {
                   </AccordionSummary>
                 </div>
                 <AccordionDetails>
+              
                   <List style={{cursor:"pointer"}}>
+                  {usr?.akses_modul?.includes('MM-2')?
                     <ListItem onClick={() => {
                       history.push('/penjualan-store')
                     }}>
                       <ListItemText primary="Penjualan Store" />
                     </ListItem>
+                    :null}
+                     {usr?.akses_modul?.includes('MM-3')?
                     <ListItem onClick={() => {
                       history.push('/penjualan-office')
                     }}>
                       <ListItemText primary="Penjualan Office" />
                     </ListItem>
+                    :null}
                   </List>
                 </AccordionDetails>
-              </Accordion>
+              </Accordion>:null
+              
+            }
+            {usr?.akses_modul?.includes('MM-4')?
               <ListItem onClick={() => {
                 history.push('/pembelian')
               }}>
                 <Icon icon="icons8:buy" style={{ fontSize: "25px", marginRight: "5px" }} />
                 <Typography>Pembelian</Typography>
               </ListItem>
+              :null}
+              {usr?.akses_modul?.includes('MM-5')?
               <Accordion>
                 <AccordionSummary
 
@@ -226,24 +238,28 @@ export default function PersistentDrawerLeft() {
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
+                  {usr?.akses_modul?.includes('MM-6')?
                     <ListItem onClick={() => {
                       history.push('/penyimpanan/barang-masuk')
                     }}>
                       <ListItemText primary="Barang Masuk" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-7')?
                     <ListItem onClick={() => {
                       history.push('/penyimpanan/barang-keluar')
                     }}>
                       <ListItemText primary="Barang Keluar" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-8')?
                     <ListItem onClick={() => {
                       history.push('/penyimpanan/stock-opname')
                     }}>
                       <ListItemText primary="Stock Opname" />
-                    </ListItem>
+                    </ListItem>:null}
                   </List>
                 </AccordionDetails>
-              </Accordion>
+              </Accordion>:null}
+              {usr?.akses_modul?.includes('MM-9')?
               <Accordion>
                 <AccordionSummary
 
@@ -259,24 +275,29 @@ export default function PersistentDrawerLeft() {
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
+                  {usr?.akses_modul?.includes('MM-10')?
                     <ListItem onClick={() => {
                       history.push('/pengiriman/gudang')
                     }}>
                       <ListItemText primary="Dari Office ke Store" />
                     </ListItem>
+                    :null}
+                    {usr?.akses_modul?.includes('MM-11')?
                     <ListItem onClick={() => {
                       history.push('/pengiriman/store')
                     }}>
                       <ListItemText primary="Dari Store ke Store" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-12')?
                     <ListItem onClick={() => {
                       history.push('/pengiriman/retur-gudang')
                     }}>
                       <ListItemText primary="Retur Gudang" />
-                    </ListItem>
+                    </ListItem>:null}
                   </List>
                 </AccordionDetails>
-              </Accordion>
+              </Accordion>:null}
+              {usr?.akses_modul?.includes('MM-13')?
               <Accordion>
                 <AccordionSummary
 
@@ -292,29 +313,34 @@ export default function PersistentDrawerLeft() {
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
+                  {usr?.akses_modul?.includes('MM-14')?
                     <ListItem onClick={() => {
                       history.push('/penerimaan/ByOffice')
                     }}>
                       <ListItemText primary="Office from store" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-15')?
                     <ListItem onClick={() => {
                       history.push('/penerimaan/ByStoreOffice')
                     }}>
                       <ListItemText primary="Store from office" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-16')?
                     <ListItem onClick={() => {
                       history.push('/penerimaan/ByStore')
                     }}>
                       <ListItemText primary="Store from Store" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-17')?
                     <ListItem onClick={() => {
                       history.push('/penerimaan/BySuplier')
                     }}>
                       <ListItemText primary="By Supplier" />
-                    </ListItem>
+                    </ListItem>:null}
                   </List>
                 </AccordionDetails>
-              </Accordion>
+              </Accordion>:null}
+              {usr?.akses_modul?.includes('MM-18')?
               <Accordion>
                 <AccordionSummary
 
@@ -330,12 +356,15 @@ export default function PersistentDrawerLeft() {
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
+                  {usr?.akses_modul?.includes('MM-19')?
                     <ListItem>
                       <ListItemText primary="Daftar Akun" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-20')?
                     <ListItem>
                       <ListItemText primary="Entri Jurnal" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-21')?
                     <ListItem>
                       <Accordion>
                         <AccordionSummary
@@ -351,28 +380,34 @@ export default function PersistentDrawerLeft() {
                         </AccordionSummary>
                         <AccordionDetails>
                           <List style={{cursor:"pointer"}}>
+                          {usr?.akses_modul?.includes('MM-22')?
                             <ListItem>
                               <ListItemText primary="Jurnal Umum" />
-                            </ListItem>
+                            </ListItem>:null}
+                            {usr?.akses_modul?.includes('MM-23')?
                             <ListItem>
                               <ListItemText primary="Buku Besar" />
-                            </ListItem>
+                            </ListItem>:null}
+                            {usr?.akses_modul?.includes('MM-24')?
                             <ListItem>
                               <ListItemText primary="Neraca Saldo" />
-                            </ListItem>
+                            </ListItem>:null}
+                            {usr?.akses_modul?.includes('MM-25')?
                             <ListItem>
                               <ListItemText primary="Laporan Laba Rugi" />
-                            </ListItem>
+                            </ListItem>:null}
+                            {usr?.akses_modul?.includes('MM-26')?
                             <ListItem>
                               <ListItemText primary="Neraca Keuangan" />
-                            </ListItem>
+                            </ListItem>:null}
                           </List>
                         </AccordionDetails>
                       </Accordion>
-                    </ListItem>
+                    </ListItem>:null}
                   </List>
                 </AccordionDetails>
-              </Accordion>
+              </Accordion>:null}
+              {usr?.akses_modul?.includes('MM-27')?
               <Accordion>
                 <AccordionSummary
 
@@ -388,35 +423,41 @@ export default function PersistentDrawerLeft() {
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
+                  {usr?.akses_modul?.includes('MM-28')?
                     <ListItem  onClick={() => {
                       history.push('/produk')
                     }}>
                       <ListItemText primary="Basic" />
-                    </ListItem>
+                    </ListItem>:null}
                     {/* <ListItem>
                       <ListItemText primary="Custom" />
                     </ListItem> */}
                   </List>
                 </AccordionDetails>
-              </Accordion>
+              </Accordion>:null}
+              {usr?.akses_modul?.includes('MM-29')?
               <ListItem onClick={() => {
                 history.push('/pelanggan')
               }}>
                 <Icon icon="clarity:group-solid" style={{ fontSize: "25px", marginRight: "5px" }} />
                 <Typography>Pelanggan</Typography>
               </ListItem>
+              :null}
+              {usr?.akses_modul?.includes('MM-30')?
               <ListItem onClick={() => {
                 history.push('/karyawan')
               }}>
                 <Icon icon="clarity:group-solid" style={{ fontSize: "25px", marginRight: "5px" }} />
                 <Typography>Karyawan</Typography>
-              </ListItem>
+              </ListItem>:null}
+              {usr?.akses_modul?.includes('MM-31')?
               <ListItem onClick={() => {
                 history.push('/pemasok')
               }}>
                 <Icon icon="fa-solid:people-arrows" style={{ fontSize: "25px", marginRight: "5px" }} />
                 <Typography>Pemasok</Typography>
-              </ListItem>
+              </ListItem>:null}
+              {usr?.akses_modul?.includes('MM-32')?
               <Accordion>
                 <AccordionSummary 
                   aria-controls="panel2a-content"
@@ -440,7 +481,7 @@ export default function PersistentDrawerLeft() {
                   </List>
                
                 </AccordionDetails>
-              </Accordion>
+              </Accordion>:null}
               <Accordion>
                 <AccordionSummary
 
@@ -456,45 +497,51 @@ export default function PersistentDrawerLeft() {
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
+                  {usr?.akses_modul?.includes('MM-48')?
                     <ListItem onClick={() => {
                       history.push('/master/kategori')
                     }}>
                       <ListItemText primary="Master Kategori" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-49')?
                     <ListItem onClick={() => {
                       history.push('/master/tipe')
                     }}>
                       <ListItemText primary="Master Tipe" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-50')?
+                    <ListItem onClick={() => {
+                      history.push('/master/store')
+                    }}>
+                      <ListItemText primary="Master Store" />
+                    </ListItem>:null}
                     <ListItem onClick={() => {
                       history.push('/master/Ukuran')
                     }}>
                       <ListItemText primary="Master Ukuran" />
                     </ListItem>
-                    <ListItem onClick={() => {
-                      history.push('/master/store')
-                    }}>
-                      <ListItemText primary="Master Store" />
-                    </ListItem>
+                    {usr?.akses_modul?.includes('MM-51')?
                     <ListItem onClick={() => {
                       history.push('/master/office')
                     }}>
                       <ListItemText primary="Master Office" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-52')?
                     <ListItem
                      onClick={() => {
                       history.push('/master/project')
                     }}
                     >
                       <ListItemText primary="Master Project" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-53')?
                     <ListItem
                      onClick={() => {
                       history.push('/master/bank')
                     }}
                     >
                       <ListItemText primary="Master Bank" />
-                    </ListItem>
+                    </ListItem>:null}
                     {/* <ListItem>
                       <ListItemText primary="Master Accessories" />
                     </ListItem> */}
@@ -516,14 +563,16 @@ export default function PersistentDrawerLeft() {
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
+                  {usr?.akses_modul?.includes('MM-54')?
                     <ListItem onClick={() => {
                       history.push('/manajemen-user')
                     }}>
                       <ListItemText primary="Management User" />
-                    </ListItem>
+                    </ListItem>:null}
+                    {usr?.akses_modul?.includes('MM-55')?
                     <ListItem>
                       <ListItemText primary="User Grup Pengguna" />
-                    </ListItem>
+                    </ListItem>:null}
                   </List>
                 </AccordionDetails>
               </Accordion>

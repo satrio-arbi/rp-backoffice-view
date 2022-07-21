@@ -17,21 +17,30 @@ geReportPengirimanGudangToStore,geReportPengirimanStoreToStore,
 geReportPurchaseStoreByArticle,geReportPurchaseStoreBySummary,
 geReportSalesByOffice,geReportStockOpname
 } from '../../Config/Api-new'
+import {getDataUserLogin} from '../../Config/helper/localStorage'
 export default function MasterKatgori() {
   const [modal,setModal] = React.useState({st:false,i:'',v:''})
   const [office,setOffice] = React.useState([])
   const [store,setStore] = React.useState([])
   const [product,setProduct] = React.useState([])
   const [pelanggan,setPelanggan] = React.useState([])
+  const usr = getDataUserLogin()
   const reprot =[
-'Report Best Article By Office','Report Best Article By Store',
-'Report Laporan Pembelian','Report Barang Masuk',
-'Report Barang Keluar','Report Pengiriman Store To Store',
-'Report Pengiriman Office To Store','Report Penerimaan From Store',
-'Report Penerimaan From Supplier','Report Pengiriman Gudang To Store',
-'Report Pengiriman Store To Store','Report Purchase Store By Article',
-'Report Purchase Store By Summary','Report Sales By Office',
-'Report Stock Opname'
+{l:'Report Best Article By Office',v:'MM-33'},
+{l:'Report Best Article By Store',v:'MM-34'},
+{l:'Report Laporan Pembelian',v:'MM-35'},
+{l:'Report Barang Masuk',v:'MM-36'},
+{l:'Report Barang Keluar',v:'MM-37'},
+{l:'Report Pengiriman Store To Store',v:'MM-38'},
+{l:'Report Pengiriman Office To Store',v:'MM-39'},
+{l:'Report Penerimaan From Store',v:'MM-40'},
+{l:'Report Penerimaan From Supplier',v:'MM-41'},
+{l:'Report Pengiriman Gudang To Store',v:'MM-42'},
+{l:'Report Pengiriman Store To Store2',v:'MM-43'},
+{l:'Report Purchase Store By Article',v:'MM-44'},
+{l:'Report Purchase Store By Summary',v:'MM-45'},
+{l:'Report Sales By Office',v:'MM-46'},
+{l:'Report Stock Opname',v:'MM-47'}
   ]
   
   React.useEffect(()=>{
@@ -107,10 +116,11 @@ export default function MasterKatgori() {
           {reprot?.map((v,i)=>{
             return(
               
-                
-                  <li onClick={()=>showModal(true,i,v)} style={{	cursor: 'pointer'}} key={i}>
-                    <p style={{textAlign: 'left',padding: '5px',paddingLeft:'20px'}}>{v}</p>
+              usr?.akses_modul?.includes(v?.v)?
+                  <li onClick={()=>showModal(true,i,v?.l)} style={{	cursor: 'pointer'}} key={i}>
+                    <p style={{textAlign: 'left',padding: '5px',paddingLeft:'20px'}}>{v?.l}</p>
                   </li>
+              :null
               
             )
           })}
