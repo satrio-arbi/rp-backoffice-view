@@ -13,10 +13,12 @@ const ModalUpdatePelanggan =(props)=>{
     const [no_hp,setNo_hp] = useState('')
     const [pembelian,setPembelian] = useState('')
     const [poin,setPoin] = useState('')
+    const [nik,setNik] = useState('')
     const [total_kunjungan,setTotal_kunjungan] = useState('')
     const data = props?.data
     useEffect(()=>{
         setAlamat(data?.alamat)
+        setNik(data?.nik)
         setEmail(data?.email)
         setKuantitas(data?.kuantitas)
         setNama_pelanggan(data?.nama_pelanggan)
@@ -62,6 +64,13 @@ const ModalUpdatePelanggan =(props)=>{
                     disable={false}
                     label={'Email pelanggan'}
                     onChange={(v)=>setEmail(v?.target?.value)}
+                    style={{width:'100%',marginTop:10}}
+                    />
+                     <Input 
+                    value={nik}
+                    disable={false}
+                    label={'NIK pelanggan'}
+                    onChange={(v)=>setNik(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
                     />
                      <Input 
@@ -111,7 +120,7 @@ const ModalUpdatePelanggan =(props)=>{
                     
                     <div style={{marginTop:10}}>
                         <Button onClick={()=>props?.submit(alamat,email,kuantitas,nama_pelanggan,
-    no_hp,pembelian,poin,total_kunjungan)} variant="contained">Save</Button>
+    no_hp,pembelian,poin,total_kunjungan,nik)} variant="contained">Save</Button>
                     </div>
                 </div>
                

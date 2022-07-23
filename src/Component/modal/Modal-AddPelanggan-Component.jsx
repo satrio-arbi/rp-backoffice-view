@@ -13,6 +13,7 @@ const ModalAddPelanggan =(props)=>{
     const [no_hp,setNo_hp] = useState('')
     const [pembelian,setPembelian] = useState('')
     const [poin,setPoin] = useState('')
+    const [nik,setNik] = useState('')
     const [total_kunjungan,setTotal_kunjungan] = useState('')
     
     useEffect(()=>{
@@ -64,6 +65,13 @@ const ModalAddPelanggan =(props)=>{
                     onChange={(v)=>setEmail(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
                     />
+                    <Input 
+                    value={nik}
+                    disable={false}
+                    label={'NIK pelanggan'}
+                    onChange={(v)=>setNik(v?.target?.value)}
+                    style={{width:'100%',marginTop:10}}
+                    />
                      <Input 
                     value={kuantitas}
                     disable={false}
@@ -111,7 +119,7 @@ const ModalAddPelanggan =(props)=>{
                     
                     <div style={{marginTop:10}}>
                         <Button onClick={()=>props?.submit(alamat,email,kuantitas,nama_pelanggan,
-    no_hp,pembelian,poin,total_kunjungan)} variant="contained">Save</Button>
+    no_hp,pembelian,poin,total_kunjungan,nik)} variant="contained">Save</Button>
                     </div>
                 </div>
                

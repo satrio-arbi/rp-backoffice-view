@@ -5,7 +5,7 @@ import { Login,Dashboard,DetailPenjualanStore } from '../../Page';
 import PenjualanStore from '../../Page/PenjualanStore'
 import PenjualanOffice from '../../Page/PenjualanOffice';
 import LaporanAll from '../../Page/laporan';
-import FormPenjualanOffice from '../../Page/FormPenjualan';
+import StockPerStore from '../../Page/StockPerStore';
 import Pembelian from '../../Page/pembelian';
 import MasterKatgori from '../../Page/MasterKategori';
 import MasterTipe from '../../Page/MasterTipe';
@@ -63,6 +63,7 @@ function Routes() {
       <Switch>
         <RouteBefore exact path='/' component={Login} />
         <PrivateRoute exact path='/dashboard' component={Dashboard} />
+        <PrivateRoute exact path='/stock-per-store' component={StockPerStore} />
         <PrivateRoute exact path='/penjualan-store' component={PenjualanStore}/>
         <PrivateRoute exact path='/penjualan-office' component={PenjualanOffice}/>
         <PrivateRoute exact path='/laporan/all' component={LaporanAll}/>

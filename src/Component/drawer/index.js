@@ -177,6 +177,12 @@ console.log({aks:usr?.akses_modul})
                 <Icon icon="bx:bxs-dashboard" style={{ fontSize: "25px", marginRight: "5px" }} />
                 <Typography>Dashboard</Typography>
               </ListItem>
+              <ListItem Button onClick={() => {
+                history.push('/stock-per-store')
+              }}>
+                <Icon icon="bx:bxs-dashboard" style={{ fontSize: "25px", marginRight: "5px" }} />
+                <Typography>Stock per store</Typography>
+              </ListItem>
               {usr?.akses_modul?.includes('MM-1')?
                 <Accordion>
                 <div style={{ position: "relative", width: "100%" }}>
@@ -482,6 +488,7 @@ console.log({aks:usr?.akses_modul})
                
                 </AccordionDetails>
               </Accordion>:null}
+              
               <Accordion>
                 <AccordionSummary
 

@@ -221,6 +221,37 @@ export const uploadKaryawan= async (file) => {
   return res
   
 }
+//stock per store
+
+export const getStockPerStoreStockAkhir = async (id) => {
+
+  const res = await NET("GET", `stockPerStore/allStockPerStore?id_store=${id}`, {})
+  
+  return res
+  
+}
+export const getStockPerStoreKeluar= async (id,str,end) => {
+
+  const res = await NET("GET", `stockPerStore/storeKeluar?id_store=${id}&date_from=${str}&date_to=${end}`, {})
+  
+  return res
+  
+}
+export const getStockPerStoreMasuk= async (id,str,end) => {
+
+  const res = await NET("GET", `stockPerStore/storeMasuk?id_store=${id}&date_from=${str}&date_to=${end}`, {})
+  
+  return res
+  
+}
+export const getStockPerStore = async () => {
+
+  const res = await NET("GET", `stockPerStore/allStock`, {})
+  
+  return res
+  
+}
+
 //store
 export const getStore = async () => {
 
