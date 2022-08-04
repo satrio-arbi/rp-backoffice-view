@@ -13,9 +13,9 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddProject from '../../Component/modal/Modal-AddProject-Component'
-import ModalUpdateProject from '../../Component/modal/Modal-UpdateProject-Component'
-// import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
+import ModalAddDaftarAkuntan from '../../Component/modal/Modal-AddDaftarAkuntan-Component'
+import ModalUpdateDaftarAkuntan from '../../Component/modal/Modal-UpdateDaftarAkuntan-Component'
+import ModalUploadDaftarAkun from '../../Component/modal/Modal-UploadDaftarAkun-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -28,6 +28,9 @@ import { visuallyHidden } from '@mui/utils';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Button from '../../Component/button/index'
 import Input from '../../Component/input/index'
+import {
+  Button as Buttons
+ } from "@mui/material";
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search'
@@ -39,8 +42,10 @@ import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess} from '../../Component/alert/sweetalert'
-
-import {getProject,getProjectSearch,getProjectAdd,getProjectUpdate,getProjectDelete} from '../../Config/Api-new'
+import moment from 'moment';
+// getDaftarAkun,addDaftarAkun,updateDaftarAkun,
+// deleteDaftarAkun,importDaftarAkun
+import {jurnalUmum,getDaftarAkunSearch,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -74,22 +79,27 @@ function stableSort(array, comparator) {
 
 const headCells = [
  
+    
     {
-      id: "No",
-      label: "No",
-      disablePadding: true,
-      numeric: false,
+      id: "tgl_penerimaan",
+      label: "Tanggal Penerimaan",
+      disablePadding: false
     },
     {
-      id: "Project Name",
-      label: "Project Name",
-      disablePadding: true,
-      numeric: false,
+      id: "nm_akun",
+      label: "Nama akun dan Transaksi",
+      disablePadding: false
     },
     {
-      id: "aksi",
-      label: "Aksi",
-    }
+      id: "db",
+      label: "Debit",
+      disablePadding: false
+    },
+    {
+      id: "kr",
+      label: "Kredit",
+      disablePadding: false
+    },
 ];
 
 function EnhancedTableHead(props) {
@@ -106,14 +116,14 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-      <TableCell
+      {/* <TableCell
             key={'check'}
             // align="center"
             // padding={'normal'}
             // sortDirection={orderBy === headCell.id ? order : false}
           >
            <input type="checkbox" checked={check} onClick={()=>checkAll()} />
-          </TableCell>
+          </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -152,7 +162,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function MasterOffice() {
+export default function MasterKatgori() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -166,21 +176,31 @@ export default function MasterOffice() {
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
   const [cari, setCari] = React.useState();
+  const [tanggal_akhir, setTanggal_akhir] = React.useState(moment(new Date()).format('YYYY-MM-DD'));
+  const [tanggal_awal, setTanggal_awal] = React.useState(moment(new Date()).format('YYYY-MM-DD'));
+  
   const [data,setData] = React.useState([]);
+  const [dataJournal,setDataJournal] = React.useState([]);
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
   useEffect(()=>{
-    getAllProject()
+    getAllJurnaUmum()
   },[])
-  const submitProject =async(project_name)=>{
+  const submitDaftarAkun =async(data)=>{
     setModal(false)
+   
     const formData = new FormData();  
-    formData.append('project_name',project_name)
-
-    let res = await getProjectAdd(formData)
+    formData.append('noAkun',data?.noAkun)
+    formData.append('nama_akun ',data?.namaAkun)
+    formData.append('kelompok',data?.kelompok)
+    formData.append('saldo_awal ',data?.saldo_awal)
+    formData.append('saldo_normal ',data?.saldo_normal)
+    formData.append('tipe ',data?.tipe)
+    
+    let res = await addDaftarAkun(formData)
     if(res?.status){
       alertSuccess('Success',res?.data)
-      getAllProject()
+      getAllJurnaUmum()
     }
     console.log({res:res})
   }
@@ -190,32 +210,45 @@ export default function MasterOffice() {
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
-      await getProjectDelete(array[i]?.id)
+      await deleteDaftarAkun(parseInt(array[i]?.id))
     }
     
     
     }
-    getAllProject()
+    getAllJurnaUmum()
     alertSuccess('Success','Success delete data')
   }
-  const submitUpdateProject =async(project_name)=>{
+  const submitUpdateDaftarAkun =async(data)=>{
     setOpenDetail(false)
     settoBeSelected({})
-    const formData = new FormData();  
-    formData.append('project_name',project_name)
-    formData.append('id',toBeSelected?.id)
-    let res = await getProjectUpdate(formData)
+    const formData = new FormData(); 
+    formData.append('noAkun',data?.noAkun)
+    formData.append('nama_akun ',data?.namaAkun)
+    formData.append('kelompok',data?.kelompok)
+    formData.append('saldo_awal ',data?.saldo_awal)
+    formData.append('saldo_normal ',data?.saldo_normal)
+    formData.append('tipe ',data?.tipe)
+    formData.append('id ',toBeSelected?.id)
+    
+    let res = await updateDaftarAkun(formData)
     if(res?.status){
       alertSuccess('Success',res?.data)
-      getAllProject()
+      getAllJurnaUmum()
     }
     console.log({res:res})
   }
-  const getAllProject =async()=>{
+  const getAllJurnaUmum =async()=>{
     
-    let res = await getProject()
+    let res = await jurnalUmum({tanggal_awal,tanggal_akhir})
     setData(res?.data)
-    
+    let jr =[]
+    res?.data?.map((d)=>{
+        if(!jr.includes(d?.nomorJournal)){
+          jr.push(d.nomorJournal)
+        }
+    })
+    // console.log({jr})
+    setDataJournal(jr)
   }
   const checkSingle=(d,i)=>{
     let array = [...data]
@@ -232,7 +265,9 @@ export default function MasterOffice() {
   const checkSemua=(v)=>{
     let array = [...data]
     array?.map((d,i)=>{
-      array[i]['check'] = v
+      if(d?.is_delets!==1){
+        array[i]['check'] = v
+      }
     })
   
     
@@ -241,7 +276,7 @@ export default function MasterOffice() {
   }
   const searching =async()=>{
     
-    let res = await getProjectSearch(searched)
+    let res = await getDaftarAkunSearch(searched)
     setData(res?.data)
     
   }
@@ -297,7 +332,10 @@ export default function MasterOffice() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const convertImage = (v) => {
+    
+    return 'data:image/png;base64,'+v
+  };
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
@@ -315,7 +353,7 @@ export default function MasterOffice() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Master Project</h1>
+      <h1>Journal Umum</h1>
             <div
              style={{
                  position:"absolute",
@@ -323,76 +361,42 @@ export default function MasterOffice() {
                  display:"flex"
              }}
             >
-            <Button
-                style={{
-                    background: "#E14C4C",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                onClick={()=>deleteData()}
-                label="Hapus"
-                startIcon={<DeleteIcon/>}
-           />
-           {/* <Button
-                style={{
-                    background: "#828EED",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                label="Upload"
-                onClick={()=>setModalUplaod(true)}
-                startIcon={<CloudUploadIcon/>} 
-           />*/}
-            <Button
-                style={{
-                    background: "#03fc35",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                label="Add"
-                onClick={()=>setModal(true)}
-                startIcon={<AddIcon/>}
-           />
+            
+           <div style={{marginRight:10}}>
+            <Input 
+                value={tanggal_awal}
+                disable={false}
+                type='date'
+                label={'Tanggal Awal'}
+                onChange={(v)=>setTanggal_awal(v?.target?.value)}
+                style={{width:'100%',marginTop:20}}
+                />  
+                </div>
+                <div style={{marginRight:10}}>
+                 <Input 
+                value={tanggal_akhir}
+                disable={false}
+                type='date'
+                label={'Tanggal Akhir'}
+                onChange={(v)=>setTanggal_akhir(v?.target?.value)}
+                style={{width:'100%',marginTop:20}}
+                />  
+                </div>
+                <Buttons onClick={()=>getAllJurnaUmum()} style={{marginTop:20,backgroundColor:'blue',color:'white',marginRight:20}}>Cari</Buttons>
+                
            </div>
       </div>
            <Gap height={15}/>
+           <div  >
+            <h3>Journal Umum</h3>
+            <h3>Rudy Project</h3>
+            <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4>
+            <h4>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
+           </div>
 <Box sx={{ width: '100%', marginTop:"20px" }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
       <div align='left'>
-      <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Cari</InputLabel>
-          <OutlinedInput
-            value={searched}
-            onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
-            id="outlined-adornment-password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  edge="end"
-                >
-                 <SearchIcon onClick={()=>searching()}/>
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Cari"
-          />
-        </FormControl>
+     
       </div>
       
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
@@ -413,47 +417,48 @@ export default function MasterOffice() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(data, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
+              {dataJournal?.map((d,i)=>{
+                
+                return (<>
+                {data?.map((row,index)=>{
+                  if(d===row?.nomorJournal){
+                  return(
+                  <TableRow
                       hover
                       onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
+                      role="checkbox" 
                       tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
+                      key={row.id} 
                     >
-                       <TableCell align="left">
-                      <input 
-                       type="checkbox" 
-                       value={row?.check} 
-                       checked={row?.check?row?.check:false} 
-                       onChange={()=>{}} 
-                       onClick={(e)=>checkSingle(row,index)}/>
-                       </TableCell>
-                      <TableCell align="left">{index+1}</TableCell>
-                      <TableCell align="left">{row.project_name}</TableCell>
-                      
-                      <TableCell align="right">
-                      <div style={{
                         
-                      }}>
-                      <IconButton onClick={()=>{
-                        handleOpenDetail(row)
-                      }}>
-                          <RemoveRedEyeOutlinedIcon />
-                        </IconButton>
-                      </div>
-                        </TableCell>
+                      
+                      <TableCell align="left">{moment(row.tanggal_transaksi).format('YYYY-MM-DD')}</TableCell>
+                      <TableCell align="left">{row.noAkun} - {row.nama_akun}</TableCell>
+                      <TableCell align="left">{row.debit_amount}</TableCell>
+                      <TableCell align="left">{row.credit_amount}</TableCell>
+                       
+                    </TableRow>)
+                    }
+                })
+              }
+                <TableRow
+                      hover
+                      onClick={(event) => handleClick(event,i)}
+                      role="checkbox" 
+                      tabIndex={-1}
+                      key={i}
+                     
+                    >
+                        
+                      
+                      
+                      <TableCell style={{backgroundColor:'#dfe2e8',textAlign:'center',fontWeight:'bold'}} colSpan='4' align="left">{d}</TableCell>
+                      
+                       
                     </TableRow>
-                  );
-                })}
+                </>)
+              })}
+               
               {/* {emptyRows > 0 && (
                 <TableRow
                   style={{
@@ -466,7 +471,7 @@ export default function MasterOffice() {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
+        {/* <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={data.length}
@@ -474,26 +479,26 @@ export default function MasterOffice() {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        /> */}
       </Paper>
     </Box>
-    <ModalUpdateProject
+    <ModalUpdateDaftarAkuntan
     open={openDetail}
     data={toBeSelected}
-    submit ={(project_name)=>submitUpdateProject(project_name)}
+    submit ={(data)=>submitUpdateDaftarAkun(data)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <ModalAddProject
+    <ModalAddDaftarAkuntan
     open={modal}
-    submit ={(project_name)=>submitProject(project_name)}
+    submit ={(data)=>submitDaftarAkun(data)}
     onClickOpen = {()=>setModal(!modal)}
     />
-     {/* <ModalUploadTipe
+     <ModalUploadDaftarAkun
     open={modalUplaod}
-    mutate={()=>getAllProject()}
-    submit ={(name)=>submitProject(name)}
+    mutate={()=>getAllJurnaUmum()}
+    
     onClickOpen = {()=>setModalUplaod(!modalUplaod)}
-    /> */}
+    />
     </div>
       );
 }

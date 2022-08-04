@@ -205,7 +205,7 @@ function Dashboard(props) {
     <div style={{ marginTop: "100px" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h1>Dashboard</h1>
-        <div style={{ display: "flex" }}>
+        {/* <div style={{ display: "flex" }}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MobileDatePicker
               open={isForcePickerOpen}
@@ -249,7 +249,7 @@ function Dashboard(props) {
               endIcon={<Icon icon="bytesize:download" />}
             />
           </div>
-        </div>
+        </div> */}
       </div>
       <Box sx={{ width: "100%" }}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -581,7 +581,7 @@ function Dashboard(props) {
         </Grid>
       </Box>
       <Gap height={25} />
-      <Box>
+      {/* <Box>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 1 }}>
           <Grid item xs={12}>
             <Item>
@@ -590,7 +590,7 @@ function Dashboard(props) {
             </Item>
           </Grid>
         </Grid>
-      </Box>
+      </Box> */}
     </div>
   );
 }

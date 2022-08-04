@@ -13,8 +13,10 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddProject from '../../Component/modal/Modal-AddProject-Component'
-import ModalUpdateProject from '../../Component/modal/Modal-UpdateProject-Component'
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import ModalAddBank from '../../Component/modal/Modal-AddBank-Component'
+import ModalUpdateBank from '../../Component/modal/Modal-UpdateBank-Component'
 // import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
@@ -27,20 +29,22 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Button from '../../Component/button/index'
+import {
+  Button as Buttons
+ } from "@mui/material";
 import Input from '../../Component/input/index'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SearchIcon from '@mui/icons-material/Search'
-import FormPembelian from '../../Page/FormPembelian/index'
+import moment from 'moment'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
-import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 
-import {getProject,getProjectSearch,getProjectAdd,getProjectUpdate,getProjectDelete} from '../../Config/Api-new'
+import { getDaftarAkun,getProject,jurnalAdd} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -81,15 +85,41 @@ const headCells = [
       numeric: false,
     },
     {
-      id: "Project Name",
-      label: "Project Name",
+      id: "tgl",
+      label: "Tanggal",
       disablePadding: true,
       numeric: false,
     },
     {
-      id: "aksi",
-      label: "Aksi",
-    }
+      id: "rincian",
+      label: "Rincian Transaksi",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "akun",
+      label: "Akun",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "debit",
+      label: "Debit",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "kredit",
+      label: "Kredit",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "project",
+      label: "Project",
+      disablePadding: true,
+      numeric: false,
+    } 
 ];
 
 function EnhancedTableHead(props) {
@@ -152,7 +182,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function MasterOffice() {
+export default function EntriJurnal() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -162,68 +192,56 @@ export default function MasterOffice() {
   const [toBeSelected, settoBeSelected] = React.useState({});
   const dispatch = useDispatch();
   const dataStore = useSelector((state)=> state.reducer.getPembelian.data)
-  const [openDetail,setOpenDetail] = React.useState(false)
+  
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
   const [cari, setCari] = React.useState();
   const [data,setData] = React.useState([]);
+  const [dataDaftarAkun,setDataDaftarAkun] = React.useState([]);
+  const [dataProject,setDataProject] = React.useState([]);
+  
   const [modal, setModal] = React.useState();
-  const [modalUplaod, setModalUplaod] = React.useState();
+  const [rincian, setRincian] = React.useState('');
+  const [akun, setAkun] = React.useState('');
+  const [debit, setDebit] = React.useState(0);
+  const [kredit, setKredit] = React.useState(0);
+  const [project, setProject] = React.useState('');
+  const [tgl, setTgl] = React.useState(moment(new Date()).format('YYYY-MM-DD'));
+  
   useEffect(()=>{
-    getAllProject()
+    getAllSelect()
   },[])
-  const submitProject =async(project_name)=>{
-    setModal(false)
-    const formData = new FormData();  
-    formData.append('project_name',project_name)
-
-    let res = await getProjectAdd(formData)
-    if(res?.status){
-      alertSuccess('Success',res?.data)
-      getAllProject()
-    }
-    console.log({res:res})
+  const getAllSelect =async()=>{
+     
+    let res = await getDaftarAkun()
+    let res2 = await getProject()
+    setDataDaftarAkun(res?.data)
+    setDataProject(res2?.data)
+    
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({array:array?.length})
+    console.log({data})
     for(let i = 0;i<array?.length;i++){
+      // console.log({s:array[i]?.check})
       if(array[i]?.check===true){
-        
-      await getProjectDelete(array[i]?.id)
+        array.splice(i, 1);
+      // await getBankDelete(parseInt(array[i]?.id))
     }
-    
+   
     
     }
-    getAllProject()
+    setData(array)
     alertSuccess('Success','Success delete data')
-  }
-  const submitUpdateProject =async(project_name)=>{
-    setOpenDetail(false)
-    settoBeSelected({})
-    const formData = new FormData();  
-    formData.append('project_name',project_name)
-    formData.append('id',toBeSelected?.id)
-    let res = await getProjectUpdate(formData)
-    if(res?.status){
-      alertSuccess('Success',res?.data)
-      getAllProject()
-    }
-    console.log({res:res})
-  }
-  const getAllProject =async()=>{
-    
-    let res = await getProject()
-    setData(res?.data)
-    
   }
   const checkSingle=(d,i)=>{
     let array = [...data]
-    let idx = array?.findIndex(a=>a.id==d?.id)
+      
+    // let idx = array?.findIndex(a=>a.id==d?.id)
     if(!d?.check){
-      array[idx]['check'] = true
+      array[i]['check'] = true
     }else{
-      array[idx]['check'] = false
+      array[i]['check'] = false
     }
     
     setData(array)
@@ -239,20 +257,15 @@ export default function MasterOffice() {
     setData(array)
 
   }
-  const searching =async()=>{
-    
-    let res = await getProjectSearch(searched)
-    setData(res?.data)
-    
-  }
+  
   useEffect(()=>{
     setRows(dataStore)
   },[dataStore])
-  const handleOpenDetail=(dataStore)=>{
-    settoBeSelected(dataStore)
-    setOpenDetail(true)
-  }
-  console.log(rows)
+  // const handleOpenDetail=(dataStore)=>{
+  //   settoBeSelected(dataStore)
+  //   setOpenDetail(true)
+  // }
+  
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -297,7 +310,10 @@ export default function MasterOffice() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const convertImage = (v) => {
+    
+    return 'data:image/png;base64,'+v
+  };
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
@@ -310,12 +326,58 @@ export default function MasterOffice() {
     const handleChangeSearch = (event) => {
       setSearched(event.target.value);
     };
+  const convAkun = (e)=>{
+    let idx = dataDaftarAkun?.findIndex(a=>a.id==e)
+
+    return dataDaftarAkun[idx]
+  }
+  const convProject = (e)=>{
+    let idx = dataProject?.findIndex(a=>a.id==e)
+
+    return dataProject[idx]
+  }
+  const addData = () =>{
+    let arr =[...data];
+ 
+    arr.push({
+      credit_amount:kredit===''?0:kredit,
+      debit_amount:debit===''?0:debit,
+      kelompok:convAkun(akun)?.kelompok,
+      nama_akun:convAkun(akun)?.namaAkun,
+      noAkun:convAkun(akun)?.noAkun,
+      project:convProject(project)?.id,
+      project_name:convProject(project)?.project_name,
+      tanggal_transaksi:tgl,
+      rincian_transaksi:rincian,
+      rowstatus:1
+    })
+    setData(arr)
+  }
+  const save = async () => {
+    // const formData = new FormData();  
+    // formData.append('request',data)
+    let res = await jurnalAdd(data)
+    if(res?.status){
+      alertSuccess('Success',res?.data)
+      setData([])
+      setRincian('')
+      setAkun('')
+      setDebit(0)
+      setKredit(0)
+      setProject('')
+      setTgl(moment(new Date()).format('YYYY-MM-DD'))
+      
+    }else{
+      alertError('Fail','Gagal upload data')
+    }
+  
+  }
   return (
     <div style={{
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Master Project</h1>
+      <h1>Entri Journal</h1>
             <div
              style={{
                  position:"absolute",
@@ -323,76 +385,88 @@ export default function MasterOffice() {
                  display:"flex"
              }}
             >
-            <Button
-                style={{
-                    background: "#E14C4C",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                onClick={()=>deleteData()}
-                label="Hapus"
-                startIcon={<DeleteIcon/>}
-           />
-           {/* <Button
-                style={{
-                    background: "#828EED",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                label="Upload"
-                onClick={()=>setModalUplaod(true)}
-                startIcon={<CloudUploadIcon/>} 
-           />*/}
-            <Button
-                style={{
-                    background: "#03fc35",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                label="Add"
-                onClick={()=>setModal(true)}
-                startIcon={<AddIcon/>}
-           />
+            
            </div>
       </div>
-           <Gap height={15}/>
+<Gap height={15}/>
 <Box sx={{ width: '100%', marginTop:"20px" }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-      <div align='left'>
-      <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Cari</InputLabel>
-          <OutlinedInput
-            value={searched}
-            onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
-            id="outlined-adornment-password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  edge="end"
-                >
-                 <SearchIcon onClick={()=>searching()}/>
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Cari"
-          />
-        </FormControl>
+      <div style={{ display: 'flex',flexDirection:'row'}}>
+          <div style={{width:'100%',marginRight:10}}>
+                <Input 
+                value={tgl}
+                disable={false}
+                type='date'
+                label={'Tanggal'}
+                onChange={(v)=>setTgl(v?.target?.value)}
+                style={{width:'100%',marginTop:20}}
+                />    
+                <Input 
+                value={rincian}
+                disable={false}
+                type='text'
+                label={'Rincian Transaksi'}
+                onChange={(v)=>setRincian(v?.target?.value)}
+                style={{width:'100%',marginTop:20}}
+                />  
+                <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
+                  <InputLabel id="demo-simple-select-label">Select Akun</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={akun}
+                    label="Select ukuran"
+                    onChange={(v)=>{setAkun(v?.target?.value)}}
+                  >
+                    {dataDaftarAkun?.map((d,i)=>{
+                      return(
+                        
+                          <MenuItem value={d?.id} >{d?.noAkun}-{d?.namaAkun}</MenuItem>
+                        
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+            </div> 
+            <div style={{width:'100%',marginRight:10}}>
+              <Input 
+                value={debit}
+                disable={kredit>0?true:false}
+                type='text'
+                label={'Debit'}
+                onChange={(v)=>setDebit(v?.target?.value)}
+                style={{width:'100%',marginTop:20}}
+                />  
+                <Input 
+                value={kredit}
+                disable={debit>0?true:false}
+                type='text'
+                label={'Kredit'}
+                onChange={(v)=>setKredit(v?.target?.value)}
+                style={{width:'100%',marginTop:20}}
+                />  
+            <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
+                  <InputLabel id="demo-simple-select-label">Select Project</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={project}
+                    label="Select ukuran"
+                    onChange={(v)=>{setProject(v?.target?.value)}}
+                  >
+                    {dataProject?.map((d,i)=>{
+                      return(
+                        
+                          <MenuItem value={d?.id} > {d?.project_name}</MenuItem>
+                        
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+              <div style={{marginTop:30}}>
+                    <Buttons onClick={()=>addData()} variant="contained">Tambah Baris</Buttons>
+              </div>
+          </div>
       </div>
       
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
@@ -437,20 +511,14 @@ export default function MasterOffice() {
                        onChange={()=>{}} 
                        onClick={(e)=>checkSingle(row,index)}/>
                        </TableCell>
+                     
                       <TableCell align="left">{index+1}</TableCell>
+                      <TableCell align="left">{row.tanggal_transaksi}</TableCell>
+                      <TableCell align="left">{row.rincian_transaksi}</TableCell>
+                      <TableCell align="left">{row.noAkun}-{row.nama_akun}</TableCell>
+                      <TableCell align="left">{row.debit_amount}</TableCell>
+                      <TableCell align="left">{row.credit_amount}</TableCell>
                       <TableCell align="left">{row.project_name}</TableCell>
-                      
-                      <TableCell align="right">
-                      <div style={{
-                        
-                      }}>
-                      <IconButton onClick={()=>{
-                        handleOpenDetail(row)
-                      }}>
-                          <RemoveRedEyeOutlinedIcon />
-                        </IconButton>
-                      </div>
-                        </TableCell>
                     </TableRow>
                   );
                 })}
@@ -475,25 +543,15 @@ export default function MasterOffice() {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+        
       </Paper>
+      <div style={{marginTop:30,display:"flex"}}>
+          <Buttons onClick={()=>save()} variant="contained">Simpan</Buttons>
+          <Buttons   onClick={()=>deleteData()} style={{backgroundColor:'red',color:'white',marginLeft:10}} >Hapus <DeleteIcon/></Buttons>
+    </div>
+            
     </Box>
-    <ModalUpdateProject
-    open={openDetail}
-    data={toBeSelected}
-    submit ={(project_name)=>submitUpdateProject(project_name)}
-    onClickOpen = {()=>setOpenDetail(!openDetail)}
-    />
-    <ModalAddProject
-    open={modal}
-    submit ={(project_name)=>submitProject(project_name)}
-    onClickOpen = {()=>setModal(!modal)}
-    />
-     {/* <ModalUploadTipe
-    open={modalUplaod}
-    mutate={()=>getAllProject()}
-    submit ={(name)=>submitProject(name)}
-    onClickOpen = {()=>setModalUplaod(!modalUplaod)}
-    /> */}
+   
     </div>
       );
 }

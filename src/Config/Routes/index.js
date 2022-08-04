@@ -29,7 +29,9 @@ import PenyimpananBarangOpname from '../../Page/penyimpanan/StockOpname';
 import Produk from '../../Page/produk';
 import MasterBank from '../../Page/MasterBank';
 import MasterProject from '../../Page/MasterProject';
-
+import DaftarAkutansi from '../../Page/DaftarAkutansi';
+import EntriJurnal from '../../Page/EntriJurnal';
+import JournalUmum from '../../Page/journal-umum';
 const PrivateRoute = ({ component: Component, ...rest }) => {
 	const accessToken = localStorage.getItem("rd-prjt");
 
@@ -64,6 +66,9 @@ function Routes() {
         <RouteBefore exact path='/' component={Login} />
         <PrivateRoute exact path='/dashboard' component={Dashboard} />
         <PrivateRoute exact path='/stock-per-store' component={StockPerStore} />
+        <PrivateRoute exact path='/daftar-akutansi' component={DaftarAkutansi} />
+        <PrivateRoute exact path='/entri-jurnal' component={EntriJurnal} />
+        <PrivateRoute exact path='/journal-umum' component={JournalUmum} />
         <PrivateRoute exact path='/penjualan-store' component={PenjualanStore}/>
         <PrivateRoute exact path='/penjualan-office' component={PenjualanOffice}/>
         <PrivateRoute exact path='/laporan/all' component={LaporanAll}/>

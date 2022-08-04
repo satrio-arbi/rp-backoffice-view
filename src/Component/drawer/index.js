@@ -488,7 +488,101 @@ console.log({aks:usr?.akses_modul})
                
                 </AccordionDetails>
               </Accordion>:null}
-              
+              <Accordion>
+                <AccordionSummary 
+                  aria-controls="panel2a-content"
+                  id="panel2a-header">
+                  <ListItem>
+                    <Icon icon="carbon:report-data" style={{ fontSize: "25px", marginRight: "5px" }} />
+                    <Typography>Akutansi</Typography>
+                    <ExpandMoreIcon style={{
+                    position: "absolute",
+                    right: 0
+                  }} />
+                  </ListItem>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <List style={{cursor:"pointer"}}>
+                    <ListItem onClick={() => {
+                      history.push('/daftar-akutansi')
+                    }}>
+                      <ListItemText primary="Daftar Akun" />
+                    </ListItem>
+                  </List>
+                  <List style={{cursor:"pointer"}}>
+                    <ListItem onClick={() => {
+                      history.push('/entri-jurnal')
+                    }}>
+                      <ListItemText primary="Entri Jrunal" />
+                    </ListItem>
+                  </List>
+                  <List style={{cursor:"pointer"}}>
+                    <Accordion>
+                        <AccordionSummary 
+                          aria-controls="panel2a-content"
+                          id="panel2a-header">
+                          <ListItem>
+                            {/* <Icon icon="carbon:report-data" style={{ fontSize: "25px", marginRight: "5px" }} /> */}
+                            <Typography>Statement</Typography>
+                            <ExpandMoreIcon style={{
+                            position: "absolute",
+                            right: 0
+                          }} />
+                          </ListItem>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <List style={{cursor:"pointer"}}>
+                            <ListItem onClick={() => {
+                              history.push('/journal-umum')
+                            }}>
+                              <ListItemText primary="Jurnal Umum" />
+                            </ListItem>
+                          </List>
+                          <List style={{cursor:"pointer"}}>
+                            <ListItem onClick={() => {
+                              history.push('/entri-jurnal')
+                            }}>
+                              <ListItemText primary="Buku Besar" />
+                            </ListItem>
+                          </List>
+                          <List style={{cursor:"pointer"}}>
+                            
+                          </List>
+                          <List style={{cursor:"pointer"}}>
+                            <ListItem onClick={() => {
+                              history.push('/entri-jurnal')
+                            }}>
+                              <ListItemText primary="Neraca Saldo" />
+                            </ListItem>
+                          </List>
+                          <List style={{cursor:"pointer"}}>
+                            
+                          </List>
+                          <List style={{cursor:"pointer"}}>
+                            <ListItem onClick={() => {
+                              history.push('/entri-jurnal')
+                            }}>
+                              <ListItemText primary="Laporan Laba Rugi" />
+                            </ListItem>
+                          </List>
+                          <List style={{cursor:"pointer"}}>
+                            
+                          </List>
+                          <List style={{cursor:"pointer"}}>
+                            <ListItem onClick={() => {
+                              history.push('/entri-jurnal')
+                            }}>
+                              <ListItemText primary="Neraca Keuangan" />
+                            </ListItem>
+                          </List>
+                          <List style={{cursor:"pointer"}}>
+                            
+                          </List>
+                        </AccordionDetails>
+                      </Accordion>
+                  </List>
+                </AccordionDetails>
+              </Accordion>
               <Accordion>
                 <AccordionSummary
 

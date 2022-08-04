@@ -13,9 +13,9 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddProject from '../../Component/modal/Modal-AddProject-Component'
-import ModalUpdateProject from '../../Component/modal/Modal-UpdateProject-Component'
-// import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
+import ModalAddDaftarAkuntan from '../../Component/modal/Modal-AddDaftarAkuntan-Component'
+import ModalUpdateDaftarAkuntan from '../../Component/modal/Modal-UpdateDaftarAkuntan-Component'
+import ModalUploadDaftarAkun from '../../Component/modal/Modal-UploadDaftarAkun-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -39,8 +39,9 @@ import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess} from '../../Component/alert/sweetalert'
-
-import {getProject,getProjectSearch,getProjectAdd,getProjectUpdate,getProjectDelete} from '../../Config/Api-new'
+// getDaftarAkun,addDaftarAkun,updateDaftarAkun,
+// deleteDaftarAkun,importDaftarAkun
+import {getDaftarAkun,getDaftarAkunSearch,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -81,8 +82,38 @@ const headCells = [
       numeric: false,
     },
     {
-      id: "Project Name",
-      label: "Project Name",
+      id: "no_akun",
+      label: "No akun",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "nama_akun",
+      label: "Nama akun",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "kelompok",
+      label: "Kelompok",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "tipe",
+      label: "Tipe",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "saldo_normal",
+      label: "Saldo Normal",
+      disablePadding: true,
+      numeric: false,
+    },
+    {
+      id: "saldo_awal",
+      label: "Saldo Awal",
       disablePadding: true,
       numeric: false,
     },
@@ -152,7 +183,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function MasterOffice() {
+export default function MasterKatgori() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -170,17 +201,23 @@ export default function MasterOffice() {
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
   useEffect(()=>{
-    getAllProject()
+    getAllDaftarAkun()
   },[])
-  const submitProject =async(project_name)=>{
+  const submitDaftarAkun =async(data)=>{
     setModal(false)
+   
     const formData = new FormData();  
-    formData.append('project_name',project_name)
-
-    let res = await getProjectAdd(formData)
+    formData.append('noAkun',data?.noAkun)
+    formData.append('nama_akun ',data?.namaAkun)
+    formData.append('kelompok',data?.kelompok)
+    formData.append('saldo_awal ',data?.saldo_awal)
+    formData.append('saldo_normal ',data?.saldo_normal)
+    formData.append('tipe ',data?.tipe)
+    
+    let res = await addDaftarAkun(formData)
     if(res?.status){
       alertSuccess('Success',res?.data)
-      getAllProject()
+      getAllDaftarAkun()
     }
     console.log({res:res})
   }
@@ -190,30 +227,36 @@ export default function MasterOffice() {
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
-      await getProjectDelete(array[i]?.id)
+      await deleteDaftarAkun(parseInt(array[i]?.id))
     }
     
     
     }
-    getAllProject()
+    getAllDaftarAkun()
     alertSuccess('Success','Success delete data')
   }
-  const submitUpdateProject =async(project_name)=>{
+  const submitUpdateDaftarAkun =async(data)=>{
     setOpenDetail(false)
     settoBeSelected({})
-    const formData = new FormData();  
-    formData.append('project_name',project_name)
-    formData.append('id',toBeSelected?.id)
-    let res = await getProjectUpdate(formData)
+    const formData = new FormData(); 
+    formData.append('noAkun',data?.noAkun)
+    formData.append('nama_akun ',data?.namaAkun)
+    formData.append('kelompok',data?.kelompok)
+    formData.append('saldo_awal ',data?.saldo_awal)
+    formData.append('saldo_normal ',data?.saldo_normal)
+    formData.append('tipe ',data?.tipe)
+    formData.append('id ',toBeSelected?.id)
+    
+    let res = await updateDaftarAkun(formData)
     if(res?.status){
       alertSuccess('Success',res?.data)
-      getAllProject()
+      getAllDaftarAkun()
     }
     console.log({res:res})
   }
-  const getAllProject =async()=>{
+  const getAllDaftarAkun =async()=>{
     
-    let res = await getProject()
+    let res = await getDaftarAkun()
     setData(res?.data)
     
   }
@@ -232,7 +275,9 @@ export default function MasterOffice() {
   const checkSemua=(v)=>{
     let array = [...data]
     array?.map((d,i)=>{
-      array[i]['check'] = v
+      if(d?.is_delets!==1){
+        array[i]['check'] = v
+      }
     })
   
     
@@ -241,7 +286,7 @@ export default function MasterOffice() {
   }
   const searching =async()=>{
     
-    let res = await getProjectSearch(searched)
+    let res = await getDaftarAkunSearch(searched)
     setData(res?.data)
     
   }
@@ -297,7 +342,10 @@ export default function MasterOffice() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const convertImage = (v) => {
+    
+    return 'data:image/png;base64,'+v
+  };
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
@@ -315,7 +363,7 @@ export default function MasterOffice() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Master Project</h1>
+      <h1>Daftar Akutansi</h1>
             <div
              style={{
                  position:"absolute",
@@ -337,7 +385,7 @@ export default function MasterOffice() {
                 label="Hapus"
                 startIcon={<DeleteIcon/>}
            />
-           {/* <Button
+           <Button
                 style={{
                     background: "#828EED",
                     color: 'white',
@@ -350,7 +398,7 @@ export default function MasterOffice() {
                 label="Upload"
                 onClick={()=>setModalUplaod(true)}
                 startIcon={<CloudUploadIcon/>} 
-           />*/}
+           />
             <Button
                 style={{
                     background: "#03fc35",
@@ -430,15 +478,21 @@ export default function MasterOffice() {
                       selected={isItemSelected}
                     >
                        <TableCell align="left">
+                        {row?.is_delets!==1?
                       <input 
                        type="checkbox" 
                        value={row?.check} 
                        checked={row?.check?row?.check:false} 
                        onChange={()=>{}} 
-                       onClick={(e)=>checkSingle(row,index)}/>
+                       onClick={(e)=>checkSingle(row,index)}/>:null}
                        </TableCell>
                       <TableCell align="left">{index+1}</TableCell>
-                      <TableCell align="left">{row.project_name}</TableCell>
+                      <TableCell align="left">{row.noAkun}</TableCell>
+                      <TableCell align="left">{row.namaAkun}</TableCell>
+                      <TableCell align="left">{row.kelompok}</TableCell>
+                      <TableCell align="left">{row.tipe}</TableCell>
+                      <TableCell align="left">{row.saldo_normal}</TableCell>
+                      <TableCell align="left">{row.saldo_awal}</TableCell>
                       
                       <TableCell align="right">
                       <div style={{
@@ -477,23 +531,23 @@ export default function MasterOffice() {
         />
       </Paper>
     </Box>
-    <ModalUpdateProject
+    <ModalUpdateDaftarAkuntan
     open={openDetail}
     data={toBeSelected}
-    submit ={(project_name)=>submitUpdateProject(project_name)}
+    submit ={(data)=>submitUpdateDaftarAkun(data)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <ModalAddProject
+    <ModalAddDaftarAkuntan
     open={modal}
-    submit ={(project_name)=>submitProject(project_name)}
+    submit ={(data)=>submitDaftarAkun(data)}
     onClickOpen = {()=>setModal(!modal)}
     />
-     {/* <ModalUploadTipe
+     <ModalUploadDaftarAkun
     open={modalUplaod}
-    mutate={()=>getAllProject()}
-    submit ={(name)=>submitProject(name)}
+    mutate={()=>getAllDaftarAkun()}
+    
     onClickOpen = {()=>setModalUplaod(!modalUplaod)}
-    /> */}
+    />
     </div>
       );
 }

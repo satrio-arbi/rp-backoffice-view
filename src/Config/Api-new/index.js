@@ -252,6 +252,109 @@ export const getStockPerStore = async () => {
   
 }
 
+//akutansi
+export const getDaftarAkun = async () => {
+
+  const res = await NET("GET", `akutansi/coa/all`, {})
+  
+  return res
+  
+}
+
+export const addDaftarAkun = async (data) => {
+
+  const res = await NET("POST", `akutansi/coa/add`, data)
+  
+  return res
+  
+}
+export const updateDaftarAkun = async (data) => {
+
+  const res = await NET("POST", `akutansi/coa/update`, data)
+  
+  return res
+  
+}
+
+export const deleteDaftarAkun = async (id) => {
+
+  const res = await NET("GET", `akutansi/coa/delete?id=${id}`, {})
+  
+  return res
+  
+}
+
+export const dropdownDaftarAkun = async (data) => {
+
+  const res = await NET("GET", `akutansi/coa/dropdown?noAkun=${data}`, )
+  
+  return res
+  
+}
+export const getDaftarAkunSearch = async (search) => {
+
+  const res = await NET("GET", `akutansi/coa/search?keyword=${search}`, )
+  
+  return res
+  
+}
+export const importDaftarAkun = async (data) => {
+  const res = await NET("POST", `akutansi/coa/import`, data, '', '',true)
+  
+  
+  return res
+  
+}
+export const jurnalAdd = async (data) => {
+  const res = await NET("POST", `akutansi/journal/add`, data)
+  // const res = await NET("POST", `akutansi/journal/add`, data)
+  
+  
+  return res
+  
+}
+export const jurnalBukuBesar= async (data) => {
+  const res = await NET("POST", `akutansi/journal/bukuBesar`, data)
+  
+  
+  return res
+  
+}
+export const jurnalUmum = async (data) => {
+  const res = await NET("GET", `akutansi/journal/journalUmum?tanggal_akhir=${data?.tanggal_akhir}&tanggal_awal=${data?.tanggal_awal}`, {})
+  
+  
+  return res
+  
+}
+export const jurnalUupdate = async (data) => {
+  const res = await NET("POST", `akutansi/journal/update`, data)
+  
+  
+  return res
+  
+}
+export const neracaSaldo = async (data) => {
+  const res = await NET("POST", `akutansi/neracaSaldo`, data)
+  
+  
+  return res
+  
+}
+export const labaRugi = async (data) => {
+  const res = await NET("POST", `akutansi/labaRugi`, data)
+  
+  
+  return res
+  
+}
+export const neracaKeuangan = async (data) => {
+  const res = await NET("POST", `akutansi/neracaKeuangan`, data)
+  
+  
+  return res
+  
+}
 //store
 export const getStore = async () => {
 
