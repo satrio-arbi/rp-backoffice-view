@@ -540,7 +540,7 @@ console.log({aks:usr?.akses_modul})
                           </List>
                           <List style={{cursor:"pointer"}}>
                             <ListItem onClick={() => {
-                              history.push('/entri-jurnal')
+                              history.push('/buku-besar')
                             }}>
                               <ListItemText primary="Buku Besar" />
                             </ListItem>
@@ -550,7 +550,7 @@ console.log({aks:usr?.akses_modul})
                           </List>
                           <List style={{cursor:"pointer"}}>
                             <ListItem onClick={() => {
-                              history.push('/entri-jurnal')
+                              history.push('/neraca-saldo')
                             }}>
                               <ListItemText primary="Neraca Saldo" />
                             </ListItem>
@@ -560,7 +560,7 @@ console.log({aks:usr?.akses_modul})
                           </List>
                           <List style={{cursor:"pointer"}}>
                             <ListItem onClick={() => {
-                              history.push('/entri-jurnal')
+                              history.push('/laba-rugi')
                             }}>
                               <ListItemText primary="Laporan Laba Rugi" />
                             </ListItem>
@@ -570,7 +570,7 @@ console.log({aks:usr?.akses_modul})
                           </List>
                           <List style={{cursor:"pointer"}}>
                             <ListItem onClick={() => {
-                              history.push('/entri-jurnal')
+                              history.push('/neraca-keuangan')
                             }}>
                               <ListItemText primary="Neraca Keuangan" />
                             </ListItem>

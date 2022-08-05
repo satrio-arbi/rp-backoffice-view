@@ -340,12 +340,12 @@ export default function EntriJurnal() {
     let arr =[...data];
  
     arr.push({
-      credit_amount:kredit===''?0:kredit,
-      debit_amount:debit===''?0:debit,
+      credit_amount:parseFloat(kredit===''?0:kredit),
+      debit_amount:parseFloat(debit===''?0:debit),
       kelompok:convAkun(akun)?.kelompok,
       nama_akun:convAkun(akun)?.namaAkun,
       noAkun:convAkun(akun)?.noAkun,
-      project:convProject(project)?.id,
+      project_id:convProject(project)?.id,
       project_name:convProject(project)?.project_name,
       tanggal_transaksi:tgl,
       rincian_transaksi:rincian,
@@ -356,19 +356,32 @@ export default function EntriJurnal() {
   const save = async () => {
     // const formData = new FormData();  
     // formData.append('request',data)
-    let res = await jurnalAdd(data)
-    if(res?.status){
-      alertSuccess('Success',res?.data)
-      setData([])
-      setRincian('')
-      setAkun('')
-      setDebit(0)
-      setKredit(0)
-      setProject('')
-      setTgl(moment(new Date()).format('YYYY-MM-DD'))
-      
+    let db =0
+    let kr=0
+    data?.map((d)=>{
+      db=db+parseInt(d?.debit_amount)
+      kr=kr+parseInt(d?.credit_amount)
+    })
+    console.log({db,kr})
+    if(db===kr){
+      let res = await jurnalAdd(data)
+      if(res?.status){
+        await alertSuccess('Success',res?.data)
+        setData([])
+        setRincian('')
+        setAkun('')
+        setDebit(0)
+        setKredit(0)
+        setProject('')
+        setTgl(moment(new Date()).format('YYYY-MM-DD'))
+        
+      }else{
+       await alertError('Fail','Gagal upload data')
+        return
+      }
     }else{
-      alertError('Fail','Gagal upload data')
+      await  alertError('Fail',`Journal tidak balance total debit Rp. ${db} dan kredit Rp. ${kr}`)
+        return
     }
   
   }

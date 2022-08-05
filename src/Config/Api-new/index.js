@@ -314,7 +314,7 @@ export const jurnalAdd = async (data) => {
   
 }
 export const jurnalBukuBesar= async (data) => {
-  const res = await NET("POST", `akutansi/journal/bukuBesar`, data)
+  const res = await NET("GET", `akutansi/journal/bukuBesar?tanggal_akhir=${data?.tanggal_akhir}&tanggal_awal=${data?.tanggal_awal}&project=${data?.project}`, {})
   
   
   return res
@@ -335,21 +335,21 @@ export const jurnalUupdate = async (data) => {
   
 }
 export const neracaSaldo = async (data) => {
-  const res = await NET("POST", `akutansi/neracaSaldo`, data)
+  const res = await NET("GET", `akutansi/neracaSaldo?year=${data?.year}`, data)
   
   
   return res
   
 }
 export const labaRugi = async (data) => {
-  const res = await NET("POST", `akutansi/labaRugi`, data)
+  const res = await NET("GET", `akutansi/labaRugi?year=${data?.year}`, {})
   
   
   return res
   
 }
 export const neracaKeuangan = async (data) => {
-  const res = await NET("POST", `akutansi/neracaKeuangan`, data)
+  const res = await NET("GET", `akutansi/neracaKeuangan?year=${data?.year}`, {})
   
   
   return res

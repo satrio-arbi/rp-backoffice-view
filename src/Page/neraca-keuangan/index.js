@@ -47,7 +47,10 @@ import {updateJournalUmumContext} from '../../Config/helper/zustand'
 // getDaftarAkun,addDaftarAkun,updateDaftarAkun,
 // deleteDaftarAkun,importDaftarAkun
 import { useHistory } from 'react-router-dom';
-import {jurnalUmum,jurnalUupdate,getDaftarAkunSearch,getDaftarAkun,getProject,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+import {neracaKeuangan,jurnalUupdate,getDaftarAkunSearch,getDaftarAkun,getProject,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -83,25 +86,16 @@ const headCells = [
  
     
     {
-      id: "tgl_penerimaan",
-      label: "Tanggal Penerimaan",
+      id: "Aktiva",
+      label: "Aktiva",
       disablePadding: false
     },
     {
-      id: "nm_akun",
-      label: "Nama akun dan Transaksi",
+      id: "Pasiva",
+      label: "Pasiva",
       disablePadding: false
     },
-    {
-      id: "db",
-      label: "Debit",
-      disablePadding: false
-    },
-    {
-      id: "kr",
-      label: "Kredit",
-      disablePadding: false
-    },
+   
 ];
 
 function EnhancedTableHead(props) {
@@ -187,8 +181,9 @@ export default function MasterKatgori() {
   const [modalUplaod, setModalUplaod] = React.useState();
   const history = useHistory();
   const [dataDaftarAkun,setDataDaftarAkun] = React.useState([]);
-  const [dataProject,setDataProject] = React.useState([]);
+  const [tot,setTot] = React.useState([]);
   const [dataDetail,setDataDetail] = React.useState({});
+  const [year,setYear] = React.useState(new Date());
   useEffect(()=>{
     // dataDaftarAkun,dataProject
     getAllJurnaUmum()
@@ -246,20 +241,50 @@ export default function MasterKatgori() {
   }
   const getAllJurnaUmum =async()=>{
     
-    let res = await jurnalUmum({tanggal_awal,tanggal_akhir})
+    let res = await neracaKeuangan({year:moment(year).format('YYYY')})
     let res2 = await getDaftarAkun()
-    let res3 = await getProject()
-    setDataDaftarAkun(res2?.data)
-    setDataProject(res3?.data)
-    setData(res?.data)
-    let jr =[]
+    // let res3 = await getProject()
+    // setDataDaftarAkun(res2?.data)
+    // setDataProject(res3?.data)
+    let aktiva = ['Aktiva Lancar','Aktiva Tetap']
+    let pasiva = ['Kewajiban','Ekuitas']
+    let ds = {aktivaLancar:[],aktivaTetap:[],kewajiban:[],ekuitas:[]}
+    
+    let idx
+    let akun =res2?.data
+    let totAktivaLancar = 0
+    let totAktivaTetap = 0
+    let totKewajiban = 0
+    let totEkuitas = 0
     res?.data?.map((d)=>{
-        if(!jr.includes(d?.nomorJournal)){
-          jr.push(d.nomorJournal)
+       idx = akun.findIndex(v=>v?.noAkun===d?.noAkun)
+      if(aktiva?.includes(akun[idx]?.tipe)){
+        if(akun[idx]?.tipe===aktiva[0]){
+            ds?.aktivaLancar.push(d)
+            totAktivaLancar = totAktivaLancar + d?.saldo
+        }else{
+          ds?.aktivaTetap.push(d)
+          totAktivaTetap = totAktivaTetap + d?.saldo
         }
+      }else if(pasiva?.includes(akun[idx]?.tipe)){
+        if(akun[idx]?.tipe===pasiva[0]){
+          ds?.kewajiban.push(d)
+          totKewajiban = totKewajiban + d?.saldo
+      }else{
+        ds?.ekuitas.push(d)
+        totEkuitas = totEkuitas + d?.saldo
+      }
+      }
+       
     })
+    let tots = {aktivaLancar:totAktivaLancar,
+      aktivaTetap:totAktivaTetap,kewajiban:totKewajiban,
+      ekuitas:totEkuitas}
+    
+    setData(ds)
+    setTot(tots)
     // console.log({jr})
-    setDataJournal(jr)
+    // setDataJournal(jr)
   }
   const checkSingle=(d,i)=>{
     let array = [...data]
@@ -383,7 +408,7 @@ export default function MasterKatgori() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Journal Umum</h1>
+      <h1>Neraca Keuangan</h1>
             <div
              style={{
                  position:"absolute",
@@ -393,24 +418,21 @@ export default function MasterKatgori() {
             >
             
            <div style={{marginRight:10}}>
-            <Input 
-                value={tanggal_awal}
-                disable={false}
-                type='date'
-                label={'Tanggal Awal'}
-                onChange={(v)=>setTanggal_awal(v?.target?.value)}
-                style={{width:'100%',marginTop:20}}
-                />  
-                </div>
-                <div style={{marginRight:10}}>
-                 <Input 
-                value={tanggal_akhir}
-                disable={false}
-                type='date'
-                label={'Tanggal Akhir'}
-                onChange={(v)=>setTanggal_akhir(v?.target?.value)}
-                style={{width:'100%',marginTop:20}}
-                />  
+           <p style={{textAlign: 'left' ,fontSize:14}}>Select Year</p>
+                  <DatePicker 
+                      selected={year}
+                      onChange={(date) => setYear(date)}
+                      showYearPicker
+                      dateFormat="yyyy"
+                      customInput={
+                        <input
+                        type="text"
+                        style={{height:30}}
+                        // placeholder={'label'} 
+                        />
+                    }
+                      // style={{height:200}}
+                    />
                 </div>
                 <Buttons onClick={()=>getAllJurnaUmum()} style={{marginTop:20,backgroundColor:'blue',color:'white',marginRight:20}}>Cari</Buttons>
                 
@@ -418,9 +440,9 @@ export default function MasterKatgori() {
       </div>
            <Gap height={15}/>
            <div  >
-            <h3>Journal Umum</h3>
+            <h3>Neraca Keuangan</h3>
             <h3>Rudy Project</h3>
-            <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4>
+            {/* <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4> */}
             <h4>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
            </div>
 <Box sx={{ width: '100%', marginTop:"20px" }}>
@@ -430,13 +452,102 @@ export default function MasterKatgori() {
       </div>
       
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-        <TableContainer>
+        <div style={{display: 'flex'}}>
+          <div style={{width: '100%',textAlign:'left',padding:10 }}>
+            <h4 >Aktiva</h4>
+            <tr style={{fontWeight:'bold'}}>
+                          <td> Aktiva Lancar </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}>  </td>
+                          <td> </td>
+                        </tr>
+                        {data?.aktivaLancar?.map((d,i)=>{return(
+                        <tr key={i}>
+                          <td style={{width:200,maxWidth:200}}> {d?.namaAkun} </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> Rp. {d?.saldo} </td>
+                        </tr>
+                        )})}
+                         <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Aktiva Lancar </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> Rp. {tot?.aktivaLancar} </td>
+                        </tr>
+                        <div style={{marginTop:10}}/>
+                        <tr style={{fontWeight:'bold'}}>
+                          <td> Aktiva Tetap </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}>  </td>
+                          <td> </td>
+                        </tr>
+                        {data?.aktivaTetap?.map((d,i)=>{return(
+                        <tr key={i}>
+                          <td style={{width:200,maxWidth:200}}> {d?.namaAkun} </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> Rp. {d?.saldo} </td>
+                        </tr>
+                        )})}
+                         <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Aktiva Tetap </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> Rp. {tot?.aktivaTetap} </td>
+                        </tr>
+                        <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Aktiva </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> Rp. {tot?.aktivaLancar+tot?.aktivaTetap} </td>
+                        </tr>
+          </div>
+          <hr/>
+          <div style={{width: '100%',textAlign:'left',padding:10}}>
+            <h4 >Pasiva</h4>
+            <tr style={{fontWeight:'bold'}}>
+                          <td> Kewajiban </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}>  </td>
+                          <td> </td>
+                        </tr>
+                        {data?.kewajiban?.map((d,i)=>{return(
+                        <tr key={i}>
+                          <td style={{width:200,maxWidth:200}}> {d?.namaAkun} </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> Rp. {d?.saldo} </td>
+                        </tr>
+                        )})}
+                         <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Kewajiban </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> Rp. {tot?.kewajiban} </td>
+                        </tr>
+                        <div style={{marginTop:10}}/>
+                        <tr style={{fontWeight:'bold'}}>
+                          <td> Ekuitas </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}>  </td>
+                          <td> </td>
+                        </tr>
+                        {data?.ekuitas?.map((d,i)=>{return(
+                        <tr key={i}>
+                          <td style={{width:200,maxWidth:200}}> {d?.namaAkun} </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> Rp. {d?.saldo} </td>
+                        </tr>
+                        )})}
+                         <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Ekuitas </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> Rp. {tot?.ekuitas} </td>
+                        </tr>
+                        <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Pasiva </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> Rp. {tot?.kewajiban+tot?.ekuitas} </td>
+                        </tr>
+          </div>  
+        </div>
+        {/* <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
-            <EnhancedTableHead
+             <EnhancedTableHead
               checkAllList={(v)=>checkSemua(v)}
               numSelected={selected.length}
               data={data}
@@ -447,62 +558,109 @@ export default function MasterKatgori() {
               rowCount={rows.length}
             />
             <TableBody>
-              {dataJournal?.map((d,i)=>{
-                
-                return (<>
-                {data?.map((row,index)=>{
-                  if(d===row?.nomorJournal){
-                  return(
-                  <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox" 
-                      tabIndex={-1}
-                      key={row.id} 
-                    >
-                        
-                      
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{moment(row.tanggal_transaksi).format('YYYY-MM-DD')}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.noAkun} - {row.nama_akun}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.debit_amount}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.credit_amount}</TableCell>
-      
-                    </TableRow>)
-                    }
-                })
-              }
+              
                 <TableRow
                       hover
-                      onClick={(event) => handleClick(event,i)}
+                      
                       role="checkbox" 
                       tabIndex={-1}
-                      key={i}
-                     style={{backgroundColor:'#dfe2e8'}}
+                       
+                    //  style={{backgroundColor:'#dfe2e8'}}
                     >
                         
                       
                       
-                      <TableCell style={{textAlign:'center',fontWeight:'bold'}} colSpan='4' align="left">{d}</TableCell>
-                      
-                      {/* <TableCell align="left">
-                     
-                      </TableCell> */}
+                      <TableCell style={{textAlign:'left' }}  align="left">  
+                         <tr style={{fontWeight:'bold'}}>
+                          <td> Aktiva Lancar </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}>  </td>
+                          <td> </td>
+                        </tr>
+                        {data?.aktivaLancar?.map((d,i)=>{return(
+                        <tr key={i}>
+                          <td style={{width:200,maxWidth:200}}> {d?.namaAkun} </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> {d?.saldo} </td>
+                        </tr>
+                        )})}
+                         <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Aktiva Lancar </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> {tot?.aktivaLancar} </td>
+                        </tr>
+                        <div style={{marginTop:10}}/>
+                        <tr style={{fontWeight:'bold'}}>
+                          <td> Aktiva Tetap </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}>  </td>
+                          <td> </td>
+                        </tr>
+                        {data?.aktivaTetap?.map((d,i)=>{return(
+                        <tr key={i}>
+                          <td style={{width:200,maxWidth:200}}> {d?.namaAkun} </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> {d?.saldo} </td>
+                        </tr>
+                        )})}
+                         <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Aktiva Tetap </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> {tot?.aktivaTetap} </td>
+                        </tr>
+                        <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Aktiva </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> {tot?.aktivaLancar+tot?.aktivaTetap} </td>
+                        </tr>
+                      </TableCell>
+                      <TableCell style={{textAlign:'left' }}  align="left">  
+                      <tr style={{fontWeight:'bold'}}>
+                          <td> Kewajiban </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}>  </td>
+                          <td> </td>
+                        </tr>
+                        {data?.kewajiban?.map((d,i)=>{return(
+                        <tr key={i}>
+                          <td style={{width:200,maxWidth:200}}> {d?.namaAkun} </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> {d?.saldo} </td>
+                        </tr>
+                        )})}
+                         <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Kewajiban </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> {tot?.kewajiban} </td>
+                        </tr>
+                        <div style={{marginTop:10}}/>
+                        <tr style={{fontWeight:'bold'}}>
+                          <td> Ekuitas </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}>  </td>
+                          <td> </td>
+                        </tr>
+                        {data?.ekuitas?.map((d,i)=>{return(
+                        <tr key={i}>
+                          <td style={{width:200,maxWidth:200}}> {d?.namaAkun} </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> {d?.saldo} </td>
+                        </tr>
+                        )})}
+                         <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Ekuitas </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> {tot?.ekuitas} </td>
+                        </tr>
+                        <tr style={{fontWeight:'bold'}}>
+                          <td> Jumlah Pasiva </td>
+                          <td style={{paddingRight:10,paddingLeft:10,paddingTop:5,paddingBottom:5}}> : </td>
+                          <td> {tot?.kewajiban+tot?.ekuitas} </td>
+                        </tr>
+                      </TableCell>
                     </TableRow>
-                </>)
-              })}
+            
                
-              {/* {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
+              
             </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer> */}
         {/* <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -515,14 +673,7 @@ export default function MasterKatgori() {
       </Paper>
     </Box>
     
-    <ModalUpdateEntryJournal
-    open={modal}
-    dataProject={dataProject}
-    dataDaftarAkun={dataDaftarAkun}
-    data={dataDetail}
-    submit ={(data)=>submitUpdateJournalUmum(data)}
-    onClickOpen = {()=>setModal(!modal)}
-    />
+     
      <ModalUploadDaftarAkun
     open={modalUplaod}
     mutate={()=>getAllJurnaUmum()}

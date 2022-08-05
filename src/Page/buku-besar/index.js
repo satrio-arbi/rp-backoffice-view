@@ -38,16 +38,19 @@ import FormPembelian from '../../Page/FormPembelian/index'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 import moment from 'moment';
 import {updateJournalUmumContext} from '../../Config/helper/zustand'
 // getDaftarAkun,addDaftarAkun,updateDaftarAkun,
 // deleteDaftarAkun,importDaftarAkun
 import { useHistory } from 'react-router-dom';
-import {jurnalUmum,jurnalUupdate,getDaftarAkunSearch,getDaftarAkun,getProject,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
+import {kelompok_akutansi} from '../../Config/helper/constant'
+import {jurnalBukuBesar,jurnalUupdate,getProject,getDaftarAkunSearch,getDaftarAkun,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -100,6 +103,11 @@ const headCells = [
     {
       id: "kr",
       label: "Kredit",
+      disablePadding: false
+    },
+    {
+      id: "sd",
+      label: "Saldo Akhir",
       disablePadding: false
     },
 ];
@@ -183,7 +191,10 @@ export default function MasterKatgori() {
   const {setUpdateJournalUmumStore} = updateJournalUmumContext()
   const [data,setData] = React.useState([]);
   const [dataJournal,setDataJournal] = React.useState([]);
+  const [dataKelompok,setDataKelompok] = React.useState([]);
   const [modal, setModal] = React.useState();
+  const [project, setProject] = React.useState();
+  
   const [modalUplaod, setModalUplaod] = React.useState();
   const history = useHistory();
   const [dataDaftarAkun,setDataDaftarAkun] = React.useState([]);
@@ -191,7 +202,7 @@ export default function MasterKatgori() {
   const [dataDetail,setDataDetail] = React.useState({});
   useEffect(()=>{
     // dataDaftarAkun,dataProject
-    getAllJurnaUmum()
+    getAllSelect()
   },[])
   const submitUpdateJournalUmum =async(data)=>{
     setModal(false)
@@ -207,7 +218,7 @@ export default function MasterKatgori() {
     let res = await jurnalUupdate(data)
     if(res?.status){
       alertSuccess('Success',res?.data)
-      getAllJurnaUmum()
+      getAllSelect()
     }
     // console.log({res:res})
   }
@@ -222,44 +233,45 @@ export default function MasterKatgori() {
     
     
     }
-    getAllJurnaUmum()
+    getAllSelect()
     alertSuccess('Success','Success delete data')
   }
-  const submitUpdateDaftarAkun =async(data)=>{
-    setOpenDetail(false)
-    settoBeSelected({})
-    const formData = new FormData(); 
-    formData.append('noAkun',data?.noAkun)
-    formData.append('nama_akun ',data?.namaAkun)
-    formData.append('kelompok',data?.kelompok)
-    formData.append('saldo_awal ',data?.saldo_awal)
-    formData.append('saldo_normal ',data?.saldo_normal)
-    formData.append('tipe ',data?.tipe)
-    formData.append('id ',toBeSelected?.id)
+  
+  const getBukuBesar =async ()=>{
+    if(project){
+      
     
-    let res = await updateDaftarAkun(formData)
-    if(res?.status){
-      alertSuccess('Success',res?.data)
-      getAllJurnaUmum()
+      let res = await jurnalBukuBesar({project,tanggal_awal,tanggal_akhir})
+      setData(res?.data)
+      let jr =[]
+      let kl =[]
+      res?.data?.map((d)=>{
+        if(!kl.includes(d?.kelompok)){
+          kl.push(d.kelompok)
+        }
+          if(jr.findIndex(s=>s?.noAkun===d.noAkun&&s?.kelompok===d.kelompok)===-1){
+            console.log({sd:jr.findIndex(s=>s?.noAkun===d.noAkun&&s?.kelompok===d.kelompok)})
+            jr.push({noAkun:d.noAkun,kelompok:d.kelompok})
+          }
+      })
+        console.log({jr,kl})
+      setDataKelompok(kl)
+      setDataJournal(jr)
+    }else{
+      alertError('Fail','Pilih project dulu')
     }
-    console.log({res:res})
+
+  
   }
-  const getAllJurnaUmum =async()=>{
+  const getAllSelect =async()=>{
     
-    let res = await jurnalUmum({tanggal_awal,tanggal_akhir})
+    
     let res2 = await getDaftarAkun()
     let res3 = await getProject()
     setDataDaftarAkun(res2?.data)
     setDataProject(res3?.data)
-    setData(res?.data)
-    let jr =[]
-    res?.data?.map((d)=>{
-        if(!jr.includes(d?.nomorJournal)){
-          jr.push(d.nomorJournal)
-        }
-    })
-    // console.log({jr})
-    setDataJournal(jr)
+    
+    
   }
   const checkSingle=(d,i)=>{
     let array = [...data]
@@ -383,15 +395,37 @@ export default function MasterKatgori() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Journal Umum</h1>
+      <h1>Buku Besar</h1>
             <div
              style={{
                  position:"absolute",
                  right:0,
-                 display:"flex"
+                 display:"flex",
+                 width:"50%"
+                //  backgroundColor:'blue'
              }}
             >
-            
+            <div style={{marginRight:10, width: '100%'}}>
+            <FormControl sx={{ marginTop:2.5, width: '100%',height:10 }} size="small">
+                  <InputLabel id="demo-simple-select-label">Select Project</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // style={{backgroundColor:'blue',height:10}}
+                    value={project}
+                    label="Select ukuran"
+                    onChange={(v)=>{setProject(v?.target?.value)}}
+                  >
+                    {dataProject?.map((d,i)=>{
+                      return(
+                        
+                          <MenuItem value={d?.project_name} > {d?.project_name}</MenuItem>
+                        
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+              </div>
            <div style={{marginRight:10}}>
             <Input 
                 value={tanggal_awal}
@@ -399,7 +433,7 @@ export default function MasterKatgori() {
                 type='date'
                 label={'Tanggal Awal'}
                 onChange={(v)=>setTanggal_awal(v?.target?.value)}
-                style={{width:'100%',marginTop:20}}
+                style={{width:'100%',marginTop:20 }}
                 />  
                 </div>
                 <div style={{marginRight:10}}>
@@ -412,13 +446,13 @@ export default function MasterKatgori() {
                 style={{width:'100%',marginTop:20}}
                 />  
                 </div>
-                <Buttons onClick={()=>getAllJurnaUmum()} style={{marginTop:20,backgroundColor:'blue',color:'white',marginRight:20}}>Cari</Buttons>
+                <Buttons onClick={()=>getBukuBesar()} style={{marginTop:20,backgroundColor:'blue',color:'white',marginRight:20}}>Cari</Buttons>
                 
            </div>
       </div>
            <Gap height={15}/>
            <div  >
-            <h3>Journal Umum</h3>
+            <h3>Buku Besar</h3>
             <h3>Rudy Project</h3>
             <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4>
             <h4>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
@@ -436,7 +470,8 @@ export default function MasterKatgori() {
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
-            <EnhancedTableHead
+             
+           <EnhancedTableHead
               checkAllList={(v)=>checkSemua(v)}
               numSelected={selected.length}
               data={data}
@@ -446,31 +481,30 @@ export default function MasterKatgori() {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
-            <TableBody>
-              {dataJournal?.map((d,i)=>{
+            {dataKelompok?.map((w,r)=>{
                 
                 return (<>
-                {data?.map((row,index)=>{
-                  if(d===row?.nomorJournal){
-                  return(
-                  <TableRow
+                <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      onClick={(event) => handleClick(event,r)}
                       role="checkbox" 
                       tabIndex={-1}
-                      key={row.id} 
+                      key={r}
+                     style={{backgroundColor:'#e3b3de'}}
                     >
                         
                       
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{moment(row.tanggal_transaksi).format('YYYY-MM-DD')}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.noAkun} - {row.nama_akun}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.debit_amount}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.credit_amount}</TableCell>
-      
-                    </TableRow>)
-                    }
-                })
-              }
+                      
+                      <TableCell style={{fontWeight:'bold'}} colSpan='5' align="left">{w}</TableCell>
+                      
+                      {/* <TableCell align="left">
+                     
+                      </TableCell> */}
+                    </TableRow>
+                    
+              {dataJournal?.map((d,i)=>{
+                if(d?.kelompok===w){
+                return (<>
                 <TableRow
                       hover
                       onClick={(event) => handleClick(event,i)}
@@ -482,25 +516,40 @@ export default function MasterKatgori() {
                         
                       
                       
-                      <TableCell style={{textAlign:'center',fontWeight:'bold'}} colSpan='4' align="left">{d}</TableCell>
+                      <TableCell style={{fontWeight:'bold'}} colSpan='5' align="left">{d?.noAkun}</TableCell>
                       
-                      {/* <TableCell align="left">
-                     
-                      </TableCell> */}
+                    
                     </TableRow>
-                </>)
+            <TableBody>
+             
+                {data?.map((row,index)=>{
+                  if(d?.noAkun===row?.noAkun&&w===row?.kelompok){
+                  return(
+                  <TableRow
+                      hover
+                      onClick={(event) => handleClick(event, row.id)}
+                      role="checkbox" 
+                      tabIndex={-1}
+                      key={row.id} 
+                    >
+                        
+                      
+                      <TableCell  align="left">{moment(row.tanggal_transaksi).format('YYYY-MM-DD')}</TableCell>
+                      <TableCell   align="left">{row.noAkun} - {row.nama_akun}</TableCell>
+                      <TableCell  align="left">{row.debit_amount}</TableCell>
+                      <TableCell   align="left">{row.credit_amount}</TableCell>
+                      <TableCell   align="left">{row.saldo_akhir}</TableCell>
+                    </TableRow>)
+                    }
+                })
+              }
+                
+              
+             
+            </TableBody> 
+            </>)}
               })}
-               
-              {/* {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
-            </TableBody>
+               </>) })}
           </Table>
         </TableContainer>
         {/* <TablePagination
@@ -525,7 +574,7 @@ export default function MasterKatgori() {
     />
      <ModalUploadDaftarAkun
     open={modalUplaod}
-    mutate={()=>getAllJurnaUmum()}
+    mutate={()=>getAllSelect()}
     
     onClickOpen = {()=>setModalUplaod(!modalUplaod)}
     />

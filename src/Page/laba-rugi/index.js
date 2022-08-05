@@ -46,8 +46,11 @@ import moment from 'moment';
 import {updateJournalUmumContext} from '../../Config/helper/zustand'
 // getDaftarAkun,addDaftarAkun,updateDaftarAkun,
 // deleteDaftarAkun,importDaftarAkun
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 import { useHistory } from 'react-router-dom';
-import {jurnalUmum,jurnalUupdate,getDaftarAkunSearch,getDaftarAkun,getProject,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
+import {labaRugi,jurnalUupdate,getDaftarAkunSearch,getDaftarAkun,getProject} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -187,8 +190,10 @@ export default function MasterKatgori() {
   const [modalUplaod, setModalUplaod] = React.useState();
   const history = useHistory();
   const [dataDaftarAkun,setDataDaftarAkun] = React.useState([]);
-  const [dataProject,setDataProject] = React.useState([]);
+  const [tot,setTot] = React.useState({});
   const [dataDetail,setDataDetail] = React.useState({});
+  const [year,setYear] = React.useState(new Date());
+  
   useEffect(()=>{
     // dataDaftarAkun,dataProject
     getAllJurnaUmum()
@@ -211,55 +216,38 @@ export default function MasterKatgori() {
     }
     // console.log({res:res})
   }
-  const deleteData = async ()=>{
-    let array = [...data]
-    console.log({array:array?.length})
-    for(let i = 0;i<array?.length;i++){
-      if(array[i]?.check===true){
-        
-      await deleteDaftarAkun(parseInt(array[i]?.id))
-    }
-    
-    
-    }
-    getAllJurnaUmum()
-    alertSuccess('Success','Success delete data')
-  }
-  const submitUpdateDaftarAkun =async(data)=>{
-    setOpenDetail(false)
-    settoBeSelected({})
-    const formData = new FormData(); 
-    formData.append('noAkun',data?.noAkun)
-    formData.append('nama_akun ',data?.namaAkun)
-    formData.append('kelompok',data?.kelompok)
-    formData.append('saldo_awal ',data?.saldo_awal)
-    formData.append('saldo_normal ',data?.saldo_normal)
-    formData.append('tipe ',data?.tipe)
-    formData.append('id ',toBeSelected?.id)
-    
-    let res = await updateDaftarAkun(formData)
-    if(res?.status){
-      alertSuccess('Success',res?.data)
-      getAllJurnaUmum()
-    }
-    console.log({res:res})
-  }
+  
   const getAllJurnaUmum =async()=>{
     
-    let res = await jurnalUmum({tanggal_awal,tanggal_akhir})
+    let res = await labaRugi({year:moment(year).format('YYYY')})
     let res2 = await getDaftarAkun()
-    let res3 = await getProject()
+    // let res3 = await getProject()
     setDataDaftarAkun(res2?.data)
-    setDataProject(res3?.data)
-    setData(res?.data)
-    let jr =[]
+    // setDataProject(res3?.data)
+    // setData(res?.data)
+    let jr ={pendapatan:[],pengeluaran:[]}
+    let akun =res2?.data
+    
+    let idx
+    let pendapatan = ['Asset','Modal','Pendapatan']
+    let pengeluaran = ['Kewajiban','Beban']
+    let pd = 0
+    let pn = 0
     res?.data?.map((d)=>{
-        if(!jr.includes(d?.nomorJournal)){
-          jr.push(d.nomorJournal)
-        }
+       idx = akun.findIndex(v=>v?.noAkun===d?.noAkun)
+      if(pendapatan?.includes(akun[idx]?.kelompok)){
+        jr?.pendapatan?.push(d)
+        pd = pd +d?.saldo
+      }else if(pengeluaran?.includes(akun[idx]?.kelompok)){
+        jr?.pengeluaran?.push(d)
+        pn = pn +d?.saldo
+      }
+       
     })
+    let tots = {pendapatan:pd,pengeluaran:pn}
     // console.log({jr})
-    setDataJournal(jr)
+    setTot(tots)
+    setData(jr)
   }
   const checkSingle=(d,i)=>{
     let array = [...data]
@@ -383,7 +371,7 @@ export default function MasterKatgori() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Journal Umum</h1>
+      <h1>Laporan Laba Rugi</h1>
             <div
              style={{
                  position:"absolute",
@@ -392,35 +380,32 @@ export default function MasterKatgori() {
              }}
             >
             
-           <div style={{marginRight:10}}>
-            <Input 
-                value={tanggal_awal}
-                disable={false}
-                type='date'
-                label={'Tanggal Awal'}
-                onChange={(v)=>setTanggal_awal(v?.target?.value)}
-                style={{width:'100%',marginTop:20}}
-                />  
+            <div style={{marginRight:10}}>
+            <p style={{textAlign: 'left' ,fontSize:14}}>Select Year</p>
+                  <DatePicker 
+                      selected={year}
+                      onChange={(date) => setYear(date)}
+                      showYearPicker
+                      dateFormat="yyyy"
+                      customInput={
+                        <input
+                        type="text"
+                        style={{height:30}}
+                        // placeholder={'label'} 
+                        />
+                    }
+                      // style={{height:200}}
+                    />
                 </div>
-                <div style={{marginRight:10}}>
-                 <Input 
-                value={tanggal_akhir}
-                disable={false}
-                type='date'
-                label={'Tanggal Akhir'}
-                onChange={(v)=>setTanggal_akhir(v?.target?.value)}
-                style={{width:'100%',marginTop:20}}
-                />  
-                </div>
+                {/* <Buttons onClick={()=>getAllJurnaUmum()} style={{marginTop:20,backgroundColor:'blue',color:'white',marginRight:20}}>Cari</Buttons> */}
                 <Buttons onClick={()=>getAllJurnaUmum()} style={{marginTop:20,backgroundColor:'blue',color:'white',marginRight:20}}>Cari</Buttons>
-                
            </div>
       </div>
            <Gap height={15}/>
            <div  >
-            <h3>Journal Umum</h3>
+            <h3>Laporan Laba Rugi</h3>
             <h3>Rudy Project</h3>
-            <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4>
+            {/* <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4> */}
             <h4>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
            </div>
 <Box sx={{ width: '100%', marginTop:"20px" }}>
@@ -436,7 +421,7 @@ export default function MasterKatgori() {
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
-            <EnhancedTableHead
+            {/* <EnhancedTableHead
               checkAllList={(v)=>checkSemua(v)}
               numSelected={selected.length}
               data={data}
@@ -445,13 +430,44 @@ export default function MasterKatgori() {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
-            />
-            <TableBody>
-              {dataJournal?.map((d,i)=>{
-                
-                return (<>
-                {data?.map((row,index)=>{
-                  if(d===row?.nomorJournal){
+            /> */}
+             <TableBody>
+             <TableRow
+                      hover
+                      
+                      role="checkbox" 
+                      tabIndex={-1}
+                  
+                     style={{backgroundColor:'#f7dcf5'}}
+                    >
+                        
+                      
+                      
+                      <TableCell style={{textAlign:'left',fontWeight:'bold'}} colSpan='4' align="left">Pendapatan</TableCell>
+                      
+                      {/* <TableCell align="left">
+                     
+                      </TableCell> */}
+                    </TableRow>
+                    <TableRow
+                      hover
+                      
+                      role="checkbox" 
+                      tabIndex={-1}
+                  
+                     style={{backgroundColor:'#dfe2e8'}}
+                    >
+                        
+                      
+                      
+                      <TableCell style={{textAlign:'center',fontWeight:'bold'}} colSpan='4' align="left">Akun</TableCell>
+                      
+                      {/* <TableCell align="left">
+                     
+                      </TableCell> */}
+                    </TableRow>
+                {data?.pendapatan?.map((row,index)=>{
+                  
                   return(
                   <TableRow
                       hover
@@ -462,35 +478,129 @@ export default function MasterKatgori() {
                     >
                         
                       
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{moment(row.tanggal_transaksi).format('YYYY-MM-DD')}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.noAkun} - {row.nama_akun}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.debit_amount}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.credit_amount}</TableCell>
+                      <TableCell lign="left"></TableCell>
+                      <TableCell align="left">{row.noAkun} - {row.namaAkun}</TableCell>
+                      <TableCell align="left"> </TableCell>
+                      <TableCell   align="left">Rp. {row.saldo}</TableCell>
       
                     </TableRow>)
-                    }
+                    
                 })
               }
-                <TableRow
+               <TableRow
                       hover
-                      onClick={(event) => handleClick(event,i)}
+                      
                       role="checkbox" 
                       tabIndex={-1}
-                      key={i}
+                  
                      style={{backgroundColor:'#dfe2e8'}}
                     >
                         
                       
+                        <TableCell lign="left"></TableCell>
+                      <TableCell align="left">Sub Total</TableCell>
+                      <TableCell align="left"> </TableCell>
+                      <TableCell   align="left">Rp. {tot?.pendapatan}</TableCell>
+                     
+                      {/* <TableCell align="left">
+                     
+                      </TableCell> */}
+                    </TableRow>
+               
+               
+            <TableRow
+                      hover
                       
-                      <TableCell style={{textAlign:'center',fontWeight:'bold'}} colSpan='4' align="left">{d}</TableCell>
+                      role="checkbox" 
+                      tabIndex={-1}
+                  
+                     style={{backgroundColor:'#f7dcf5'}}
+                    >
+                        
+                      
+                      
+                      <TableCell style={{textAlign:'left',fontWeight:'bold'}} colSpan='4' align="left">Pengeluaran</TableCell>
                       
                       {/* <TableCell align="left">
                      
                       </TableCell> */}
                     </TableRow>
-                </>)
-              })}
-               
+                    <TableRow
+                      hover
+                      
+                      role="checkbox" 
+                      tabIndex={-1}
+                  
+                     style={{backgroundColor:'#dfe2e8'}}
+                    >
+                        
+                      
+                      
+                      <TableCell style={{textAlign:'center',fontWeight:'bold'}} colSpan='4' align="left">Akun</TableCell>
+                      
+                      {/* <TableCell align="left">
+                     
+                      </TableCell> */}
+                    </TableRow>
+                    {data?.pengeluaran?.map((row,index)=>{
+                
+                return(
+                <TableRow
+                    hover
+                    onClick={(event) => handleClick(event, row.id)}
+                    role="checkbox" 
+                    tabIndex={-1}
+                    key={row.id} 
+                  >
+                      
+                    
+                      <TableCell lign="left"></TableCell>
+                      <TableCell align="left">{row.noAkun} - {row.namaAkun}</TableCell>
+                      <TableCell align="left"> </TableCell>
+                      <TableCell   align="left">Rp. {row.saldo}</TableCell>
+    
+                  </TableRow>)
+                  
+              })
+            }
+             <TableRow
+                      hover
+                      
+                      role="checkbox" 
+                      tabIndex={-1}
+                  
+                     style={{backgroundColor:'#dfe2e8'}}
+                    >
+                        
+                      
+                        <TableCell lign="left"></TableCell>
+                      <TableCell align="left">Sub Total</TableCell>
+                      <TableCell align="left"> </TableCell>
+                      <TableCell   align="left">Rp. {tot?.pengeluaran}</TableCell>
+                     
+                      {/* <TableCell align="left">
+                     
+                      </TableCell> */}
+                    </TableRow>
+                    <TableRow
+                      hover
+                      
+                      role="checkbox" 
+                      tabIndex={-1}
+                  
+                     style={{backgroundColor:'#dfe2e8'}}
+                    >
+                        
+                      
+                        <TableCell lign="left"></TableCell>
+                      <TableCell align="left">Total</TableCell>
+                      <TableCell align="left"> </TableCell>
+                      <TableCell   align="left">Rp. {tot?.pendapatan-tot?.pengeluaran}</TableCell>
+                     
+                      {/* <TableCell align="left">
+                     
+                      </TableCell> */}
+                    </TableRow>
               {/* {emptyRows > 0 && (
                 <TableRow
                   style={{
@@ -515,14 +625,7 @@ export default function MasterKatgori() {
       </Paper>
     </Box>
     
-    <ModalUpdateEntryJournal
-    open={modal}
-    dataProject={dataProject}
-    dataDaftarAkun={dataDaftarAkun}
-    data={dataDetail}
-    submit ={(data)=>submitUpdateJournalUmum(data)}
-    onClickOpen = {()=>setModal(!modal)}
-    />
+   
      <ModalUploadDaftarAkun
     open={modalUplaod}
     mutate={()=>getAllJurnaUmum()}

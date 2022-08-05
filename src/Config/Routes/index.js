@@ -32,6 +32,10 @@ import MasterProject from '../../Page/MasterProject';
 import DaftarAkutansi from '../../Page/DaftarAkutansi';
 import EntriJurnal from '../../Page/EntriJurnal';
 import JournalUmum from '../../Page/journal-umum';
+import BukuBesar from '../../Page/buku-besar';
+import LabaRugi from '../../Page/laba-rugi';
+import NeracaKeuangan from '../../Page/neraca-keuangan';
+import NeracaSaldo from '../../Page/neraca-saldo';
 const PrivateRoute = ({ component: Component, ...rest }) => {
 	const accessToken = localStorage.getItem("rd-prjt");
 
@@ -68,9 +72,12 @@ function Routes() {
         <PrivateRoute exact path='/stock-per-store' component={StockPerStore} />
         <PrivateRoute exact path='/daftar-akutansi' component={DaftarAkutansi} />
         <PrivateRoute exact path='/entri-jurnal' component={EntriJurnal} />
+        
         <PrivateRoute exact path='/journal-umum' component={JournalUmum} />
-        <PrivateRoute exact path='/penjualan-store' component={PenjualanStore}/>
-        <PrivateRoute exact path='/penjualan-office' component={PenjualanOffice}/>
+        <PrivateRoute exact path='/buku-besar' component={BukuBesar} />
+        <PrivateRoute exact path='/laba-rugi' component={LabaRugi} />
+        <PrivateRoute exact path='/neraca-keuangan' component={NeracaKeuangan}/>
+        <PrivateRoute exact path='/neraca-saldo' component={NeracaSaldo}/>
         <PrivateRoute exact path='/laporan/all' component={LaporanAll}/>
         <PrivateRoute exact path='/pembelian' component={Pembelian}/>
         <PrivateRoute exact path='/master/kategori' component={MasterKatgori}/>

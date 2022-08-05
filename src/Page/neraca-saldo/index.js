@@ -28,6 +28,9 @@ import { visuallyHidden } from '@mui/utils';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Button from '../../Component/button/index'
 import Input from '../../Component/input/index'
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 import {
   Button as Buttons
  } from "@mui/material";
@@ -47,7 +50,7 @@ import {updateJournalUmumContext} from '../../Config/helper/zustand'
 // getDaftarAkun,addDaftarAkun,updateDaftarAkun,
 // deleteDaftarAkun,importDaftarAkun
 import { useHistory } from 'react-router-dom';
-import {jurnalUmum,jurnalUupdate,getDaftarAkunSearch,getDaftarAkun,getProject,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
+import {neracaSaldo,jurnalUupdate,getDaftarAkunSearch,getDaftarAkun,getProject,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -185,10 +188,13 @@ export default function MasterKatgori() {
   const [dataJournal,setDataJournal] = React.useState([]);
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
+  const [dbt, setDbt] = React.useState(0);
+  const [krd, setKrd] = React.useState(0);
   const history = useHistory();
   const [dataDaftarAkun,setDataDaftarAkun] = React.useState([]);
   const [dataProject,setDataProject] = React.useState([]);
   const [dataDetail,setDataDetail] = React.useState({});
+  const [year,setYear] = React.useState(new Date());
   useEffect(()=>{
     // dataDaftarAkun,dataProject
     getAllJurnaUmum()
@@ -246,20 +252,26 @@ export default function MasterKatgori() {
   }
   const getAllJurnaUmum =async()=>{
     
-    let res = await jurnalUmum({tanggal_awal,tanggal_akhir})
-    let res2 = await getDaftarAkun()
-    let res3 = await getProject()
-    setDataDaftarAkun(res2?.data)
-    setDataProject(res3?.data)
+    let res = await neracaSaldo({year:moment(year).format('YYYY')})
+    // let res2 = await getDaftarAkun()
+    // let res3 = await getProject()
+    // setDataDaftarAkun(res2?.data)
+    // setDataProject(res3?.data)
     setData(res?.data)
     let jr =[]
+    let db = 0
+    let kd = 0
     res?.data?.map((d)=>{
-        if(!jr.includes(d?.nomorJournal)){
-          jr.push(d.nomorJournal)
-        }
+        // if(!jr.includes(d?.nomorJournal)){
+        //   jr.push(d.nomorJournal)
+        // }
+        db=db+d?.debit_amount
+        kd=kd+d?.credit_amount
     })
+    setDbt(db)
+    setKrd(kd)
     // console.log({jr})
-    setDataJournal(jr)
+    // setDataJournal(jr)
   }
   const checkSingle=(d,i)=>{
     let array = [...data]
@@ -383,7 +395,7 @@ export default function MasterKatgori() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Journal Umum</h1>
+      <h1>Neraca Saldo</h1>
             <div
              style={{
                  position:"absolute",
@@ -392,25 +404,22 @@ export default function MasterKatgori() {
              }}
             >
             
-           <div style={{marginRight:10}}>
-            <Input 
-                value={tanggal_awal}
-                disable={false}
-                type='date'
-                label={'Tanggal Awal'}
-                onChange={(v)=>setTanggal_awal(v?.target?.value)}
-                style={{width:'100%',marginTop:20}}
-                />  
-                </div>
-                <div style={{marginRight:10}}>
-                 <Input 
-                value={tanggal_akhir}
-                disable={false}
-                type='date'
-                label={'Tanggal Akhir'}
-                onChange={(v)=>setTanggal_akhir(v?.target?.value)}
-                style={{width:'100%',marginTop:20}}
-                />  
+              <div style={{marginRight:10}}>
+                <p style={{textAlign: 'left' ,fontSize:14}}>Select Year</p>
+                  <DatePicker 
+                      selected={year}
+                      onChange={(date) => setYear(date)}
+                      showYearPicker
+                      dateFormat="yyyy"
+                      customInput={
+                        <input
+                        type="text"
+                        style={{height:30}}
+                        // placeholder={'label'} 
+                        />
+                    }
+                      // style={{height:200}}
+                    />
                 </div>
                 <Buttons onClick={()=>getAllJurnaUmum()} style={{marginTop:20,backgroundColor:'blue',color:'white',marginRight:20}}>Cari</Buttons>
                 
@@ -418,9 +427,9 @@ export default function MasterKatgori() {
       </div>
            <Gap height={15}/>
            <div  >
-            <h3>Journal Umum</h3>
+            <h3>Neraca Saldo</h3>
             <h3>Rudy Project</h3>
-            <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4>
+            {/* <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4> */}
             <h4>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
            </div>
 <Box sx={{ width: '100%', marginTop:"20px" }}>
@@ -446,12 +455,12 @@ export default function MasterKatgori() {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
-            <TableBody>
-              {dataJournal?.map((d,i)=>{
-                
-                return (<>
+            <TableBody
+           
+            >
+               
                 {data?.map((row,index)=>{
-                  if(d===row?.nomorJournal){
+               
                   return(
                   <TableRow
                       hover
@@ -462,35 +471,57 @@ export default function MasterKatgori() {
                     >
                         
                       
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{moment(row.tanggal_transaksi).format('YYYY-MM-DD')}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.noAkun} - {row.nama_akun}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.debit_amount}</TableCell>
-                      <TableCell onClick={()=>updateEntryJurnal(row)} align="left">{row.credit_amount}</TableCell>
+                      <TableCell   align="left">{moment(row.tanggal_transaksi).format('YYYY-MM-DD')}</TableCell>
+                      <TableCell   align="left">{row.noAkun} - {row.nama_akun}</TableCell>
+                      <TableCell   align="left">{row.debit_amount}</TableCell>
+                      <TableCell   align="left">{row.credit_amount}</TableCell>
       
                     </TableRow>)
-                    }
+                   
                 })
               }
-                <TableRow
+              <div  
+                style={{position: 'relative',marginBottom:40}}
+              >
+                <div style={{
+                    position: 'fixed',
+                    right: 24,
+                    bottom: 15,
+                    // top:1,
+                    width: '77.5%',
+                    backgroundColor: '#f0f3f7',
+                    color: 'black',
+                    // textAlign: 'center'
+                    height:50
+                }}>
+                <div style={{display:'flex',textAlign: 'center'}}>
+                  <div style={{height:50,width: '100%' }}></div>
+                  <div style={{height:50,width: '250%'}}></div>
+                  <div style={{height:50,width: '100%',paddingTop:10 }}>Rp. {dbt}</div>
+                  <div style={{height:50,width: '100%',paddingTop:10 }}>Rp. {krd}</div>
+                </div>
+                </div> 
+              </div>
+                  {/* <TableRow
                       hover
-                      onClick={(event) => handleClick(event,i)}
+                      // onClick={(event) => handleClick(event, row.id)}
                       role="checkbox" 
                       tabIndex={-1}
-                      key={i}
-                     style={{backgroundColor:'#dfe2e8'}}
+                      style={{backgroundColor:'gray',
+                      position:'fixed',
+                      textAlign: 'center',
+                      bottom:'0',
+                      // width: '100%',
+                      }}
                     >
                         
                       
-                      
-                      <TableCell style={{textAlign:'center',fontWeight:'bold'}} colSpan='4' align="left">{d}</TableCell>
-                      
-                      {/* <TableCell align="left">
-                     
-                      </TableCell> */}
-                    </TableRow>
-                </>)
-              })}
-               
+                      <TableCell ></TableCell>
+                      <TableCell > </TableCell>
+                      <TableCell > 0</TableCell>
+                      <TableCell >0</TableCell>
+      
+                    </TableRow> */}
               {/* {emptyRows > 0 && (
                 <TableRow
                   style={{
