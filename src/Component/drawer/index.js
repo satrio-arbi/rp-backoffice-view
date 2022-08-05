@@ -346,73 +346,7 @@ console.log({aks:usr?.akses_modul})
                   </List>
                 </AccordionDetails>
               </Accordion>:null}
-              {usr?.akses_modul?.includes('MM-18')?
-              <Accordion>
-                <AccordionSummary
-
-                  aria-controls="panel2a-content"
-                  id="panel2a-header"
-                >
-                  <Icon icon="mdi:cash-check" style={{ fontSize: "25px", marginRight: "5px" }} />
-                  <Typography>Akuntansi</Typography>
-                  <ExpandMoreIcon style={{
-                    position: "absolute",
-                    right: 0
-                  }} />
-                </AccordionSummary>
-                <AccordionDetails>
-                  <List style={{cursor:"pointer"}}>
-                  {usr?.akses_modul?.includes('MM-19')?
-                    <ListItem>
-                      <ListItemText primary="Daftar Akun" />
-                    </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-20')?
-                    <ListItem>
-                      <ListItemText primary="Entri Jurnal" />
-                    </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-21')?
-                    <ListItem>
-                      <Accordion>
-                        <AccordionSummary
-
-                          aria-controls="panel2a-content"
-                          id="panel2a-header"
-                        >
-                          <Typography>Statment</Typography>
-                          <ExpandMoreIcon style={{
-                            position: "absolute",
-                            right: 0
-                          }} />
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <List style={{cursor:"pointer"}}>
-                          {usr?.akses_modul?.includes('MM-22')?
-                            <ListItem>
-                              <ListItemText primary="Jurnal Umum" />
-                            </ListItem>:null}
-                            {usr?.akses_modul?.includes('MM-23')?
-                            <ListItem>
-                              <ListItemText primary="Buku Besar" />
-                            </ListItem>:null}
-                            {usr?.akses_modul?.includes('MM-24')?
-                            <ListItem>
-                              <ListItemText primary="Neraca Saldo" />
-                            </ListItem>:null}
-                            {usr?.akses_modul?.includes('MM-25')?
-                            <ListItem>
-                              <ListItemText primary="Laporan Laba Rugi" />
-                            </ListItem>:null}
-                            {usr?.akses_modul?.includes('MM-26')?
-                            <ListItem>
-                              <ListItemText primary="Neraca Keuangan" />
-                            </ListItem>:null}
-                          </List>
-                        </AccordionDetails>
-                      </Accordion>
-                    </ListItem>:null}
-                  </List>
-                </AccordionDetails>
-              </Accordion>:null}
+              
               {usr?.akses_modul?.includes('MM-27')?
               <Accordion>
                 <AccordionSummary
@@ -488,101 +422,92 @@ console.log({aks:usr?.akses_modul})
                
                 </AccordionDetails>
               </Accordion>:null}
+              {usr?.akses_modul?.includes('MM-18')?
               <Accordion>
-                <AccordionSummary 
+                <AccordionSummary
+
                   aria-controls="panel2a-content"
-                  id="panel2a-header">
-                  <ListItem>
-                    <Icon icon="carbon:report-data" style={{ fontSize: "25px", marginRight: "5px" }} />
-                    <Typography>Akutansi</Typography>
-                    <ExpandMoreIcon style={{
+                  id="panel2a-header"
+                >
+                  <Icon icon="mdi:cash-check" style={{ fontSize: "25px", marginRight: "5px" }} />
+                  <Typography>Akuntansi</Typography>
+                  <ExpandMoreIcon style={{
                     position: "absolute",
                     right: 0
                   }} />
-                  </ListItem>
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                    <ListItem onClick={() => {
-                      history.push('/daftar-akutansi')
-                    }}>
-                      <ListItemText primary="Daftar Akun" />
-                    </ListItem>
-                  </List>
-                  <List style={{cursor:"pointer"}}>
+                  {usr?.akses_modul?.includes('MM-19')?
+                     <List style={{cursor:"pointer"}}>
+                     <ListItem onClick={() => {
+                       history.push('/daftar-akutansi')
+                     }}>
+                       <ListItemText primary="Daftar Akun" />
+                     </ListItem>
+                   </List>:null}
+                    {usr?.akses_modul?.includes('MM-20')?
+                    <List style={{cursor:"pointer"}}>
                     <ListItem onClick={() => {
                       history.push('/entri-jurnal')
                     }}>
                       <ListItemText primary="Entri Jrunal" />
                     </ListItem>
-                  </List>
-                  <List style={{cursor:"pointer"}}>
-                    <Accordion>
-                        <AccordionSummary 
+                  </List>:null}
+                    {usr?.akses_modul?.includes('MM-21')?
+                    <ListItem>
+                      <Accordion>
+                        <AccordionSummary
+
                           aria-controls="panel2a-content"
-                          id="panel2a-header">
-                          <ListItem>
-                            {/* <Icon icon="carbon:report-data" style={{ fontSize: "25px", marginRight: "5px" }} /> */}
-                            <Typography>Statement</Typography>
-                            <ExpandMoreIcon style={{
+                          id="panel2a-header"
+                        >
+                          <Typography>Statment</Typography>
+                          <ExpandMoreIcon style={{
                             position: "absolute",
                             right: 0
                           }} />
-                          </ListItem>
                         </AccordionSummary>
                         <AccordionDetails>
                           <List style={{cursor:"pointer"}}>
+                          {usr?.akses_modul?.includes('MM-22')?
                             <ListItem onClick={() => {
                               history.push('/journal-umum')
                             }}>
                               <ListItemText primary="Jurnal Umum" />
-                            </ListItem>
-                          </List>
-                          <List style={{cursor:"pointer"}}>
+                            </ListItem>:null}
+                            {usr?.akses_modul?.includes('MM-23')?
                             <ListItem onClick={() => {
                               history.push('/buku-besar')
                             }}>
                               <ListItemText primary="Buku Besar" />
-                            </ListItem>
-                          </List>
-                          <List style={{cursor:"pointer"}}>
-                            
-                          </List>
-                          <List style={{cursor:"pointer"}}>
+                            </ListItem>:null}
+                            {usr?.akses_modul?.includes('MM-24')?
                             <ListItem onClick={() => {
                               history.push('/neraca-saldo')
                             }}>
                               <ListItemText primary="Neraca Saldo" />
-                            </ListItem>
-                          </List>
-                          <List style={{cursor:"pointer"}}>
-                            
-                          </List>
-                          <List style={{cursor:"pointer"}}>
+                            </ListItem>:null}
+                            {usr?.akses_modul?.includes('MM-25')?
                             <ListItem onClick={() => {
                               history.push('/laba-rugi')
                             }}>
                               <ListItemText primary="Laporan Laba Rugi" />
-                            </ListItem>
-                          </List>
-                          <List style={{cursor:"pointer"}}>
-                            
-                          </List>
-                          <List style={{cursor:"pointer"}}>
+                            </ListItem>:null}
+                            {usr?.akses_modul?.includes('MM-26')?
                             <ListItem onClick={() => {
                               history.push('/neraca-keuangan')
                             }}>
                               <ListItemText primary="Neraca Keuangan" />
-                            </ListItem>
-                          </List>
-                          <List style={{cursor:"pointer"}}>
-                            
+                            </ListItem>:null}
                           </List>
                         </AccordionDetails>
                       </Accordion>
+                    </ListItem>:null}
                   </List>
                 </AccordionDetails>
-              </Accordion>
+              </Accordion>:null}
+             
               <Accordion>
                 <AccordionSummary
 
