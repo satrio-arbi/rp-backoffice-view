@@ -37,7 +37,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import FormPembelian from '../../Page/FormPembelian/index'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect,useRef } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
@@ -50,6 +50,8 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { useHistory } from 'react-router-dom';
+import {ConvertToRp} from '../../Config/helper/constant'
+import ReactToPrint from 'react-to-print';
 import {labaRugi,jurnalUupdate,getDaftarAkunSearch,getDaftarAkun,getProject} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -193,7 +195,7 @@ export default function MasterKatgori() {
   const [tot,setTot] = React.useState({});
   const [dataDetail,setDataDetail] = React.useState({});
   const [year,setYear] = React.useState(new Date());
-  
+  const componentRef = React.useRef(null);
   useEffect(()=>{
     // dataDaftarAkun,dataProject
     getAllJurnaUmum()
@@ -366,6 +368,23 @@ export default function MasterKatgori() {
     // setUpdateJournalUmumStore(arr)
     // history.push('/entri-jurnal')
   }
+  const reactToPrintContent = React.useCallback(() => {
+    
+    return componentRef.current;
+  }, [componentRef.current]);
+  const reactToPrintTrigger = React.useCallback(() => {
+    // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+    // to the root node of the returned component as it will be overwritten.
+
+    // Bad: the `onClick` here will be overwritten by `react-to-print`
+    // return <button onClick={() => alert('This will not work')}>Print this out!</button>;
+
+    // Good
+    return  (
+    <div>
+      <Buttons style={{marginTop:20,backgroundColor:'green',color:'white',marginRight:20}}>Download</Buttons>
+      </div>)
+  }, []);
   return (
     <div style={{
       marginTop:"5%"
@@ -379,7 +398,12 @@ export default function MasterKatgori() {
                  display:"flex"
              }}
             >
-            
+             <ReactToPrint
+            content={reactToPrintContent}
+            documentTitle={`Laba Rugi ${moment(new Date()).format('DD MMMM YYYY')}`}
+          
+            trigger={reactToPrintTrigger}
+          />
             <div style={{marginRight:10}}>
             <p style={{textAlign: 'left' ,fontSize:14}}>Select Year</p>
                   <DatePicker 
@@ -402,11 +426,12 @@ export default function MasterKatgori() {
            </div>
       </div>
            <Gap height={15}/>
+           <div ref={componentRef} >
            <div  >
-            <h3>Laporan Laba Rugi</h3>
-            <h3>Rudy Project</h3>
+            <h3 style={{textAlign:'center'}}>Laporan Laba Rugi</h3>
+            <h3 style={{textAlign:'center'}}>Rudy Project</h3>
             {/* <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4> */}
-            <h4>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
+            <h4 style={{textAlign:'center'}}>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
            </div>
 <Box sx={{ width: '100%', marginTop:"20px" }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -438,7 +463,7 @@ export default function MasterKatgori() {
                       role="checkbox" 
                       tabIndex={-1}
                   
-                     style={{backgroundColor:'#f7dcf5'}}
+                     style={{backgroundColor:'#f7dcf5',borderWidth:2,borderColor:'#f7dcf5',borderStyle: 'solid'}}
                     >
                         
                       
@@ -455,7 +480,7 @@ export default function MasterKatgori() {
                       role="checkbox" 
                       tabIndex={-1}
                   
-                     style={{backgroundColor:'#dfe2e8'}}
+                     style={{backgroundColor:'#dfe2e8',borderWidth:2,borderColor:'#dfe2e8',borderStyle: 'solid'}}
                     >
                         
                       
@@ -481,7 +506,7 @@ export default function MasterKatgori() {
                       <TableCell lign="left"></TableCell>
                       <TableCell align="left">{row.noAkun} - {row.namaAkun}</TableCell>
                       <TableCell align="left"> </TableCell>
-                      <TableCell   align="left">Rp. {row.saldo}</TableCell>
+                      <TableCell   align="left">{ConvertToRp(row.saldo)}</TableCell>
       
                     </TableRow>)
                     
@@ -500,7 +525,7 @@ export default function MasterKatgori() {
                         <TableCell lign="left"></TableCell>
                       <TableCell align="left">Sub Total</TableCell>
                       <TableCell align="left"> </TableCell>
-                      <TableCell   align="left">Rp. {tot?.pendapatan}</TableCell>
+                      <TableCell   align="left">{ConvertToRp(tot?.pendapatan)}</TableCell>
                      
                       {/* <TableCell align="left">
                      
@@ -514,7 +539,7 @@ export default function MasterKatgori() {
                       role="checkbox" 
                       tabIndex={-1}
                   
-                     style={{backgroundColor:'#f7dcf5'}}
+                     style={{backgroundColor:'#f7dcf5',borderWidth:2,borderColor:'#f7dcf5',borderStyle: 'solid'}}
                     >
                         
                       
@@ -531,7 +556,7 @@ export default function MasterKatgori() {
                       role="checkbox" 
                       tabIndex={-1}
                   
-                     style={{backgroundColor:'#dfe2e8'}}
+                     style={{backgroundColor:'#dfe2e8',borderWidth:2,borderColor:'#dfe2e8',borderStyle: 'solid'}}
                     >
                         
                       
@@ -557,7 +582,7 @@ export default function MasterKatgori() {
                       <TableCell lign="left"></TableCell>
                       <TableCell align="left">{row.noAkun} - {row.namaAkun}</TableCell>
                       <TableCell align="left"> </TableCell>
-                      <TableCell   align="left">Rp. {row.saldo}</TableCell>
+                      <TableCell   align="left">{ConvertToRp(row.saldo)}</TableCell>
     
                   </TableRow>)
                   
@@ -576,7 +601,7 @@ export default function MasterKatgori() {
                         <TableCell lign="left"></TableCell>
                       <TableCell align="left">Sub Total</TableCell>
                       <TableCell align="left"> </TableCell>
-                      <TableCell   align="left">Rp. {tot?.pengeluaran}</TableCell>
+                      <TableCell   align="left">{ConvertToRp(tot?.pengeluaran)}</TableCell>
                      
                       {/* <TableCell align="left">
                      
@@ -595,7 +620,7 @@ export default function MasterKatgori() {
                         <TableCell lign="left"></TableCell>
                       <TableCell align="left">Total</TableCell>
                       <TableCell align="left"> </TableCell>
-                      <TableCell   align="left">Rp. {tot?.pendapatan-tot?.pengeluaran}</TableCell>
+                      <TableCell   align="left">{ConvertToRp(tot?.pendapatan-tot?.pengeluaran)}</TableCell>
                      
                       {/* <TableCell align="left">
                      
@@ -624,7 +649,7 @@ export default function MasterKatgori() {
         /> */}
       </Paper>
     </Box>
-    
+    </div>
    
      <ModalUploadDaftarAkun
     open={modalUplaod}

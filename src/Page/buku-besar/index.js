@@ -37,7 +37,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import FormPembelian from '../../Page/FormPembelian/index'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect,useRef } from 'react';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Gap from '../../Component/gap/index';
@@ -49,7 +49,8 @@ import {updateJournalUmumContext} from '../../Config/helper/zustand'
 // getDaftarAkun,addDaftarAkun,updateDaftarAkun,
 // deleteDaftarAkun,importDaftarAkun
 import { useHistory } from 'react-router-dom';
-import {kelompok_akutansi} from '../../Config/helper/constant'
+import {ConvertToRp} from '../../Config/helper/constant'
+import ReactToPrint from 'react-to-print';
 import {jurnalBukuBesar,jurnalUupdate,getProject,getDaftarAkunSearch,getDaftarAkun,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -200,6 +201,7 @@ export default function MasterKatgori() {
   const [dataDaftarAkun,setDataDaftarAkun] = React.useState([]);
   const [dataProject,setDataProject] = React.useState([]);
   const [dataDetail,setDataDetail] = React.useState({});
+  const componentRef = React.useRef(null);
   useEffect(()=>{
     // dataDaftarAkun,dataProject
     getAllSelect()
@@ -390,6 +392,23 @@ export default function MasterKatgori() {
     // setUpdateJournalUmumStore(arr)
     // history.push('/entri-jurnal')
   }
+  const reactToPrintContent = React.useCallback(() => {
+    
+    return componentRef.current;
+  }, [componentRef.current]);
+  const reactToPrintTrigger = React.useCallback(() => {
+    // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+    // to the root node of the returned component as it will be overwritten.
+
+    // Bad: the `onClick` here will be overwritten by `react-to-print`
+    // return <button onClick={() => alert('This will not work')}>Print this out!</button>;
+
+    // Good
+    return  (
+    <div>
+      <Buttons style={{marginTop:20,backgroundColor:'green',color:'white',marginRight:20}}>Download</Buttons>
+      </div>)
+  }, []);
   return (
     <div style={{
       marginTop:"5%"
@@ -401,10 +420,16 @@ export default function MasterKatgori() {
                  position:"absolute",
                  right:0,
                  display:"flex",
-                 width:"50%"
+                 width:"60%"
                 //  backgroundColor:'blue'
              }}
             >
+              <ReactToPrint
+            content={reactToPrintContent}
+            documentTitle={`Buku Besar ${moment(tanggal_awal).format('DD MMMM YYYY')} - ${moment(tanggal_akhir).format('DD MMMM YYYY')}`}
+          
+            trigger={reactToPrintTrigger}
+          />
             <div style={{marginRight:10, width: '100%'}}>
             <FormControl sx={{ marginTop:2.5, width: '100%',height:10 }} size="small">
                   <InputLabel id="demo-simple-select-label">Select Project</InputLabel>
@@ -450,12 +475,14 @@ export default function MasterKatgori() {
                 
            </div>
       </div>
+      
            <Gap height={15}/>
+           <div ref={componentRef} >
            <div  >
-            <h3>Buku Besar</h3>
-            <h3>Rudy Project</h3>
-            <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4>
-            <h4>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
+            <h3 style={{textAlign:'center'}}>Buku Besar</h3>
+            <h3 style={{textAlign:'center'}}>Rudy Project</h3>
+            <h4 style={{textAlign:'center'}}>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4>
+            <h4 style={{textAlign:'center'}}>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
            </div>
 <Box sx={{ width: '100%', marginTop:"20px" }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -490,7 +517,7 @@ export default function MasterKatgori() {
                       role="checkbox" 
                       tabIndex={-1}
                       key={r}
-                     style={{backgroundColor:'#e3b3de'}}
+                     style={{backgroundColor:'#e3b3de',borderWidth:2,borderColor:'#e3b3de',borderStyle: 'solid'}}
                     >
                         
                       
@@ -511,7 +538,7 @@ export default function MasterKatgori() {
                       role="checkbox" 
                       tabIndex={-1}
                       key={i}
-                     style={{backgroundColor:'#dfe2e8'}}
+                     style={{backgroundColor:'#dfe2e8',borderWidth:2,borderColor:'#dfe2e8',borderStyle: 'solid'}}
                     >
                         
                       
@@ -536,9 +563,9 @@ export default function MasterKatgori() {
                       
                       <TableCell  align="left">{moment(row.tanggal_transaksi).format('YYYY-MM-DD')}</TableCell>
                       <TableCell   align="left">{row.noAkun} - {row.nama_akun}</TableCell>
-                      <TableCell  align="left">{row.debit_amount}</TableCell>
-                      <TableCell   align="left">{row.credit_amount}</TableCell>
-                      <TableCell   align="left">{row.saldo_akhir}</TableCell>
+                      <TableCell  align="left">{ConvertToRp(row.debit_amount)}</TableCell>
+                      <TableCell   align="left">{ConvertToRp(row.credit_amount)}</TableCell>
+                      <TableCell   align="left">{ConvertToRp(row.saldo_akhir)}</TableCell>
                     </TableRow>)
                     }
                 })
@@ -563,7 +590,7 @@ export default function MasterKatgori() {
         /> */}
       </Paper>
     </Box>
-    
+    </div>
     <ModalUpdateEntryJournal
     open={modal}
     dataProject={dataProject}

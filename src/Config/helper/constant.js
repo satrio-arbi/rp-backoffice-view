@@ -11,8 +11,21 @@ let tipe_akutansi = [
     'Aktiva Tidak Berwujud','Kewajiban',
     'Ekuitas','Pendapatan','Beban'
 ]
+const ConvertToRp = (val) => {
+    if (val == 0) {
+        return 'Rp. ' + val.toString().replace(".", ",")
+    }
+    if (val) {
+        const num = parseInt(val).toFixed(0)
+        const rp = new Intl.NumberFormat('id-ID', {
+        }).format(num)
 
+        return 'Rp. ' + rp.toString()
+    }
+    return
+}
 export {
+    ConvertToRp,
     saldo_normal_akutansi,
     kelompok_akutansi,
     tipe_akutansi

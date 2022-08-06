@@ -40,13 +40,15 @@ import SearchIcon from '@mui/icons-material/Search'
 import FormPembelian from '../../Page/FormPembelian/index'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect,useRef } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess} from '../../Component/alert/sweetalert'
 import moment from 'moment';
 import {updateJournalUmumContext} from '../../Config/helper/zustand'
+import {ConvertToRp} from '../../Config/helper/constant'
+import ReactToPrint from 'react-to-print';
 // getDaftarAkun,addDaftarAkun,updateDaftarAkun,
 // deleteDaftarAkun,importDaftarAkun
 import { useHistory } from 'react-router-dom';
@@ -195,6 +197,7 @@ export default function MasterKatgori() {
   const [dataProject,setDataProject] = React.useState([]);
   const [dataDetail,setDataDetail] = React.useState({});
   const [year,setYear] = React.useState(new Date());
+  const componentRef = React.useRef(null);
   useEffect(()=>{
     // dataDaftarAkun,dataProject
     getAllJurnaUmum()
@@ -390,6 +393,23 @@ export default function MasterKatgori() {
     // setUpdateJournalUmumStore(arr)
     // history.push('/entri-jurnal')
   }
+  const reactToPrintContent = React.useCallback(() => {
+    
+    return componentRef.current;
+  }, [componentRef.current]);
+  const reactToPrintTrigger = React.useCallback(() => {
+    // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+    // to the root node of the returned component as it will be overwritten.
+
+    // Bad: the `onClick` here will be overwritten by `react-to-print`
+    // return <button onClick={() => alert('This will not work')}>Print this out!</button>;
+
+    // Good
+    return  (
+    <div>
+      <Buttons style={{marginTop:20,backgroundColor:'green',color:'white',marginRight:20}}>Download</Buttons>
+      </div>)
+  }, []);
   return (
     <div style={{
       marginTop:"5%"
@@ -403,7 +423,12 @@ export default function MasterKatgori() {
                  display:"flex"
              }}
             >
-            
+            <ReactToPrint
+            content={reactToPrintContent}
+            documentTitle={`Neraca Saldo ${moment(new Date()).format('DD MMMM YYYY')}`}
+          
+            trigger={reactToPrintTrigger}
+          />
               <div style={{marginRight:10}}>
                 <p style={{textAlign: 'left' ,fontSize:14}}>Select Year</p>
                   <DatePicker 
@@ -426,11 +451,12 @@ export default function MasterKatgori() {
            </div>
       </div>
            <Gap height={15}/>
+           <div ref={componentRef} >
            <div  >
-            <h3>Neraca Saldo</h3>
-            <h3>Rudy Project</h3>
+            <h3 style={{textAlign:'center'}}>Neraca Saldo</h3>
+            <h3 style={{textAlign:'center'}}>Rudy Project</h3>
             {/* <h4>{moment(tanggal_awal).format('DD MMMM YYYY')} - {moment(tanggal_akhir).format('DD MMMM YYYY')}</h4> */}
-            <h4>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
+            <h4 style={{textAlign:'center'}}>Dibuat pada {moment(new Date()).format('DD MMMM YYYY')}</h4>
            </div>
 <Box sx={{ width: '100%', marginTop:"20px" }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -473,14 +499,29 @@ export default function MasterKatgori() {
                       
                       <TableCell   align="left">{moment(row.tanggal_transaksi).format('YYYY-MM-DD')}</TableCell>
                       <TableCell   align="left">{row.noAkun} - {row.nama_akun}</TableCell>
-                      <TableCell   align="left">{row.debit_amount}</TableCell>
-                      <TableCell   align="left">{row.credit_amount}</TableCell>
+                      <TableCell   align="left">{ConvertToRp(row.debit_amount)}</TableCell>
+                      <TableCell   align="left">{ConvertToRp(row.credit_amount)}</TableCell>
       
                     </TableRow>)
                    
                 })
               }
-              <div  
+              <TableRow
+                      hover
+                      
+                      role="checkbox" 
+                      tabIndex={-1}
+                      
+                    >
+                        
+                      
+                      <TableCell   align="left"></TableCell>
+                      <TableCell   align="left"></TableCell>
+                      <TableCell   align="left">{ConvertToRp(dbt)}</TableCell>
+                      <TableCell   align="left">{ConvertToRp(krd)}</TableCell>
+      
+                    </TableRow>
+              {/* <div  
                 style={{position: 'relative',marginBottom:40}}
               >
                 <div style={{
@@ -497,11 +538,11 @@ export default function MasterKatgori() {
                 <div style={{display:'flex',textAlign: 'center'}}>
                   <div style={{height:50,width: '100%' }}></div>
                   <div style={{height:50,width: '250%'}}></div>
-                  <div style={{height:50,width: '100%',paddingTop:10 }}>Rp. {dbt}</div>
-                  <div style={{height:50,width: '100%',paddingTop:10 }}>Rp. {krd}</div>
+                  <div style={{height:50,width: '100%',paddingTop:10 }}>  {ConvertToRp(dbt)}</div>
+                  <div style={{height:50,width: '100%',paddingTop:10 }}>  {ConvertToRp(krd)}</div>
                 </div>
                 </div> 
-              </div>
+              </div> */}
                   {/* <TableRow
                       hover
                       // onClick={(event) => handleClick(event, row.id)}
@@ -545,7 +586,7 @@ export default function MasterKatgori() {
         /> */}
       </Paper>
     </Box>
-    
+    </div>
     <ModalUpdateEntryJournal
     open={modal}
     dataProject={dataProject}
