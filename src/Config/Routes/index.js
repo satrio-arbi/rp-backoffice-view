@@ -72,7 +72,9 @@ function Routes() {
         <PrivateRoute exact path='/stock-per-store' component={StockPerStore} />
         <PrivateRoute exact path='/daftar-akutansi' component={DaftarAkutansi} />
         <PrivateRoute exact path='/entri-jurnal' component={EntriJurnal} />
-        
+        <PrivateRoute exact path='/penjualan-office' component={PenjualanOffice} />
+        <PrivateRoute exact path='/penjualan-store' component={PenjualanStore} />
+ 
         <PrivateRoute exact path='/journal-umum' component={JournalUmum} />
         <PrivateRoute exact path='/buku-besar' component={BukuBesar} />
         <PrivateRoute exact path='/laba-rugi' component={LabaRugi} />
