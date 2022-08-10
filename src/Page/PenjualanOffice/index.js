@@ -264,7 +264,7 @@ export default function Pembelian() {
       alertSuccess('Success',res?.data)
       getAllPembelian()
     }
-    console.log({res:res})
+    console.log({res:arr,v})
   }
   const getAllPembelian =async()=>{
     
