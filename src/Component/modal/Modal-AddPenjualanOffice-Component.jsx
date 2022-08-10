@@ -26,7 +26,7 @@ const ModalAddPenjualanOffice =(props)=>{
    const [harga_satuan_barang,setHarga_satuan_barang] = useState('')
    const [ongkos_kirim,setOngkos_kirim] = useState('')
    const [pajak,setPajak] = useState('')
-  
+   const [karyawan,setKaryawan] = useState('')
    useEffect(()=>{
       setHarga_satuan_barang('')
       setOngkos_kirim('')
@@ -41,6 +41,7 @@ const ModalAddPenjualanOffice =(props)=>{
        setId_pelanggan('')
        setKuantitas('')
        setBank('')
+       setKaryawan('')
    },[props?.open])
    const getSKU = async (e)=>{
      
@@ -71,6 +72,11 @@ const ModalAddPenjualanOffice =(props)=>{
        
        return {hp:props?.pelanggan?props?.pelanggan[idx]?.no_hp:'',nama:props?.pelanggan?props?.pelanggan[idx]?.nama_pelanggan:''}
      }
+     const convertKaryawan = (v) =>{
+      let idx = props?.karyawan?.findIndex(a=>a.id==v)
+      
+      return props?.karyawan[idx]
+    }
      const convertOffice=(v) =>{
        let idx = props?.office?.findIndex(a=>a.id==v)
        
@@ -176,6 +182,24 @@ const ModalAddPenjualanOffice =(props)=>{
                              return(
                                
                                  <MenuItem value={d?.id} >{d?.no_hp}-{d?.nama_pelanggan}</MenuItem>
+                               
+                             )
+                           })}
+                         </Select>
+                       </FormControl>
+                       <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
+                         <InputLabel id="demo-simple-select-label">Select karyawan</InputLabel>
+                         <Select
+                           labelId="demo-simple-select-label"
+                           id="demo-simple-select"
+                           value={karyawan}
+                           label="Select Toko Tujuan"
+                           onChange={(v)=>{setKaryawan(v?.target?.value)}}
+                         >
+                           {props?.karyawan?.map((d,i)=>{
+                             return(
+                               
+                                 <MenuItem value={d?.id} >{d?.nama_karyawan}</MenuItem>
                                
                              )
                            })}
@@ -496,11 +520,13 @@ const ModalAddPenjualanOffice =(props)=>{
                        </div>
                    <div style={{marginTop:10}}>
                        <Button onClick={()=>props?.submit(  {detail_penjualan:listDetail,
- tanggal_transaksi:moment(tanggal_transaksi).format('YYYY-MM-DD'),
- id_office,
- lokasi_office:convertOffice(id_office),
- nama_pelanggan:convertPelanggan(id_pelanggan)?.nama,
- no_hp_pelanggan:convertPelanggan(id_pelanggan)?.hp})} variant="contained">Save</Button>
+                        tanggal_transaksi:moment(tanggal_transaksi).format('YYYY-MM-DD'),
+                        id_office,
+                        id_karyawan:convertKaryawan(karyawan)?.id,
+                        nama_karyawan:convertKaryawan(karyawan)?.nama_karyawan,
+                        lokasi_office:convertOffice(id_office),
+                        nama_pelanggan:convertPelanggan(id_pelanggan)?.nama,
+                        no_hp_pelanggan:convertPelanggan(id_pelanggan)?.hp})} variant="contained">Save</Button>
                    </div>
                </div>
               

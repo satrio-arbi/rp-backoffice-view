@@ -41,7 +41,7 @@ import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess} from '../../Component/alert/sweetalert'
 
-import {getBank,getOffice,geReportLaporanPembelian,getUkuran,
+import {getBank,getKaryawanStore,getOffice,geReportLaporanPembelian,getUkuran,
   getPelanggan,getKategori,
   getTipe,getPenjualanOffice,
   getPenjualanOfficeSearch,getPenjualanOfficeAdd,
@@ -205,6 +205,7 @@ export default function Pembelian() {
   const [ukuran, setUkuran] = React.useState([]);
   const [office, setOffice] = React.useState([]);
   const [bank, setBank] = React.useState([]);
+  const [karyawan, setKaryawan] = React.useState([]);
   const [modalReport, setModalReport] = React.useState();
   useEffect(()=>{
     getAllPembelian()
@@ -250,6 +251,8 @@ export default function Pembelian() {
       id_office:v?.id_office,
       lokasi_office:v?.lokasi_office,
       nama_pelanggan:v?.nama_pelanggan,
+      id_karyawan:v?.id_karyawan,
+      nama_karyawan:v?.nama_karyawan,
       no_hp_pelanggan:v?.no_hp_pelanggan,
       tanggal_transaksi:v?.tanggal_transaksi,
       rowstatus:'1',
@@ -272,6 +275,7 @@ export default function Pembelian() {
     let res4 = await getUkuran()
     let res5 = await getOffice()
     let res6 = await getBank()
+    let res7 = await getKaryawanStore(1)
     setPelanggan(res1?.data)
     setKategori(res2?.data)
     setTipe(res3?.data)
@@ -279,6 +283,7 @@ export default function Pembelian() {
     setUkuran(res4?.data)
     setOffice(res5?.data)
     setBank(res6?.data)
+    setKaryawan(res7?.data)
     
   }
   const checkSingle=(d,i)=>{
@@ -581,6 +586,7 @@ export default function Pembelian() {
     tipe={tipe}
     kategori={kategori}
     ukuran={ukuran}
+    karyawan={karyawan}
     submit ={(v)=>submitUpdatePenjualan(v)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
@@ -592,6 +598,7 @@ export default function Pembelian() {
     tipe={tipe}
     kategori={kategori}
     ukuran={ukuran}
+    karyawan={karyawan}
     submit ={(v)=>submitPenjualan(v)}
     onClickOpen = {()=>setModal(!modal)}
     />
