@@ -97,7 +97,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
      let arr = [...listDetail]
      
      arr.push({
-       id:detail?.id,
+      //  id:detail?.id,
        sku_code:sku,
        artikel:article,
        type_name:detail?.type_name,
@@ -123,6 +123,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
    const deleteData = (idx)=>{
      let datas = [...listDetail]
      // let idx = listDetail?.findIndex(a=>a.id==id)
+      // datas[idx]['rowstatus'] =0
      datas.splice(idx, 1);
      setListDetail(datas)
    }
@@ -426,7 +427,8 @@ const ModalUpdatePenjualanOffice =(props)=>{
                            </tr>
                            <tbody>
                              {listDetail?.map((d,i)=>{return(
-                             
+                              d?.rowstatus===1?
+                             <>
                                <tr key={i}>
                                    <td style={{
                                        textAlign: 'left',
@@ -521,6 +523,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                    <DeleteIcon onClick={()=>deleteData(i)}/>
                                    </td>
                                </tr>
+                               </>:null
                                )})}
                            </tbody>
                        </tabel>
