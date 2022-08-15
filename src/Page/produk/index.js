@@ -292,7 +292,7 @@ export default function MasterKatgori() {
      image
     )
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     
@@ -385,7 +385,7 @@ export default function MasterKatgori() {
       nama_kategori,
       image,toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})

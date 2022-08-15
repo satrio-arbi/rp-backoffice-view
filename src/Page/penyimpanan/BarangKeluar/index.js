@@ -241,7 +241,7 @@ export default function BarangKeluar() {
     let res = await geReportBarangKeluar(start,end)
     if(res?.status){
       // ,res?.data
-      alertSuccess('Success')
+      alertSuccess('Success','')
       // getAllKategori()
     }
     console.log({res:res})
@@ -265,7 +265,7 @@ export default function BarangKeluar() {
     settoBeSelected({})
     let res = await updateKategori(name,toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})

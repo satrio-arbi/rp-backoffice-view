@@ -272,7 +272,7 @@ pengiriman)=>{
   lokasi_store_tujuan,
   pengiriman,toBeSelected?.penerimaan_code,toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})

@@ -366,7 +366,7 @@ export default function EntriJurnal() {
     if(db===kr){
       let res = await jurnalAdd(data)
       if(res?.status){
-        await alertSuccess('Success',res?.data)
+        await alertSuccess('Success','')
         setData([])
         setRincian('')
         setAkun('')

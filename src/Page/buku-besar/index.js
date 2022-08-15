@@ -219,7 +219,7 @@ export default function MasterKatgori() {
     
     let res = await jurnalUupdate(data)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllSelect()
     }
     // console.log({res:res})

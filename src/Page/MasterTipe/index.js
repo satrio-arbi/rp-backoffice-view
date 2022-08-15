@@ -175,7 +175,7 @@ export default function MasterKatgori() {
     setModal(false)
     let res = await addTipe(name)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})
@@ -199,7 +199,7 @@ export default function MasterKatgori() {
     settoBeSelected({})
     let res = await updateTipe(name,toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})

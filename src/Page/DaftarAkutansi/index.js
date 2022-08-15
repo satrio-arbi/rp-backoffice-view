@@ -216,7 +216,7 @@ export default function MasterKatgori() {
     
     let res = await addDaftarAkun(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllDaftarAkun()
     }
     console.log({res:res})
@@ -249,7 +249,7 @@ export default function MasterKatgori() {
     
     let res = await updateDaftarAkun(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllDaftarAkun()
     }
     console.log({res:res})

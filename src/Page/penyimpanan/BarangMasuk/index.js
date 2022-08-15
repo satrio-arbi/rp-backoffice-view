@@ -240,7 +240,7 @@ export default function BarangMasuk() {
     let res = await geReportBarangMasuk(start,end)
     if(res?.status){
       // ,res?.data
-      alertSuccess('Success')
+      alertSuccess('Success','')
       // getAllKategori()
     }
     console.log({res:res})
@@ -264,7 +264,7 @@ export default function BarangMasuk() {
     settoBeSelected({})
     let res = await updateKategori(name,toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})

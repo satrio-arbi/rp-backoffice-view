@@ -199,7 +199,7 @@ export default function MasterKatgori() {
     formData.append('office_name ',office)
     let res = await getOfficeAdd(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllOffice()
     }
     console.log({res:res})
@@ -229,7 +229,7 @@ export default function MasterKatgori() {
     formData.append('id',toBeSelected?.id)
     let res = await getOfficeUpdate(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllOffice()
     }
     console.log({res:res})
