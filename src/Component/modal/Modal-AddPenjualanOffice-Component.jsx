@@ -90,7 +90,7 @@ const ModalAddPenjualanOffice =(props)=>{
      let arr = [...listDetail]
      
      arr.push({
-       id:detail?.id,
+      //  id:detail?.id,
        sku_code:sku,
        artikel:article,
        type_name:detail?.type_name,

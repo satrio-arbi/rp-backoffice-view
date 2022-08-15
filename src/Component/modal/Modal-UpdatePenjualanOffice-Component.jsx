@@ -97,7 +97,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
      let arr = [...listDetail]
      
      arr.push({
-       id:detail?.id,
+      //  id:detail?.id,
        sku_code:sku,
        artikel:article,
        type_name:detail?.type_name,
@@ -107,6 +107,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
        nama_barang:detail?.nama_product,
        kuantitas,
        ukuran,
+       rowstatus:1,
        metode_pembayaran:bank,
        harga_satuan_barang,
        ongkos_kirim,
