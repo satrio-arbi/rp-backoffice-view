@@ -561,7 +561,7 @@ export default function Pembelian() {
           />
         </FormControl> */}
         <FormControl sx={{ marginTop:2, width: '25ch' }} variant="outlined">
-                         <InputLabel id="demo-simple-select-label">Select store</InputLabel>
+                         <InputLabel id="demo-simple-select-label">Store</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"

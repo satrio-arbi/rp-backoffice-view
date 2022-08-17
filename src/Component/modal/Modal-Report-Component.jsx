@@ -84,7 +84,7 @@ const ModalAddBank =(props)=>{
                     </div>
                     {d?.i===0||d?.i===13?
                     <FormControl sx={{  width: '100%',marginRight:10,marginTop:2 }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Office</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Office</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
@@ -104,7 +104,7 @@ const ModalAddBank =(props)=>{
                         :null}
                          {d?.i===1?
                           <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Store</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Store</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
@@ -124,7 +124,7 @@ const ModalAddBank =(props)=>{
                           :null}
                           {d?.i===11?
                           <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Product</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Product</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"

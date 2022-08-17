@@ -36,7 +36,7 @@ export default function MasterKatgori() {
 {l:'Report Penerimaan From Store',v:'MM-40'},
 {l:'Report Penerimaan From Supplier',v:'MM-41'},
 {l:'Report Pengiriman Gudang To Store',v:'MM-42'},
-{l:'Report Pengiriman Store To Store2',v:'MM-43'},
+{l:'Report Pengiriman Store To Store',v:'MM-43'},
 {l:'Report Purchase Store By Article',v:'MM-44'},
 {l:'Report Purchase Store By Summary',v:'MM-45'},
 {l:'Report Sales By Office',v:'MM-46'},

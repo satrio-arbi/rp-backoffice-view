@@ -6,12 +6,12 @@ import {
   import React,{useState,useEffect} from 'react';
   import DeleteIcon from '@mui/icons-material/Delete';
   import moment from 'moment';
-import  Input  from "../../Component/input";
+import  Input  from "../input";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import {getProdukBySKU,getProdukByArtikel} from '../../Config/Api-new'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
-const ModalEditStokeOpname =(props)=>{
+const ModalEditStockOpname =(props)=>{
     // const [detail_pengiriman,setDetail_pengiriman] = useState([])
     const [tanggal_pengiriman,setTanggal_pengiriman] = useState(moment(new Date()).format('YYYY-MM-DD'))
     const [id_store_asal,setId_store_asal] = useState('')
@@ -227,4 +227,4 @@ const ModalEditStokeOpname =(props)=>{
     )
 
 }
-export default ModalEditStokeOpname
+export default ModalEditStockOpname

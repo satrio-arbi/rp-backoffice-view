@@ -545,7 +545,7 @@ export default function MasterKatgori() {
           
         </FormControl>
         <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-            <InputLabel id="demo-simple-select-label">Select Store</InputLabel>
+            <InputLabel id="demo-simple-select-label">Store</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"

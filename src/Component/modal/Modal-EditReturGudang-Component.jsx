@@ -183,7 +183,7 @@ const ModaEditReturGudang =(props)=>{
                           </Select>
                         </FormControl>
                         <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Office Tujuan</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Office Tujuan</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"

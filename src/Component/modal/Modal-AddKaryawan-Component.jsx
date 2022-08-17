@@ -127,7 +127,7 @@ const ModalAddKaryawan =(props)=>{
                     style={{width:'100%',marginTop:10}}
                     /> */}
                      <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Store</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Store</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
@@ -154,7 +154,7 @@ const ModalAddKaryawan =(props)=>{
                     style={{width:'100%',marginTop:10}}
                     /> */}
                       <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Office</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Office</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"

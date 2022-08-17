@@ -13,8 +13,8 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddStokeOpname from '../../../Component/modal/Modal-AddStokeOpname-Component'
-import ModalEditStokeOpname from '../../../Component/modal/Modal-EditStokeOpname-Component'
+import ModalAddStockOpname from '../../../Component/modal/Modal-AddStockOpname-Component'
+import ModalEditStockOpname from '../../../Component/modal/Modal-EditStockOpname-Component'
 import ModalUploadKategori from '../../../Component/modal/Modal-UploadKategori-Component'
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
@@ -411,7 +411,7 @@ export default function BarangMasuk() {
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Stoke Opname</h1>
+      <h1>Stock Opname</h1>
             <div
              style={{
                  position:"absolute",
@@ -583,7 +583,7 @@ export default function BarangMasuk() {
         />
       </Paper>
     </Box>
-    <ModalEditStokeOpname
+    <ModalEditStockOpname
     open={openDetail}
     data={toBeSelected}
     submit ={(artikel,
@@ -603,7 +603,7 @@ export default function BarangMasuk() {
       type_name)}
     onClickOpen = {()=>setOpenDetail(!openDetail)}
     />
-    <ModalAddStokeOpname 
+    <ModalAddStockOpname 
     open={modal}
     submit ={(
       artikel,
