@@ -40,7 +40,7 @@ function Login(props) {
                 const resp = await dispatch(login(user))
                 console.log({resp:resp?.payload?.status})
                 if (resp.type === 'LOGIN_SUCCESS'){
-                    await alertSuccess('Success','Login berhasil !')
+                    alertSuccess('Success','Login berhasil !')
                     history.push('/dashboard')
                     window.location.reload()
                 }else{
