@@ -101,6 +101,14 @@ const headCells = [
       disablePadding: true,
       numeric: false,
     }
+    ,
+    
+    {
+      id: "detail",
+      label: "Detail",
+      disablePadding: true,
+      numeric: false,
+    }
 ];
 
 function EnhancedTableHead(props) {
@@ -502,7 +510,17 @@ export default function MasterKatgori() {
                       <TableCell align="left">{row.lokasi_store}</TableCell>
                       
                       <TableCell align="left">{row.total_per_store}</TableCell>
-                     
+                      <TableCell align="right">
+                      <div style={{
+                        
+                      }}>
+                      <IconButton onClick={()=>{
+                        handleOpenDetail(row)
+                      }}>
+                          <RemoveRedEyeOutlinedIcon />
+                        </IconButton>
+                      </div>
+                        </TableCell>
                     </TableRow>
                   );
                 })}
