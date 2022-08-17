@@ -200,6 +200,9 @@ function EnhancedTableHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  // React.useEffect(()=>{
+  //   setCheck(false)
+  // },[checkChange])
   const [head,setHead] = useState([])
   useEffect(()=>{
     let a = []
@@ -476,7 +479,8 @@ const ModalStorePerStock =(props)=>{
             size={dense ? 'small' : 'medium'}
           >
              <EnhancedTableHead
-              // checkAllList={(v)=>checkSemua(v)}
+              //checkAllList={(v)=>checkSemua(v)}
+              // checkChange={check}
               tipe={tipe}
               numSelected={selected.length}
               data={data}

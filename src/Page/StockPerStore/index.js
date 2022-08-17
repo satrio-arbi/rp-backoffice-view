@@ -104,12 +104,15 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
+  const { checkChange,checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
   const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  React.useEffect(()=>{
+    setCheck(false)
+  },[checkChange])
   const checkAll =()=>{
     checkAllList(!check)
     setCheck(!check)
@@ -117,14 +120,14 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-      <TableCell
+      {/* <TableCell
             key={'check'}
             // align="center"
             // padding={'normal'}
             // sortDirection={orderBy === headCell.id ? order : false}
           >
            <input type="checkbox" checked={check} onClick={()=>checkAll()} />
-          </TableCell>
+          </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -155,6 +158,7 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
   data: PropTypes.any,
   checkAllList: PropTypes.func,
+  checkChange: PropTypes.any,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -179,6 +183,7 @@ export default function MasterKatgori() {
   const [idStore, setIdStore] = React.useState();
   const [data,setData] = React.useState([]);
   const [store,setStore] = React.useState([]);
+  const [check, setCheck] = React.useState(false);
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
   useEffect(()=>{
@@ -210,6 +215,7 @@ export default function MasterKatgori() {
     
     }
     getDataPerStore()
+    setCheck(!check)
     alertSuccess('Success','Success delete data')
   }
   const submitUpdateBank =async(acc_number,owner_name,bank_name,image)=>{
@@ -452,7 +458,8 @@ export default function MasterKatgori() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
-              checkAllList={(v)=>checkSemua(v)}
+             checkAllList={(v)=>checkSemua(v)}
+              checkChange={check}
               numSelected={selected.length}
               data={data}
               order={order}
@@ -480,14 +487,14 @@ export default function MasterKatgori() {
                       selected={isItemSelected}
                     >
                       
-                       <TableCell align="left">
+                       {/* <TableCell align="left">
                       <input 
                        type="checkbox" 
                        value={row?.check} 
                        checked={row?.check?row?.check:false} 
                        onChange={()=>{}} 
                        onClick={(e)=>checkSingle(row,index)}/>
-                       </TableCell>
+                       </TableCell> */}
                        
                       <TableCell align="left">{index+1}</TableCell>
                       <TableCell align="left">{row.id}</TableCell>

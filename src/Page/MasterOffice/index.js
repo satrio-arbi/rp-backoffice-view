@@ -111,12 +111,15 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
+  const { checkChange,checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
   const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  React.useEffect(()=>{
+    setCheck(false)
+  },[checkChange])
   const checkAll =()=>{
     checkAllList(!check)
     setCheck(!check)
@@ -162,6 +165,7 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
   data: PropTypes.any,
   checkAllList: PropTypes.func,
+  checkChange: PropTypes.any,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -184,6 +188,7 @@ export default function MasterKatgori() {
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
   const [cari, setCari] = React.useState();
+  const [check, setCheck] = React.useState(false);
   const [data,setData] = React.useState([]);
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
@@ -216,6 +221,7 @@ export default function MasterKatgori() {
     
     }
     getAllOffice()
+    setCheck(!check)
     alertSuccess('Success','Success delete data')
   }
   const submitUpdateOffice =async(alamat,atasan,hp,office)=>{
@@ -426,7 +432,8 @@ export default function MasterKatgori() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
-              checkAllList={(v)=>checkSemua(v)}
+             checkAllList={(v)=>checkSemua(v)}
+              checkChange={check}
               numSelected={selected.length}
               data={data}
               order={order}
