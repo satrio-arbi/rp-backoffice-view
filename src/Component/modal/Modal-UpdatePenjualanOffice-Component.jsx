@@ -124,8 +124,8 @@ const ModalUpdatePenjualanOffice =(props)=>{
    const deleteData = (idx)=>{
      let datas = [...listDetail]
      // let idx = listDetail?.findIndex(a=>a.id==id)
-      // datas[idx]['rowstatus'] =0
-     datas.splice(idx, 1);
+      datas[idx]['rowstatus'] =0
+    //  datas.splice(idx, 1);
      setListDetail(datas)
    }
    return (

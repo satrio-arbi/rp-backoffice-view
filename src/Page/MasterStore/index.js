@@ -199,7 +199,7 @@ export default function MasterKatgori() {
     formData.append('store_name',store)
     let res = await getStoreAdd(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllStore()
     }
     console.log({res:res})
@@ -229,7 +229,7 @@ export default function MasterKatgori() {
     formData.append('id',toBeSelected?.id)
     let res = await getStoreUpdate(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllStore()
     }
     console.log({res:res})

@@ -258,7 +258,7 @@ export default function BarangMasuk() {
   type_name
     )
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})
@@ -296,7 +296,7 @@ export default function BarangMasuk() {
       type,
       type_name,toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})

@@ -233,7 +233,7 @@ export default function MasterKatgori() {
     
     let res = await getPemasokAdd(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllPelanggan()
     }
     console.log({res:res})
@@ -267,7 +267,7 @@ export default function MasterKatgori() {
     formData.append('id',toBeSelected?.id)
     let res = await getPemasokUpdate(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllPelanggan()
     }
     console.log({res:res})
@@ -376,7 +376,7 @@ export default function MasterKatgori() {
       let res = await getDownloadPemasok()
       if(res?.status){
         // ,res?.data
-        alertSuccess('Success')
+        alertSuccess('Success','')
         // getAllKategori()
       }
       console.log({res:res})

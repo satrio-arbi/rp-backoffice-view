@@ -222,7 +222,7 @@ export default function PengirimanOfficeStore() {
       id_store,
       lokasi_store)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})
@@ -259,7 +259,7 @@ export default function PengirimanOfficeStore() {
       lokasi_store,toBeSelected?.pengiriman_code
       ,toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})
@@ -269,7 +269,7 @@ export default function PengirimanOfficeStore() {
     let res = await geReportPengirimanOfficetoStore(start,end)
     if(res?.status){
       // ,res?.data
-      alertSuccess('Success')
+      alertSuccess('Success','')
       // getAllKategori()
     }
     console.log({res:res})

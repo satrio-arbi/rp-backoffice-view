@@ -179,7 +179,7 @@ export default function MasterOffice() {
 
     let res = await getProjectAdd(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllProject()
     }
     console.log({res:res})
@@ -206,7 +206,7 @@ export default function MasterOffice() {
     formData.append('id',toBeSelected?.id)
     let res = await getProjectUpdate(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllProject()
     }
     console.log({res:res})

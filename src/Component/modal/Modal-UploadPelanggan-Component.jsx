@@ -29,7 +29,7 @@ import {
         if(res?.status){
             props?.onClickOpen()
             props?.mutate()
-            alertSuccess('Success',res?.data)
+            alertSuccess('Success','')
             
         }
         

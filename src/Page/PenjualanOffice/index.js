@@ -219,7 +219,7 @@ export default function Pembelian() {
     // formData.append('image ',image)
     let res = await getPenjualanOfficeAdd(v)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllPembelian()
     }
     console.log({res:res})
@@ -253,6 +253,7 @@ export default function Pembelian() {
       nama_pelanggan:v?.nama_pelanggan,
       id_karyawan:v?.id_karyawan,
       nama_karyawan:v?.nama_karyawan,
+      id_transaksi:toBeSelected?.id_transaksi,
       no_hp_pelanggan:v?.no_hp_pelanggan,
       tanggal_transaksi:v?.tanggal_transaksi,
       rowstatus:'1',
@@ -261,10 +262,10 @@ export default function Pembelian() {
     // formData.append('id',toBeSelected?.id)
     let res = await getPenjualanOfficeUpdate(arr)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllPembelian()
     }
-    console.log({res:arr,v})
+    
   }
   const getAllPembelian =async()=>{
     
@@ -387,7 +388,7 @@ export default function Pembelian() {
       let res = await geReportLaporanPembelian(start,end)
       if(res?.status){
         // ,res?.data
-        alertSuccess('Success')
+        alertSuccess('Success','')
         // getAllKategori()
       }
       console.log({res:res})

@@ -276,7 +276,7 @@ export default function Pembelian() {
     // formData.append('image ',image)
     let res = await getPenjualanOfficeAdd(v)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllPembelian()
     }
     console.log({res:res})
@@ -316,7 +316,7 @@ export default function Pembelian() {
     // formData.append('id',toBeSelected?.id)
     let res = await getPenjualanOfficeUpdate(arr)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllPembelian()
     }
     console.log({res:res})
@@ -458,7 +458,7 @@ export default function Pembelian() {
       let res = await geReportLaporanPembelian(start,end)
       if(res?.status){
         // ,res?.data
-        alertSuccess('Success')
+        alertSuccess('Success','')
         // getAllKategori()
       }
       console.log({res:res})

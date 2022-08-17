@@ -203,7 +203,7 @@ export default function MasterKatgori() {
     
     let res = await jurnalUupdate(data)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllJurnaUmum()
     }
     // console.log({res:res})
@@ -236,7 +236,7 @@ export default function MasterKatgori() {
     
     let res = await updateDaftarAkun(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllJurnaUmum()
     }
     console.log({res:res})

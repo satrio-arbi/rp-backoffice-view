@@ -94,12 +94,7 @@ const headCells = [
       disablePadding: true,
       numeric: false,
     },
-    {
-      id: "nama_barang",
-      label: "Nama barang",
-      disablePadding: true,
-      numeric: false,
-    },
+    
     {
       id: "jumlah",
       label: "Jumlah stock",
@@ -198,7 +193,7 @@ export default function MasterKatgori() {
     formData.append('image ',image)
     let res = await getBankAdd(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getDataPerStore()
     }
     console.log({res:res})
@@ -228,7 +223,7 @@ export default function MasterKatgori() {
     formData.append('id',toBeSelected?.id)
     let res = await getBankUpdate(formData)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getDataPerStore()
     }
     console.log({res:res})
@@ -500,17 +495,7 @@ export default function MasterKatgori() {
                       <TableCell align="left">{row.lokasi_store}</TableCell>
                       
                       <TableCell align="left">{row.total_per_store}</TableCell>
-                      <TableCell align="right">
-                      <div style={{
-                        
-                      }}>
-                      <IconButton onClick={()=>{
-                        handleOpenDetail(row)
-                      }}>
-                          <RemoveRedEyeOutlinedIcon />
-                        </IconButton>
-                      </div>
-                        </TableCell>
+                     
                     </TableRow>
                   );
                 })}

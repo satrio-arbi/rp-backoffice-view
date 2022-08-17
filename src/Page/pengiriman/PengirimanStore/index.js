@@ -258,7 +258,7 @@ export default function PengirimanStoreStore() {
     let res = await geReportPengirimanStoretoStore(start,end)
     if(res?.status){
       // ,res?.data
-      alertSuccess('Success')
+      alertSuccess('Success','')
       // getAllKategori()
     }
     console.log({res:res})
@@ -280,7 +280,7 @@ export default function PengirimanStoreStore() {
       id_store_tujuan,
       lokasi_store_tujuan,toBeSelected?.pengiriman_code,toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})

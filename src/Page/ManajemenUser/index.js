@@ -245,7 +245,7 @@ export default function MasterKatgori() {
       id_office,
       email)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})
@@ -289,7 +289,7 @@ export default function MasterKatgori() {
       id_office,
       email,toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})

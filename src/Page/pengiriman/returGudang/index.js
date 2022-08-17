@@ -268,7 +268,7 @@ export default function PengirimanStoreStore() {
       id_store_tujuan,
       lokasi_store_tujuan,toBeSelected?.pengiriman_code,toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})

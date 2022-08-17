@@ -276,7 +276,7 @@ export default function PengirimanStoreStore() {
   toBeSelected?.penerimaan_code,
   toBeSelected?.id)
     if(res?.status){
-      alertSuccess('Success',res?.data)
+      alertSuccess('Success','')
       getAllKategori()
     }
     console.log({res:res})
@@ -297,7 +297,7 @@ export default function PengirimanStoreStore() {
     let res = await geReportPenerimaanFromStore(start,end)
     if(res?.status){
       // ,res?.data
-      alertSuccess('Success')
+      alertSuccess('Success','')
       // getAllKategori()
     }
     console.log({res:res})
