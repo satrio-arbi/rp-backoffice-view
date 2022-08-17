@@ -173,7 +173,7 @@ const ModalPenerimaanAddOfficeStore =(props)=>{
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={id_office}
-                            label="Select Toko Asal"
+                            label="Toko Asal"
                             onChange={(v)=>{setId_office(v?.target?.value)}}
                           >
                             {props?.office?.map((d,i)=>{
@@ -186,12 +186,12 @@ const ModalPenerimaanAddOfficeStore =(props)=>{
                           </Select>
                         </FormControl>
                         <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Toko</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Toko</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={id_store}
-                            label="Select Toko Tujuan"
+                            label="Toko Tujuan"
                             onChange={(v)=>{setId_store(v?.target?.value)}}
                           >
                             {props?.store?.map((d,i)=>{

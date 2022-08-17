@@ -157,7 +157,7 @@ const ModalAddPenjualanOffice =(props)=>{
                            labelId="demo-simple-select-label"
                            id="demo-simple-select"
                            value={id_office}
-                           label="Select Toko Asal"
+                           label="Toko Asal"
                            onChange={(v)=>{setId_office(v?.target?.value)}}
                          >
                            {props?.office?.map((d,i)=>{
@@ -170,12 +170,12 @@ const ModalAddPenjualanOffice =(props)=>{
                          </Select>
                        </FormControl>
                        <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                         <InputLabel id="demo-simple-select-label">Select pelanggan</InputLabel>
+                         <InputLabel id="demo-simple-select-label">pelanggan</InputLabel>
                          <Select
                            labelId="demo-simple-select-label"
                            id="demo-simple-select"
                            value={id_pelanggan}
-                           label="Select Toko Tujuan"
+                           label="Toko Tujuan"
                            onChange={(v)=>{setId_pelanggan(v?.target?.value)}}
                          >
                            {props?.pelanggan?.map((d,i)=>{
@@ -188,12 +188,12 @@ const ModalAddPenjualanOffice =(props)=>{
                          </Select>
                        </FormControl>
                        <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                         <InputLabel id="demo-simple-select-label">Select karyawan</InputLabel>
+                         <InputLabel id="demo-simple-select-label">karyawan</InputLabel>
                          <Select
                            labelId="demo-simple-select-label"
                            id="demo-simple-select"
                            value={karyawan}
-                           label="Select Toko Tujuan"
+                           label="Toko Tujuan"
                            onChange={(v)=>{setKaryawan(v?.target?.value)}}
                          >
                            {props?.karyawan?.map((d,i)=>{
@@ -256,12 +256,12 @@ const ModalAddPenjualanOffice =(props)=>{
                                style={{width:'100%'}}
                                />
                                 <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                         <InputLabel id="demo-simple-select-label">Select Ukuran</InputLabel>
+                         <InputLabel id="demo-simple-select-label">Ukuran</InputLabel>
                          <Select
                            labelId="demo-simple-select-label"
                            id="demo-simple-select"
                            value={ukuran}
-                           label="Select Toko Tujuan"
+                           label="Toko Tujuan"
                            onChange={(v)=>{setUkuran(v?.target?.value)}}
                          >
                            {props?.ukuran?.map((d,i)=>{
@@ -284,15 +284,15 @@ const ModalAddPenjualanOffice =(props)=>{
                                onChange={(v)=>setKuantitas(v?.target?.value)}
                                style={{width:'100%'}}
                                />
-                               {/* <p style={{textColor:'gray',fontSize:'13px'}}>Select Ukuran</p> */}
+                               {/* <p style={{textColor:'gray',fontSize:'13px'}}>Ukuran</p> */}
                               
                        <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                         <InputLabel id="demo-simple-select-label">Select Metode Bayar</InputLabel>
+                         <InputLabel id="demo-simple-select-label">Metode Bayar</InputLabel>
                          <Select
                            labelId="demo-simple-select-label"
                            id="demo-simple-select"
                            value={bank}
-                           label="Select Toko Tujuan"
+                           label="Toko Tujuan"
                            onChange={(v)=>{setBank(v?.target?.value)}}
                          >
                            {props?.bank?.map((d,i)=>{

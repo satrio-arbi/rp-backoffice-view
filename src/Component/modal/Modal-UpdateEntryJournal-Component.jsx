@@ -91,14 +91,14 @@ const ModalUpdateEntryJournal =(props)=>{
                             />  
                             </div> 
                             <div>
-                            {/* <p>Select Akun</p> */}
+                            {/* <p>Akun</p> */}
                             <FormControl sx={{ marginTop:2,  width: '100%' }} variant="outlined">
-                              <InputLabel id="demo-simple-select-label">Select Akun</InputLabel>
+                              <InputLabel id="demo-simple-select-label">Akun</InputLabel>
                               <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={akun}
-                                label="Select ukuran"
+                                label="ukuran"
                                 onChange={(v)=>{setAkun(v?.target?.value)}}
                               >
                                 {props?.dataDaftarAkun?.map((d,i)=>{
@@ -136,14 +136,14 @@ const ModalUpdateEntryJournal =(props)=>{
                             />  
                             </div> 
                             <div>
-                            {/* <p>Select Project</p> */}
+                            {/* <p>Project</p> */}
                         <FormControl sx={{  marginTop:2, width: '100%' }} variant="outlined">
-                              <InputLabel id="demo-simple-select-label">Select Project</InputLabel>
+                              <InputLabel id="demo-simple-select-label">Project</InputLabel>
                               <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={project}
-                                label="Select ukuran"
+                                label="Ukuran"
                                 onChange={(v)=>{setProject(v?.target?.value)}}
                               >
                                 {props?.dataProject?.map((d,i)=>{

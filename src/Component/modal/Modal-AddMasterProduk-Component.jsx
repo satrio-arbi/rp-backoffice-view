@@ -158,12 +158,12 @@ const ModalAddMasterProduk =(props)=>{
                         style={{width:'100%',marginTop:10}}
                         />
                             <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Ukuran</InputLabel>
+                          <InputLabel id="demo-simple-select-label"> Ukuran</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={ukuran}
-                            label="Select Toko Tujuan"
+                            label="Toko Tujuan"
                             onChange={(v)=>{setUkuran(v?.target?.value)}}
                           >
                             {props?.ukuran?.map((d,i)=>{
@@ -176,7 +176,7 @@ const ModalAddMasterProduk =(props)=>{
                           </Select>
                         </FormControl>
                             <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Type</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Type</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
@@ -194,7 +194,7 @@ const ModalAddMasterProduk =(props)=>{
                           </Select>
                         </FormControl>
                         <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Kategori</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"

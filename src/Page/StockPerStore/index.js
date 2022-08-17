@@ -430,7 +430,7 @@ export default function MasterKatgori() {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={idStore}
-                  label="Select Toko Tujuan"
+                  label="Toko Tujuan"
                   onChange={(v)=>{setIdStore(v?.target?.value)}}
                 >
                   {store?.map((d,i)=>{

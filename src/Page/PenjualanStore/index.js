@@ -566,7 +566,7 @@ export default function Pembelian() {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={id_store}
-                  label="Select Toko Tujuan"
+                  label="Toko Tujuan"
                   onChange={(v)=>{setId_store(v?.target?.value)}}
                 >
                   {storeFilter?.map((d,i)=>{

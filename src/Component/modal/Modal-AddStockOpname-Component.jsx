@@ -174,7 +174,7 @@ const ModalAddStockOpname =(props)=>{
                                 onChange={(v)=>setStock_opname(v?.target?.value)}
                                 style={{width:'100%'}}
                                 />
-                                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Select Ukuran</p> */}
+                                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Ukuran</p> */}
                             
                         <p style={{textColor:'gray',fontSize:'13px'}}>Hpp</p> 
                                 <Input 

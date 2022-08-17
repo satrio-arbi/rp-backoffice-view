@@ -442,7 +442,7 @@ export default function MasterKatgori() {
             trigger={reactToPrintTrigger}
           />
            <div style={{marginRight:10}}>
-           <p style={{textAlign: 'left' ,fontSize:14}}>Select Year</p>
+           <p style={{textAlign: 'left' ,fontSize:14}}>Year</p>
                   <DatePicker 
                       selected={year}
                       onChange={(date) => setYear(date)}

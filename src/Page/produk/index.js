@@ -631,7 +631,7 @@ export default function MasterKatgori() {
           />
         </FormControl> */}
         {/* <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Select by Type</InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password">by Type</InputLabel>
           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"

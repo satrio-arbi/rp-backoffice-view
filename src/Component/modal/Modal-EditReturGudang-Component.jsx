@@ -165,12 +165,12 @@ const ModaEditReturGudang =(props)=>{
                    style={{width:'100%'}}
                    />
                     <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Toko Asal</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Toko Asal</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={id_store_asal}
-                            label="Select Toko Asal"
+                            label="Toko Asal"
                             onChange={(v)=>{setId_store_asal(v?.target?.value)}}
                           >
                             {props?.store?.map((d,i)=>{
@@ -188,7 +188,7 @@ const ModaEditReturGudang =(props)=>{
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={id_office_tujuan}
-                            label="Select Toko Tujuan"
+                            label="Toko Tujuan"
                             onChange={(v)=>{setId_office_tujuan(v?.target?.value)}}
                           >
                             {props?.office?.map((d,i)=>{
@@ -262,14 +262,14 @@ const ModaEditReturGudang =(props)=>{
                                onChange={(v)=>isUpdate?updateDataDetail(v?.target?.value,'kuantitas'):setKuantitas(v?.target?.value)}
                                style={{width:'100%'}}
                                />
-                               {/* <p style={{textColor:'gray',fontSize:'13px'}}>Select Ukuran</p> */}
+                               {/* <p style={{textColor:'gray',fontSize:'13px'}}>Ukuran</p> */}
                                <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                         <InputLabel id="demo-simple-select-label">Select Ukuran</InputLabel>
+                         <InputLabel id="demo-simple-select-label">Ukuran</InputLabel>
                          <Select
                            labelId="demo-simple-select-label"
                            id="demo-simple-select"
                            value={isUpdate?updateDetail?.ukuran:ukuran}
-                           label="Select Toko Tujuan"
+                           label="Toko Tujuan"
                            onChange={(v)=>{isUpdate?updateDataDetail(v?.target?.value,'ukuran'):setUkuran(v?.target?.value)}}
                          >
                            {props?.ukuran?.map((d,i)=>{

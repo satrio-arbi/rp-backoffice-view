@@ -75,12 +75,12 @@ const ModalAddDaftarAkuntan =(props)=>{
                     style={{width:'100%',marginTop:10}}
                     />
                   <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Saldo Normal</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Saldo Normal</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={saldo_normal}
-                            label="Select Toko Asal"
+                            label="Toko Asal"
                             onChange={(v)=>{setSaldo_normal(v?.target?.value)}}
                           >
                             {saldo_normal_akutansi?.map((d,i)=>{
@@ -93,12 +93,12 @@ const ModalAddDaftarAkuntan =(props)=>{
                           </Select>
                         </FormControl>
                         <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Kelompok</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Kelompok</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={kelompok}
-                            label="Select Toko Asal"
+                            label="Toko Asal"
                             onChange={(v)=>{setKelompok(v?.target?.value)}}
                           >
                             {kelompok_akutansi?.map((d,i)=>{
@@ -111,12 +111,12 @@ const ModalAddDaftarAkuntan =(props)=>{
                           </Select>
                         </FormControl>
                         <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select tipe</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Tipe</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={tipe}
-                            label="Select Toko Asal"
+                            label="Toko Asal"
                             onChange={(v)=>{setTipe(v?.target?.value)}}
                           >
                             {tipe_akutansi?.map((d,i)=>{

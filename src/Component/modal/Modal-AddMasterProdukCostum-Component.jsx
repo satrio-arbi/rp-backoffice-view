@@ -162,12 +162,12 @@ import {
                  <h2 id="parent-modal-title">Add Master Produk Custom </h2>
                  <div>
                  <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                           <InputLabel id="demo-simple-select-label">Select Type</InputLabel>
+                           <InputLabel id="demo-simple-select-label">Type</InputLabel>
                            <Select
                              labelId="demo-simple-select-label"
                              id="demo-simple-select"
                              value={type}
-                             label="Select Type"
+                             label="Type"
                              onChange={(v)=>{setType(v?.target?.value);}}
                            >
                              {props?.type?.map((d,i)=>{
@@ -338,12 +338,12 @@ import {
                          style={{width:'100%',marginTop:10}}
                          />
                             <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Ukuran</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Ukuran</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={ukuran}
-                            label="Select Toko Tujuan"
+                            label="Toko Tujuan"
                             onChange={(v)=>{setUkuran(v?.target?.value)}}
                           >
                             {props?.ukuran?.map((d,i)=>{
@@ -357,7 +357,7 @@ import {
                         </FormControl>
                              
                          <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                           <InputLabel id="demo-simple-select-label">Select Kategori</InputLabel>
+                           <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
                            <Select
                              labelId="demo-simple-select-label"
                              id="demo-simple-select"

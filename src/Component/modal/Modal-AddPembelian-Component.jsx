@@ -144,12 +144,12 @@ const ModalAddPembelian =(props)=>{
                     style={{width:'100%',marginTop:20}}
                     />
                      <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Supplier</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Supplier</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={id_pemasok}
-                            label="Select Toko Asal"
+                            label="Toko Asal"
                             onChange={(v)=>{setId_pemasok(v?.target?.value)}}
                           >
                             {props?.pemasok?.map((d,i)=>{
@@ -180,12 +180,12 @@ const ModalAddPembelian =(props)=>{
                                />
                                 {/* <p style={{textColor:'gray',fontSize:'13px'}}>Tipe</p> */}
                         <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Tipe</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Type</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={tipe}
-                            label="Select Toko Asal"
+                            label="Toko Asal"
                             onChange={(v)=>{setTipe(v?.target?.value)}}
                           >
                             {props?.tipe?.map((d,i)=>{
@@ -206,12 +206,12 @@ const ModalAddPembelian =(props)=>{
                     style={{width:'100%',marginTop:20}}
                     />  */}
                      <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Ukuran</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Ukuran</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={ukuran}
-                            label="Select ukuran"
+                            label="Ukuran"
                             onChange={(v)=>{setUkuran(v?.target?.value)}}
                           >
                             {props?.ukuran?.map((d,i)=>{
@@ -246,12 +246,12 @@ const ModalAddPembelian =(props)=>{
                                style={{width:'100%',marginTop:20}}
                                />
                                 <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Kategori</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={kategori}
-                            label="Select Toko Asal"
+                            label="Toko Asal"
                             onChange={(v)=>{setKategori(v?.target?.value)}}
                           >
                             {props?.kategori?.map((d,i)=>{

@@ -144,7 +144,7 @@ const ModalAddBank =(props)=>{
                           :null}
                            {d?.i===12?
                           <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                          <InputLabel id="demo-simple-select-label">Select Pelanggan</InputLabel>
+                          <InputLabel id="demo-simple-select-label">Pelanggan</InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"

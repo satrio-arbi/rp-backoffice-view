@@ -432,13 +432,13 @@ export default function MasterKatgori() {
           />
             <div style={{marginRight:10, width: '100%'}}>
             <FormControl sx={{ marginTop:2.5, width: '100%',height:10 }} size="small">
-                  <InputLabel id="demo-simple-select-label">Select Project</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Project</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     // style={{backgroundColor:'blue',height:10}}
                     value={project}
-                    label="Select ukuran"
+                    label="Ukuran"
                     onChange={(v)=>{setProject(v?.target?.value)}}
                   >
                     {dataProject?.map((d,i)=>{
