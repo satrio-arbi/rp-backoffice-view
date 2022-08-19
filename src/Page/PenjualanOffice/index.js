@@ -28,6 +28,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Button from '../../Component/button/index'
+import DownloadIcon from '@mui/icons-material/Download';
 import Input from '../../Component/input/index'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -41,7 +42,9 @@ import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 
-import {getBank,getKaryawanStore,getOffice,geReportLaporanPembelian,getUkuran,
+import {getBank,getKaryawanStore,
+  getOffice,geReportLaporanPembelian,getUkuran,
+  getDownloadInvoicePEnjualanOffice,
   getPelanggan,getKategori,
   getTipe,getPenjualanOffice,
   getPenjualanOfficeSearch,getPenjualanOfficeAdd,
@@ -224,10 +227,19 @@ export default function Pembelian() {
     // formData.append('image ',image)
     let res = await getPenjualanOfficeAdd(v)
     if(res?.status){
+      downloadInvoice(res?.data)
       alertSuccess('Success','')
       getAllPembelian()
     }else{
       alertError('Error','Fail add data')
+    }
+  }
+  const downloadInvoice = async (v)=>{
+    let res  = getDownloadInvoicePEnjualanOffice({office:v?.id_office,trx:v?.id_transaksi})
+    if(res?.status){
+      
+    }else{
+      await alertError('Error','Fail download invoice')
     }
   }
   const deleteData = async ()=>{
@@ -283,6 +295,7 @@ export default function Pembelian() {
     if(res?.status){
       alertSuccess('Success','')
       getAllPembelian()
+      downloadInvoice(res?.data)
     }else{
       alertError('Error','Fail update data')
     }
@@ -575,6 +588,11 @@ export default function Pembelian() {
                         handleOpenDetail(row)
                       }}>
                           <RemoveRedEyeOutlinedIcon />
+                        </IconButton>
+                        <IconButton onClick={()=>{
+                        downloadInvoice(row)
+                      }}>
+                          <DownloadIcon />
                         </IconButton>
                       </div>
                         </TableCell>

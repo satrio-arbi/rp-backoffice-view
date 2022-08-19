@@ -668,6 +668,21 @@ export const getPenjualanOfficeDelete = async (id) => {
   return res
   
 }
+export const getDownloadInvoicePEnjualanOffice = async (data) => {
+
+  const res = await NET("GET", `report/invoice?id_office=${data?.office}&id_transaksi=${data?.trx}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `pelanggan_${new Date()}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  // console.log({link})
+  
+}
 //dashboard
 export const getBiaya = async () => {
 
