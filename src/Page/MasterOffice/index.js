@@ -38,7 +38,7 @@ import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 
 import {getOffice,getOfficeSearch,getOfficeAdd,getOfficeUpdate,getOfficeDelete} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
@@ -206,12 +206,15 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllOffice()
+    }else{
+      alertError('Error','Fail add data')
     }
     console.log({res:res})
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({array:array?.length})
+    let idx = array?.findIndex(a=>a.check==true)
+    if(idx>-1){
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
@@ -223,6 +226,9 @@ export default function MasterKatgori() {
     getAllOffice()
     setCheck(!check)
     alertSuccess('Success','Success delete data')
+  }else{
+    alertError('Error','Fail, no data chose for delete')
+  }
   }
   const submitUpdateOffice =async(alamat,atasan,hp,office)=>{
     setOpenDetail(false)
@@ -237,6 +243,8 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllOffice()
+    }else{
+      alertError('Error','Fail update data')
     }
     console.log({res:res})
   }
@@ -268,11 +276,12 @@ export default function MasterKatgori() {
     setData(array)
 
   }
-  const searching =async()=>{
+  const searching =async(e,type)=>{
     
+    if((type==='enter'&&e.keyCode === 13)||type==='klik'){
     let res = await getOfficeSearch(searched)
     setData(res?.data)
-    
+    }
   }
   useEffect(()=>{
     setRows(dataStore)
@@ -405,9 +414,9 @@ export default function MasterKatgori() {
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
+            onKeyUp={(e)=>{
+              searching(e,'enter')
+            }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -415,7 +424,7 @@ export default function MasterKatgori() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon onClick={()=>searching()}/>
+                 <SearchIcon onClick={()=>searching('','klik')}/>
                 </IconButton>
               </InputAdornment>
             }

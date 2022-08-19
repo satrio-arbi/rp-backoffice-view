@@ -40,7 +40,7 @@ import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 import {addKaryawan,getKaryawan,
   getKaryawanSearch,getKaryawanStore,
   getKaryawanSearchStore,
@@ -276,12 +276,15 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllKategori()
+    }else{
+      alertError('Error','Fail add data')
     }
     
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({array:array?.length})
+    let idx = array?.findIndex(a=>a.check==true)
+    if(idx>-1){
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
@@ -293,6 +296,9 @@ export default function MasterKatgori() {
     getAllKategori()
     setCheck(!check)
     alertSuccess('Success','Success delete data')
+  }else{
+    alertError('Error','Fail, no data chose for delete')
+  }
   }
   const submitUpdateKategori =async(no_hp,
     lokasi_office,
@@ -323,6 +329,8 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllKategori()
+    }else{
+      alertError('Error','Fail update data')
     }
     console.log({res:res})
   }
@@ -374,6 +382,9 @@ export default function MasterKatgori() {
     }else if(searched!=''&&store!=''){
       d = await getKaryawanSearchStore(searched,store)
       res = d?.data
+    }else  if(searched==''&&store==''){
+      d = await getKaryawanSearch(searched)
+      res = d?.data
     }
     setData(res)
     }
@@ -415,6 +426,8 @@ export default function MasterKatgori() {
       alertSuccess('Success',res?.data?.message)
       setOpenPindah(false)
       getAllKategori()
+    }else{
+      alertError('Error','Fail move data')
     }
   }
   const handleClick = (event, name) => {

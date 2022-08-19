@@ -3,6 +3,7 @@ import {
    Modal,Box
   } from "@mui/material";
   import * as React from 'react';
+  import CloseIcon from '@mui/icons-material/Close';
 const ModalAddPengiriman =(props)=>{
     const style = {
       
@@ -28,7 +29,10 @@ const ModalAddPengiriman =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Text in a modal</h2>
+                <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}}  id="parent-modal-title">Text in a modal</h2>
+                <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <p id="parent-modal-description">
                 Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
                 </p>

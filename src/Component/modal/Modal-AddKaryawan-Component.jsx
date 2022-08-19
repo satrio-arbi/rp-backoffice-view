@@ -3,6 +3,7 @@ import {
    Modal,Box,Button
   } from "@mui/material";
   import moment from "moment";
+  import CloseIcon from '@mui/icons-material/Close';
   import React,{useState,useEffect} from 'react';
 import  Input  from "../../Component/input";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -12,11 +13,11 @@ const ModalAddKaryawan =(props)=>{
     const [name,setName] = useState('')
     const [hp,setHp] = useState('')
     const [lokasiOffice,setLokasiOffice] = useState('')
-    const [tgl,setTgl] = useState('')
+    const [tgl,setTgl] = useState(moment(new Date()).format('YYYY-MM-DD'))
     const [jabatan,setJabatan] = useState('')
     const [lokasiStore,setLokasiStore] = useState('')
     const [idStore,setIdStore] = useState('')
-    const [lahir,setLahir] = useState('')
+    const [lahir,setLahir] = useState(moment(new Date()).format('YYYY-MM-DD'))
     const [email,setEmail] = useState('')
     const [idOffice,setIdOffice] = useState('')
     const [alamat,setAlamat] = useState('')
@@ -24,6 +25,7 @@ const ModalAddKaryawan =(props)=>{
     const [imageAddress,setImageAddress] = useState(null)
     useEffect(()=>{
         // setName('')
+        // setTgl(moment(new Date()).format('YYYY-MM-DD'))
     },[props?.open])
     const atChangeFile = async(e) => {
           
@@ -62,7 +64,10 @@ const ModalAddKaryawan =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Add Karyawan</h2>
+           <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Add Karyawan</h2>
+                  <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                     {/* <p>Nama Kategori</p> */}
                     <Input 

@@ -2,7 +2,9 @@
 import {
     Modal,Box,Button
    } from "@mui/material";
-   import {alertSuccess} from '../../Component/alert/sweetalert'
+   
+   import CloseIcon from '@mui/icons-material/Close'; 
+   import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
    import React,{useState,useEffect,useRef} from 'react';
    import {uploadType} from '../../Config/Api-new'
 //  import  Input  from "../../Component/input";
@@ -31,7 +33,9 @@ import {
             props?.mutate()
             alertSuccess('Success','')
             
-        }
+        }else{
+            alertError('Error','Fail upload data')
+          }
         
       }
       const atClickUploadHandler = async () => {
@@ -57,7 +61,10 @@ import {
          border: '2px solid #000',
          boxShadow: 24,
          p: 4, }}>
-                 <h2 id="parent-modal-title">Upload Tipe</h2>
+                 <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Upload Tipe</h2>
+                 <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                  <div>
                      <p>Upload Kategori</p>
                      <p>{name}</p>

@@ -226,6 +226,8 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllSelect()
+    }else{
+      alertError('Error','Fail update data')
     }
     // console.log({res:res})
   }

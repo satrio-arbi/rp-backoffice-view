@@ -2,6 +2,7 @@
 import {
    Modal,Box,Button
   } from "@mui/material";
+  import CloseIcon from '@mui/icons-material/Close';
   import {FormControl,InputLabel } from '@mui/material';  
 import Select from '@mui/material/Select';
 import React,{useState,useEffect} from 'react';
@@ -59,7 +60,10 @@ const ModalAddBank =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">{d?.v}</h2>
+                <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">{d?.v}</h2>
+                <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                   
                 <div style={{width:'100%',marginRight:10,marginTop:10}}>

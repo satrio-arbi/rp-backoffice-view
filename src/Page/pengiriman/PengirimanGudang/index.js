@@ -39,7 +39,7 @@ import { useEffect } from 'react';
 import Gap from '../../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../../Config/Redux/action';
-import {alertSuccess} from '../../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../../Component/alert/sweetalert'
 import ModalDownloadReport from '../../../Component/modal/Modal-DownloadReport-Component'
 import {geReportPengirimanOfficetoStore,addPengirimanOfficekeStore,getUkuran,getStore,getOffice,getPengirimanOfficekeStore,getPengirimanOfficekeStoreSearch,updatePengirimanOfficekeStore,deletePengirimanOfficekeStore} from '../../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
@@ -229,8 +229,9 @@ export default function PengirimanOfficeStore() {
     if(res?.status){
       alertSuccess('Success','')
       getAllKategori()
+    }else{
+      alertError('Error','Fail add data')
     }
-    console.log({res:res})
   }
   const deleteData = async ()=>{
     let array = [...data]
@@ -267,8 +268,9 @@ export default function PengirimanOfficeStore() {
     if(res?.status){
       alertSuccess('Success','')
       getAllKategori()
+    }else{
+      alertError('Error','Fail update data')
     }
-    console.log({res:res})
   }
   const donwloadReport =async(start,end)=>{
     setModal(false)
@@ -277,8 +279,9 @@ export default function PengirimanOfficeStore() {
       // ,res?.data
       alertSuccess('Success','')
       // getAllKategori()
+    }else{
+      alertError('Error','Fail download data')
     }
-    console.log({res:res})
   }
   const getAllKategori =async()=>{
     let res1 = await getStore()
@@ -314,11 +317,12 @@ export default function PengirimanOfficeStore() {
     setData(array)
 
   }
-  const searching =async()=>{
+  const searching =async(e,type)=>{
     
+    if((type==='enter'&&e.keyCode === 13)||type==='klik'){
     let res = await getPengirimanOfficekeStoreSearch(searched)
     setData(res?.data)
-    
+    }
   }
   useEffect(()=>{
     setRows(dataStore)
@@ -493,9 +497,9 @@ export default function PengirimanOfficeStore() {
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
+            onKeyUp={(e)=>{
+              searching(e,'enter')
+            }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -503,7 +507,7 @@ export default function PengirimanOfficeStore() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon onClick={()=>searching()}/>
+                 <SearchIcon onClick={()=>searching('','klik')}/>
                 </IconButton>
               </InputAdornment>
             }

@@ -38,7 +38,7 @@ import { useEffect } from 'react';
 import Gap from '../../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../../Config/Redux/action';
-import {alertSuccess} from '../../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../../Component/alert/sweetalert'
 import {addStockOpname,getOffice,getStockOpnameMasuk,getStockOpnameSearch,updateStockOpnameMasuk,deleteStockOpnameMasuk} from '../../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -265,12 +265,14 @@ export default function BarangMasuk() {
     if(res?.status){
       alertSuccess('Success','')
       getAllKategori()
+    }else{
+      alertError('Error','Fail add data')
     }
-    console.log({res:res})
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({array:array?.length})
+    let idx = array?.findIndex(a=>a.check==true)
+    if(idx>-1){
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
@@ -282,6 +284,9 @@ export default function BarangMasuk() {
     getAllKategori()
     setCheck(!check)
     alertSuccess('Success','Success delete data')
+  }else{
+    alertError('Error','Fail, no data chose for delete')
+  }
   }
   const submitUpdateStockOpname =async(artikel,
     kategori,
@@ -304,8 +309,9 @@ export default function BarangMasuk() {
     if(res?.status){
       alertSuccess('Success','')
       getAllKategori()
+    }else{
+      alertError('Error','Fail update data')
     }
-    console.log({res:res})
   }
   const getAllKategori =async()=>{
     
@@ -341,11 +347,12 @@ export default function BarangMasuk() {
     setData(array)
 
   }
-  const searching =async()=>{
+  const searching =async(e,type)=>{
     
+    if((type==='enter'&&e.keyCode === 13)||type==='klik'){
     let res = await getStockOpnameSearch(searched)
     setData(res?.data)
-    
+    }
   }
   useEffect(()=>{
     setRows(dataStore)
@@ -478,9 +485,9 @@ export default function BarangMasuk() {
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
+            onKeyUp={(e)=>{
+              searching(e,'enter')
+            }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -488,7 +495,7 @@ export default function BarangMasuk() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon onClick={()=>searching()}/>
+                 <SearchIcon onClick={()=>searching('','klik')}/>
                 </IconButton>
               </InputAdornment>
             }

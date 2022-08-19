@@ -39,7 +39,7 @@ import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 
 import {getBank,getKaryawanStore,getOffice,geReportLaporanPembelian,getUkuran,
   getPelanggan,getKategori,
@@ -226,12 +226,14 @@ export default function Pembelian() {
     if(res?.status){
       alertSuccess('Success','')
       getAllPembelian()
+    }else{
+      alertError('Error','Fail add data')
     }
-    console.log({res:res})
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({array:array?.length})
+    let idx = array?.findIndex(a=>a.check==true)
+    if(idx>-1){
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
@@ -243,6 +245,9 @@ export default function Pembelian() {
     getAllPembelian()
     setCheck(!check)
     alertSuccess('Success','Success delete data')
+  }else{
+    alertError('Error','Fail, no data chose for delete')
+  }
   }
   const submitUpdatePenjualan =async(v)=>{
     setOpenDetail(false)
@@ -263,6 +268,14 @@ export default function Pembelian() {
       no_hp_pelanggan:v?.no_hp_pelanggan,
       tanggal_transaksi:v?.tanggal_transaksi,
       rowstatus:'1',
+      pajak_biaya:v?.pajak_biaya,
+      ongkos_kirim:v?.ongkos_kirim,
+      ekspedisi:v?.ekspedisi,
+      diskon:v?.diskon,
+      diskon_remark:v?.diskon_remark,
+      metode_pembayaran:v?.metode_pembayaran,
+      bank_name:v?.bank_name,
+      no_rek:v?.no_rek,
       id:toBeSelected?.id
     }
     // formData.append('id',toBeSelected?.id)
@@ -270,6 +283,8 @@ export default function Pembelian() {
     if(res?.status){
       alertSuccess('Success','')
       getAllPembelian()
+    }else{
+      alertError('Error','Fail update data')
     }
     
   }
@@ -279,7 +294,7 @@ export default function Pembelian() {
     let res1 = await getPelanggan()
     let res2 = await getKategori()
     let res3 = await getTipe()
-    let res4 = await getUkuran()
+    // let res4 = await getUkuran()
     let res5 = await getOffice()
     let res6 = await getBank()
     let res7 = await getKaryawanStore(1)
@@ -287,7 +302,7 @@ export default function Pembelian() {
     setKategori(res2?.data)
     setTipe(res3?.data)
     setData(res?.data)
-    setUkuran(res4?.data)
+    // setUkuran(res4?.data)
     setOffice(res5?.data)
     setBank(res6?.data)
     setKaryawan(res7?.data)
@@ -315,10 +330,13 @@ export default function Pembelian() {
     setData(array)
 
   }
-  const searching =async()=>{
+  const searching =async(e,type)=>{
     
-    let res = await getPenjualanOfficeSearch(searched)
-    setData(res?.data)
+    if((type==='enter'&&e.keyCode === 13)||type==='klik'){
+      let res = await getPenjualanOfficeSearch(searched)
+      setData(res?.data)
+    }
+   
     
   }
   useEffect(()=>{
@@ -396,8 +414,9 @@ export default function Pembelian() {
         // ,res?.data
         alertSuccess('Success','')
         // getAllKategori()
+      }else{
+        alertError('Error','Fail download data')
       }
-      console.log({res:res})
     }
   return (
     <div style={{
@@ -479,9 +498,9 @@ export default function Pembelian() {
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
+            onKeyUp={(e)=>{
+              searching(e,'enter')
+            }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -489,7 +508,7 @@ export default function Pembelian() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon onClick={()=>searching()}/>
+                 <SearchIcon onClick={()=>searching('','klik')}/>
                 </IconButton>
               </InputAdornment>
             }

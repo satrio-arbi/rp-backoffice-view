@@ -2,7 +2,7 @@
 import {
    Modal,Box,Button,IconButton
   } from "@mui/material";
-  
+  import CloseIcon from '@mui/icons-material/Close'; 
   import React,{useState,useEffect} from 'react';
   import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -115,7 +115,10 @@ const ModalUpdateUser =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Update User</h2>
+                <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Update User</h2>
+                <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                     {/* <p>Nama Kategori</p> */}
                     <Input 

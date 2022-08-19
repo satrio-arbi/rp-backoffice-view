@@ -39,7 +39,7 @@ import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 
 import {getPemasok,getPemasokSearch,getPemasokAdd,
   getPemasokUpdate,getPemasokDelete
@@ -240,12 +240,14 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllPelanggan()
+    }else{
+      alertError('Error','Fail add data')
     }
-    console.log({res:res})
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({array:array?.length})
+    let idx = array?.findIndex(a=>a.check==true)
+    if(idx>-1){
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
@@ -257,6 +259,9 @@ export default function MasterKatgori() {
     getAllPelanggan()
     setCheck(!check)
     alertSuccess('Success','Success delete data')
+  }else{
+    alertError('Error','Fail, no data chose for delete')
+  }
   }
   const submitUpdatePemasok =async(alamat,email,harga_jual,nama_pemasok,
     no_hp,kode_pemasok,hpp)=>{
@@ -275,8 +280,9 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllPelanggan()
+    }else{
+      alertError('Error','Fail update data')
     }
-    console.log({res:res})
   }
   const getAllPelanggan =async()=>{
     
@@ -306,11 +312,12 @@ export default function MasterKatgori() {
     setData(array)
 
   }
-  const searching =async()=>{
+  const searching =async(e,type)=>{
     
+    if((type==='enter'&&e.keyCode === 13)||type==='klik'){
     let res = await getPemasokSearch(searched)
     setData(res?.data)
-    
+    }
   }
   useEffect(()=>{
     setRows(dataStore)
@@ -384,15 +391,16 @@ export default function MasterKatgori() {
         // ,res?.data
         alertSuccess('Success','')
         // getAllKategori()
+      }else{
+        alertError('Error','Fail download data')
       }
-      console.log({res:res})
     }
   return (
     <div style={{
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Data Pelanggan</h1>
+      <h1>Data Pemasok</h1>
             <div
              style={{
                  position:"absolute",
@@ -467,9 +475,9 @@ export default function MasterKatgori() {
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
+            onKeyUp={(e)=>{
+              searching(e,'enter')
+            }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -477,7 +485,7 @@ export default function MasterKatgori() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon onClick={()=>searching()}/>
+                 <SearchIcon onClick={()=>searching('','klik')}/>
                 </IconButton>
               </InputAdornment>
             }

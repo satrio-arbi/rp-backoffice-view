@@ -3,6 +3,7 @@ import {
    Modal,Box,Button
   } from "@mui/material";
   import moment from "moment";
+  import CloseIcon from '@mui/icons-material/Close';
   import React,{useState,useEffect} from 'react';
 import  Input  from "../../Component/input";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -44,7 +45,10 @@ const ModalUpdateddKaryawan =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Pindah Store Karyawan</h2>
+                <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Pindah Store Karyawan</h2>
+                <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                    
                      <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">

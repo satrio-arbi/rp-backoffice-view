@@ -5,6 +5,7 @@ import {
   
   import React,{useState,useEffect} from 'react';
   import DeleteIcon from '@mui/icons-material/Delete';
+  import CloseIcon from '@mui/icons-material/Close';
   import moment from 'moment';
 import  Input  from "../../Component/input";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -116,7 +117,10 @@ const ModalAddOfficeStore =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Add Pengiriman Office to Store</h2>
+                <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Add Pengiriman Office to Store</h2>
+                    <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                     {/* <p>Tanggal Pengiriman</p> */}
                     <Input 

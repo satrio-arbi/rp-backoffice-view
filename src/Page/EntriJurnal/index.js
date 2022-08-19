@@ -226,7 +226,8 @@ export default function EntriJurnal() {
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({data})
+    let idx = array?.findIndex(a=>a.check==true)
+    if(idx>-1){
     for(let i = 0;i<array?.length;i++){
       // console.log({s:array[i]?.check})
       if(array[i]?.check===true){
@@ -239,6 +240,9 @@ export default function EntriJurnal() {
     setData(array)
     setCheck(!check)
     alertSuccess('Success','Success delete data')
+  }else{
+    alertError('Error','Fail, no data chose for delete')
+  }
   }
   const checkSingle=(d,i)=>{
     let array = [...data]
@@ -382,7 +386,7 @@ export default function EntriJurnal() {
         setTgl(moment(new Date()).format('YYYY-MM-DD'))
         
       }else{
-       await alertError('Fail','Gagal upload data')
+       await alertError('Fail','Fail add data')
         return
       }
     }else{

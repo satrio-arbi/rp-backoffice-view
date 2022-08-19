@@ -40,7 +40,7 @@ import { useEffect } from 'react';
 import Gap from '../../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../../Config/Redux/action';
-import {alertSuccess} from '../../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../../Component/alert/sweetalert'
 import ModalDownloadReport from '../../../Component/modal/Modal-DownloadReport-Component'
 import {geReportPengirimanStoretoStore,getUkuran,addPengirimanStorekeStore,getStore,getPengirimanStorekeStore,getPengirimanStorekeStoreSearch,updatePengirimanStorekeStore,deletePengirimanStorekeStore} from '../../../Config/Api-new'
 import { set } from 'date-fns/esm';
@@ -236,6 +236,8 @@ export default function PengirimanStoreStore() {
     if(res?.status){
       alertSuccess('Success','')
       getAllKategori()
+    }else{
+      alertError('Error','Fail add data')
     }
     // console.log({detail_pengiriman,
     //   tanggal_pengiriman,
@@ -246,7 +248,8 @@ export default function PengirimanStoreStore() {
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({array:array?.length})
+    let idx = array?.findIndex(a=>a.check==true)
+    if(idx>-1){
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
@@ -258,6 +261,9 @@ export default function PengirimanStoreStore() {
     getAllKategori()
     setCheck(!check)
     alertSuccess('Success','Success delete data')
+  }else{
+    alertError('Error','Fail, no data chose for delete')
+  }
   }
   const donwloadReport =async(start,end)=>{
     setModal(false)
@@ -266,8 +272,9 @@ export default function PengirimanStoreStore() {
       // ,res?.data
       alertSuccess('Success','')
       // getAllKategori()
+    }else{
+      alertError('Error','Fail download data')
     }
-    console.log({res:res})
   }
   const submitUpdateKategori =async( detail_pengiriman,
     tanggal_pengiriman,
@@ -288,8 +295,9 @@ export default function PengirimanStoreStore() {
     if(res?.status){
       alertSuccess('Success','')
       getAllKategori()
+    }else{
+      alertError('Error','Fail update data')
     }
-    console.log({res:res})
   }
  
   const convertToko = (v) =>{
@@ -335,11 +343,12 @@ export default function PengirimanStoreStore() {
     setData(array)
 
   }
-  const searching =async()=>{
+  const searching =async(e,type)=>{
     
+    if((type==='enter'&&e.keyCode === 13)||type==='klik'){
     let res = await getPengirimanStorekeStoreSearch(searched)
     setData(res?.data)
-    
+    }
   }
   useEffect(()=>{
     setRows(dataStore)
@@ -491,9 +500,9 @@ export default function PengirimanStoreStore() {
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
+            onKeyUp={(e)=>{
+              searching(e,'enter')
+            }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -501,7 +510,7 @@ export default function PengirimanStoreStore() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon onClick={()=>searching()}/>
+                 <SearchIcon onClick={()=>searching('','klik')}/>
                 </IconButton>
               </InputAdornment>
             }

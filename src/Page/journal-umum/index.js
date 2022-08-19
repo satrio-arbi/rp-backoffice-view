@@ -43,7 +43,7 @@ import { useEffect,useRef } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 import moment from 'moment';
 import {updateJournalUmumContext} from '../../Config/helper/zustand'
 // getDaftarAkun,addDaftarAkun,updateDaftarAkun,
@@ -217,6 +217,8 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllJurnaUmum()
+    }else{
+      alertError('Error','Fail update data')
     }
     // console.log({res:res})
   }
@@ -251,6 +253,8 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllJurnaUmum()
+    }else{
+      alertError('Error','Fail update data')
     }
     console.log({res:res})
   }

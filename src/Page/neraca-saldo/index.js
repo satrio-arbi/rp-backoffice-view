@@ -44,7 +44,7 @@ import { useEffect,useRef } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 import moment from 'moment';
 import {updateJournalUmumContext} from '../../Config/helper/zustand'
 import {ConvertToRp} from '../../Config/helper/constant'
@@ -222,8 +222,9 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllJurnaUmum()
+    }else{
+      alertError('Error','Fail update data')
     }
-    // console.log({res:res})
   }
   const deleteData = async ()=>{
     let array = [...data]
@@ -256,8 +257,9 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllJurnaUmum()
+    }else{
+      alertError('Error','Fail update data')
     }
-    console.log({res:res})
   }
   const getAllJurnaUmum =async()=>{
     

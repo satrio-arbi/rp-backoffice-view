@@ -41,7 +41,7 @@ import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 
 import {getBank,getStore,geReportLaporanPembelian,getUkuran,
   getPelanggan,getKategori,
@@ -283,12 +283,14 @@ export default function Pembelian() {
     if(res?.status){
       alertSuccess('Success','')
       getAllPembelian()
+    }else{
+      alertError('Error','Fail add data')
     }
-    console.log({res:res})
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({array:array?.length})
+    let idx = array?.findIndex(a=>a.check==true)
+    if(idx>-1){
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
@@ -300,6 +302,9 @@ export default function Pembelian() {
     getAllPembelian()
     setCheck(!check)
     alertSuccess('Success','Success delete data')
+  }else{
+    alertError('Error','Fail, no data chose for delete')
+  }
   }
   const submitUpdatePenjualan =async(v)=>{
     setOpenDetail(false)
@@ -324,8 +329,9 @@ export default function Pembelian() {
     if(res?.status){
       alertSuccess('Success','')
       getAllPembelian()
+    }else{
+      alertError('Error','Fail update data')
     }
-    console.log({res:res})
   }
   const getAllPembelian =async()=>{
     
@@ -385,11 +391,12 @@ export default function Pembelian() {
     setData(res?.data)
     
   }
-  const searching =async()=>{
+  const searching =async(e,type)=>{
     
+    if((type==='enter'&&e.keyCode === 13)||type==='klik'){
     let res = await getPenjualanStorePerStore(id_store)
     setData(res?.data)
-    
+    }
   }
   useEffect(()=>{
     setRows(dataStore)
@@ -466,8 +473,9 @@ export default function Pembelian() {
         // ,res?.data
         alertSuccess('Success','')
         // getAllKategori()
+      }else{
+        alertError('Error','Fail download data')
       }
-      console.log({res:res})
     }
   return (
     <div style={{
@@ -549,9 +557,9 @@ export default function Pembelian() {
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
+            onKeyUp={(e)=>{
+              searching(e,'enter')
+            }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -559,7 +567,7 @@ export default function Pembelian() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon onClick={()=>searching()}/>
+                 <SearchIcon onClick={()=>searching('','klik')}/>
                 </IconButton>
               </InputAdornment>
             }
