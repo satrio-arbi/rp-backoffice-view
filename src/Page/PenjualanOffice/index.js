@@ -235,12 +235,8 @@ export default function Pembelian() {
     }
   }
   const downloadInvoice = async (v)=>{
-    let res  = getDownloadInvoicePEnjualanOffice({office:v?.id_office,trx:v?.id_transaksi})
-    if(res?.status){
-      
-    }else{
-      await alertError('Error','Fail download invoice')
-    }
+    let res  = await getDownloadInvoicePEnjualanOffice({office:v?.id_office,trx:v?.id_transaksi})
+   
   }
   const deleteData = async ()=>{
     let array = [...data]

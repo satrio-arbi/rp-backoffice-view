@@ -677,7 +677,7 @@ export const getDownloadInvoicePEnjualanOffice = async (data) => {
   const url = window.URL.createObjectURL(new Blob([a]));
   const link = document.createElement('a');
   link.href = url;
-  link.setAttribute('download', `pelanggan_${new Date()}.pdf`); //or any other extension
+  link.setAttribute('download', `penjualan_office_${new Date()}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
   // console.log({link})
