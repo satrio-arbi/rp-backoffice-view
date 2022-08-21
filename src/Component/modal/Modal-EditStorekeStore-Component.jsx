@@ -114,11 +114,18 @@ const ModaEditStorekeStore =(props)=>{
       setListDetail(datas)
     }
     const setDataDetail = (d)=>{
-      let kon = !isUpdate
+      let kon = true
       
       setUpdateDetail(!kon?{}:d)
       
       setIsUpdate(kon)
+    }
+    const saveUpdate = ()=>{
+      // let kon = true
+      
+      setUpdateDetail({})
+      
+      setIsUpdate(false)
     }
     const updateDataDetail = (v,type)=>{
       let datas = [...listDetail]
@@ -308,7 +315,7 @@ const ModaEditStorekeStore =(props)=>{
                             </div>
                         </div>
                         <div style={{marginTop:10,justifyContent:'end',display:'flex'}}>
-                          <Button onClick={()=>isUpdate?setDataDetail():addDetailProduk()} variant="contained">{isUpdate?'Update':'Save'} Produk detail</Button>
+                          <Button onClick={()=>isUpdate?saveUpdate():addDetailProduk()} variant="contained">{isUpdate?'Update':'Save'} Produk detail</Button>
                         </div>
                         <div style={{overflowX:'auto',marginTop:20}}>
                         <tabel style={{

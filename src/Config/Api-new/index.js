@@ -982,6 +982,7 @@ export const updateProduk = async (
     formData.append('harga_jual',harga_jual)
     formData.append('sku_code',sku_code)
     formData.append('remarks',remarks)
+    formData.append('rowstatus',1)
     formData.append('nama_kategori',nama_kategori)
     formData.append('image',image)
   const res = await NET("POST", `master/product/update`, formData)

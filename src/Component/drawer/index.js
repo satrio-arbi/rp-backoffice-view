@@ -183,7 +183,7 @@ console.log({aks:usr?.akses_modul})
                 <Icon icon="bx:bxs-dashboard" style={{ fontSize: "25px", marginRight: "5px" }} />
                 <Typography>Stock per store</Typography>
               </ListItem>
-              {usr?.akses_modul?.includes('MM-1')?
+              {!usr?.akses_modul?.includes('MM-1')?
                 <Accordion>
                 <div style={{ position: "relative", width: "100%" }}>
                   <AccordionSummary
@@ -201,14 +201,14 @@ console.log({aks:usr?.akses_modul})
                 <AccordionDetails>
               
                   <List style={{cursor:"pointer"}}>
-                  {usr?.akses_modul?.includes('MM-2')?
+                  {!usr?.akses_modul?.includes('MM-2')?
                     <ListItem onClick={() => {
                       history.push('/penjualan-store')
                     }}>
                       <ListItemText primary="Penjualan Store" />
                     </ListItem>
                     :null}
-                     {usr?.akses_modul?.includes('MM-3')?
+                     {!usr?.akses_modul?.includes('MM-3')?
                     <ListItem onClick={() => {
                       history.push('/penjualan-office')
                     }}>
@@ -220,7 +220,7 @@ console.log({aks:usr?.akses_modul})
               </Accordion>:null
               
             }
-            {usr?.akses_modul?.includes('MM-4')?
+            {!usr?.akses_modul?.includes('MM-4')?
               <ListItem onClick={() => {
                 history.push('/pembelian')
               }}>
@@ -228,7 +228,7 @@ console.log({aks:usr?.akses_modul})
                 <Typography>Pembelian</Typography>
               </ListItem>
               :null}
-              {usr?.akses_modul?.includes('MM-5')?
+              {!usr?.akses_modul?.includes('MM-5')?
               <Accordion>
                 <AccordionSummary
 
@@ -244,19 +244,19 @@ console.log({aks:usr?.akses_modul})
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                  {usr?.akses_modul?.includes('MM-6')?
+                  {!usr?.akses_modul?.includes('MM-6')?
                     <ListItem onClick={() => {
                       history.push('/penyimpanan/barang-masuk')
                     }}>
                       <ListItemText primary="Barang Masuk" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-7')?
+                    {!usr?.akses_modul?.includes('MM-7')?
                     <ListItem onClick={() => {
                       history.push('/penyimpanan/barang-keluar')
                     }}>
                       <ListItemText primary="Barang Keluar" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-8')?
+                    {!usr?.akses_modul?.includes('MM-8')?
                     <ListItem onClick={() => {
                       history.push('/penyimpanan/stock-opname')
                     }}>
@@ -265,7 +265,7 @@ console.log({aks:usr?.akses_modul})
                   </List>
                 </AccordionDetails>
               </Accordion>:null}
-              {usr?.akses_modul?.includes('MM-9')?
+              {!usr?.akses_modul?.includes('MM-9')?
               <Accordion>
                 <AccordionSummary
 
@@ -281,20 +281,20 @@ console.log({aks:usr?.akses_modul})
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                  {usr?.akses_modul?.includes('MM-10')?
+                  {!usr?.akses_modul?.includes('MM-10')?
                     <ListItem onClick={() => {
-                      history.push('/pengiriman/gudang')
+                      history.push('/pengiriman/office-to-store')
                     }}>
                       <ListItemText primary="Dari Office ke Store" />
                     </ListItem>
                     :null}
-                    {usr?.akses_modul?.includes('MM-11')?
+                    {!usr?.akses_modul?.includes('MM-11')?
                     <ListItem onClick={() => {
                       history.push('/pengiriman/store')
                     }}>
                       <ListItemText primary="Dari Store ke Store" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-12')?
+                    {!usr?.akses_modul?.includes('MM-12')?
                     <ListItem onClick={() => {
                       history.push('/pengiriman/retur-gudang')
                     }}>
@@ -303,7 +303,7 @@ console.log({aks:usr?.akses_modul})
                   </List>
                 </AccordionDetails>
               </Accordion>:null}
-              {usr?.akses_modul?.includes('MM-13')?
+              {!usr?.akses_modul?.includes('MM-13')?
               <Accordion>
                 <AccordionSummary
 
@@ -319,25 +319,25 @@ console.log({aks:usr?.akses_modul})
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                  {usr?.akses_modul?.includes('MM-14')?
+                  {!usr?.akses_modul?.includes('MM-14')?
                     <ListItem onClick={() => {
                       history.push('/penerimaan/ByOffice')
                     }}>
                       <ListItemText primary="Office from store" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-15')?
+                    {!usr?.akses_modul?.includes('MM-15')?
                     <ListItem onClick={() => {
                       history.push('/penerimaan/ByStoreOffice')
                     }}>
                       <ListItemText primary="Store from office" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-16')?
+                    {!usr?.akses_modul?.includes('MM-16')?
                     <ListItem onClick={() => {
                       history.push('/penerimaan/ByStore')
                     }}>
                       <ListItemText primary="Store from Store" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-17')?
+                    {!usr?.akses_modul?.includes('MM-17')?
                     <ListItem onClick={() => {
                       history.push('/penerimaan/BySuplier')
                     }}>
@@ -347,7 +347,7 @@ console.log({aks:usr?.akses_modul})
                 </AccordionDetails>
               </Accordion>:null}
               
-              {usr?.akses_modul?.includes('MM-27')?
+              {!usr?.akses_modul?.includes('MM-27')?
               <Accordion>
                 <AccordionSummary
 
@@ -363,7 +363,7 @@ console.log({aks:usr?.akses_modul})
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                  {usr?.akses_modul?.includes('MM-28')?
+                  {!usr?.akses_modul?.includes('MM-28')?
                     <ListItem  onClick={() => {
                       history.push('/produk')
                     }}>
@@ -375,7 +375,7 @@ console.log({aks:usr?.akses_modul})
                   </List>
                 </AccordionDetails>
               </Accordion>:null}
-              {usr?.akses_modul?.includes('MM-29')?
+              {!usr?.akses_modul?.includes('MM-29')?
               <ListItem onClick={() => {
                 history.push('/pelanggan')
               }}>
@@ -383,21 +383,21 @@ console.log({aks:usr?.akses_modul})
                 <Typography>Pelanggan</Typography>
               </ListItem>
               :null}
-              {usr?.akses_modul?.includes('MM-30')?
+              {!usr?.akses_modul?.includes('MM-30')?
               <ListItem onClick={() => {
                 history.push('/karyawan')
               }}>
                 <Icon icon="clarity:group-solid" style={{ fontSize: "25px", marginRight: "5px" }} />
                 <Typography>Karyawan</Typography>
               </ListItem>:null}
-              {usr?.akses_modul?.includes('MM-31')?
+              {!usr?.akses_modul?.includes('MM-31')?
               <ListItem onClick={() => {
                 history.push('/pemasok')
               }}>
                 <Icon icon="fa-solid:people-arrows" style={{ fontSize: "25px", marginRight: "5px" }} />
                 <Typography>Pemasok</Typography>
               </ListItem>:null}
-              {usr?.akses_modul?.includes('MM-32')?
+              {!usr?.akses_modul?.includes('MM-32')?
               <Accordion>
                 <AccordionSummary 
                   aria-controls="panel2a-content"
@@ -422,7 +422,7 @@ console.log({aks:usr?.akses_modul})
                
                 </AccordionDetails>
               </Accordion>:null}
-              {usr?.akses_modul?.includes('MM-18')?
+              {!usr?.akses_modul?.includes('MM-18')?
               <Accordion>
                 <AccordionSummary
 
@@ -438,7 +438,7 @@ console.log({aks:usr?.akses_modul})
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                  {usr?.akses_modul?.includes('MM-19')?
+                  {!usr?.akses_modul?.includes('MM-19')?
                      <List style={{cursor:"pointer"}}>
                      <ListItem onClick={() => {
                        history.push('/daftar-akutansi')
@@ -446,7 +446,7 @@ console.log({aks:usr?.akses_modul})
                        <ListItemText primary="Daftar Akun" />
                      </ListItem>
                    </List>:null}
-                    {usr?.akses_modul?.includes('MM-20')?
+                    {!usr?.akses_modul?.includes('MM-20')?
                     <List style={{cursor:"pointer"}}>
                     <ListItem onClick={() => {
                       history.push('/entri-jurnal')
@@ -454,7 +454,7 @@ console.log({aks:usr?.akses_modul})
                       <ListItemText primary="Entri Jurnal" />
                     </ListItem>
                   </List>:null}
-                    {usr?.akses_modul?.includes('MM-21')?
+                    {!usr?.akses_modul?.includes('MM-21')?
                     <ListItem>
                       <Accordion>
                         <AccordionSummary
@@ -470,31 +470,31 @@ console.log({aks:usr?.akses_modul})
                         </AccordionSummary>
                         <AccordionDetails>
                           <List style={{cursor:"pointer"}}>
-                          {usr?.akses_modul?.includes('MM-22')?
+                          {!usr?.akses_modul?.includes('MM-22')?
                             <ListItem onClick={() => {
                               history.push('/journal-umum')
                             }}>
                               <ListItemText primary="Jurnal Umum" />
                             </ListItem>:null}
-                            {usr?.akses_modul?.includes('MM-23')?
+                            {!usr?.akses_modul?.includes('MM-23')?
                             <ListItem onClick={() => {
                               history.push('/buku-besar')
                             }}>
                               <ListItemText primary="Buku Besar" />
                             </ListItem>:null}
-                            {usr?.akses_modul?.includes('MM-24')?
+                            {!usr?.akses_modul?.includes('MM-24')?
                             <ListItem onClick={() => {
                               history.push('/neraca-saldo')
                             }}>
                               <ListItemText primary="Neraca Saldo" />
                             </ListItem>:null}
-                            {usr?.akses_modul?.includes('MM-25')?
+                            {!usr?.akses_modul?.includes('MM-25')?
                             <ListItem onClick={() => {
                               history.push('/laba-rugi')
                             }}>
                               <ListItemText primary="Laporan Laba Rugi" />
                             </ListItem>:null}
-                            {usr?.akses_modul?.includes('MM-26')?
+                            {!usr?.akses_modul?.includes('MM-26')?
                             <ListItem onClick={() => {
                               history.push('/neraca-keuangan')
                             }}>
@@ -523,19 +523,19 @@ console.log({aks:usr?.akses_modul})
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                  {usr?.akses_modul?.includes('MM-48')?
+                  {!usr?.akses_modul?.includes('MM-48')?
                     <ListItem onClick={() => {
                       history.push('/master/kategori')
                     }}>
                       <ListItemText primary="Master Kategori" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-49')?
+                    {!usr?.akses_modul?.includes('MM-49')?
                     <ListItem onClick={() => {
                       history.push('/master/tipe')
                     }}>
                       <ListItemText primary="Master Tipe" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-50')?
+                    {!usr?.akses_modul?.includes('MM-50')?
                     <ListItem onClick={() => {
                       history.push('/master/store')
                     }}>
@@ -546,13 +546,13 @@ console.log({aks:usr?.akses_modul})
                     }}>
                       <ListItemText primary="Master Ukuran" />
                     </ListItem> */}
-                    {usr?.akses_modul?.includes('MM-51')?
+                    {!usr?.akses_modul?.includes('MM-51')?
                     <ListItem onClick={() => {
                       history.push('/master/office')
                     }}>
                       <ListItemText primary="Master Office" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-52')?
+                    {!usr?.akses_modul?.includes('MM-52')?
                     <ListItem
                      onClick={() => {
                       history.push('/master/project')
@@ -560,7 +560,7 @@ console.log({aks:usr?.akses_modul})
                     >
                       <ListItemText primary="Master Project" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-53')?
+                    {!usr?.akses_modul?.includes('MM-53')?
                     <ListItem
                      onClick={() => {
                       history.push('/master/bank')
@@ -589,13 +589,13 @@ console.log({aks:usr?.akses_modul})
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
-                  {usr?.akses_modul?.includes('MM-54')?
+                  {!usr?.akses_modul?.includes('MM-54')?
                     <ListItem onClick={() => {
                       history.push('/manajemen-user')
                     }}>
                       <ListItemText primary="Management User" />
                     </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-55')?
+                    {!usr?.akses_modul?.includes('MM-55')?
                     <ListItem>
                       {/* <ListItemText primary="User Grup Pengguna" /> */}
                     </ListItem>

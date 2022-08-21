@@ -93,7 +93,16 @@ const ModalUpdatePembelian =(props)=>{
         nama_barang,
 
       })
-
+      setNama_barang('')
+      setSku_code('')
+      
+      setUkuran('')
+      setArtikel('')
+    setTipe('')
+    setKategori('')
+    setKuantitas('')
+    setHpp('')
+    setHarga_jual('')
       setListDetail(arr)
     }
     const deleteData = (idx)=>{
@@ -118,6 +127,9 @@ const ModalUpdatePembelian =(props)=>{
       setNama_barang(res?.data?.nama_product)
       setTipe(res?.data?.type)
       setKategori(res?.data?.kategori)
+      setKuantitas(res?.data?.kuantitas)
+      setHpp(res?.data.hpp)
+      setHarga_jual(res?.data?.harga_jual)
       }
     }
     const getSKU = async (e)=>{
@@ -134,6 +146,9 @@ const ModalUpdatePembelian =(props)=>{
       setNama_barang(res?.data?.nama_product)
       setTipe(res?.data?.type)
       setKategori(res?.data?.kategori)
+      setKuantitas(res?.data?.kuantitas)
+      setHpp(res?.data.hpp)
+      setHarga_jual(res?.data?.harga_jual)
       }
     }
     return (
