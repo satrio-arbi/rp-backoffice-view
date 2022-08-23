@@ -602,7 +602,7 @@ export default function MasterKatgori() {
       <Paper sx={{ width: '100%', mb: 2 }}>
       <div align='left'>
       <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Search by Name</InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password">Search</InputLabel>
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
