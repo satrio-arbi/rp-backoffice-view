@@ -179,7 +179,7 @@ const ModalAddStokeOpname =(props)=>{
                                 />
                                 {/* <p style={{textColor:'gray',fontSize:'13px'}}>Select Ukuran</p> */}
                             
-                        <p style={{textColor:'gray',fontSize:'13px'}}>Hpp</p> 
+                        {/* <p style={{textColor:'gray',fontSize:'13px'}}>Hpp</p> 
                                 <Input 
                                 value={detail?.hpp}
                                 readOnly={true}
@@ -196,12 +196,12 @@ const ModalAddStokeOpname =(props)=>{
                                 // label={'Harga jual'}
                                 // onChange={(v)=>setTanggal_pengiriman(v?.target?.value)}
                                 style={{width:'100%'}}
-                                />
-                                <div style={{marginTop:10}}>
+                                /> */}
+                                {/* <div style={{marginTop:10}}>
                                 <p style={{textColor:'gray',fontSize:'13px'}}>Foto Barang</p> 
                                 
                                   {detail?.image?<img src={convertImage(detail?.image)} style={{width:200,height:200}} />:null}
-                                  </div>
+                                  </div> */}
                             </div>
                         </div>
                     

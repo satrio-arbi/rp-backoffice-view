@@ -35,13 +35,22 @@ const ModaEditStorekeStore =(props)=>{
       props?.detail?.map((d,i)=>{
         arr[i]['rowstatus'] = 1
       })
-      console.log({arr})
+      
       setListDetail(arr)
       setDetail('')
       setArticle('')
       setId_store_tujuan((data?.id_store_tujuan))
       setKuantitas('')
     },[props?.open])
+    useEffect(()=>{
+      
+      if(id_store_asal!==''&&id_store_tujuan!==''){
+        if(id_store_asal===id_store_tujuan){
+          alert('Store asal dan tunjuan tidak boleh sama !')
+          setId_store_tujuan('')
+        }
+      }
+    },[id_store_asal,id_store_tujuan])
     const getSKU = async (e)=>{
       
       if(e.charCode === 13){

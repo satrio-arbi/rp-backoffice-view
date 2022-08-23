@@ -7,6 +7,7 @@ import {
   import DeleteIcon from '@mui/icons-material/Delete';
   import moment from 'moment';
 import  Input  from "../../Component/input";
+
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import {getProdukBySKU,getProdukByArtikel} from '../../Config/Api-new'
@@ -35,6 +36,16 @@ const ModalAddStorekeStore =(props)=>{
         setId_store_tujuan('')
         setKuantitas('')
     },[props?.open])
+    useEffect(()=>{
+      
+      if(id_store_asal!==''&&id_store_tujuan!==''){
+        if(id_store_asal===id_store_tujuan){
+          alert('Store asal dan tunjuan tidak boleh sama !')
+          setId_store_tujuan('')
+        }
+      }
+    },[id_store_asal,id_store_tujuan])
+    
     const getSKU = async (e)=>{
       
       if(e.charCode === 13){
