@@ -2,7 +2,7 @@
 import {
    Modal,Box,Button
   } from "@mui/material";
-  
+  import CloseIcon from '@mui/icons-material/Close';
   import React,{useState,useEffect} from 'react';
   import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -90,7 +90,11 @@ const ModalAddMasterProduk =(props)=>{
                 boxShadow: 24,
                 p: 4, 
         }}>
-                <h2 id="parent-modal-title">Add Master Produk</h2>
+          
+          <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Add Master Produk</h2>
+                <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                 <Input 
                         value={artikel_produk}

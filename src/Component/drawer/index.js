@@ -283,7 +283,7 @@ console.log({aks:usr?.akses_modul})
                   <List style={{cursor:"pointer"}}>
                   {usr?.akses_modul?.includes('MM-10')?
                     <ListItem onClick={() => {
-                      history.push('/pengiriman/gudang')
+                      history.push('/pengiriman/office-to-store')
                     }}>
                       <ListItemText primary="Dari Office ke Store" />
                     </ListItem>
@@ -451,7 +451,7 @@ console.log({aks:usr?.akses_modul})
                     <ListItem onClick={() => {
                       history.push('/entri-jurnal')
                     }}>
-                      <ListItemText primary="Entri Jrunal" />
+                      <ListItemText primary="Entri Jurnal" />
                     </ListItem>
                   </List>:null}
                     {usr?.akses_modul?.includes('MM-21')?
@@ -597,8 +597,9 @@ console.log({aks:usr?.akses_modul})
                     </ListItem>:null}
                     {usr?.akses_modul?.includes('MM-55')?
                     <ListItem>
-                      <ListItemText primary="User Grup Pengguna" />
-                    </ListItem>:null}
+                      {/* <ListItemText primary="User Grup Pengguna" /> */}
+                    </ListItem>
+                    :null}
                   </List>
                 </AccordionDetails>
               </Accordion>

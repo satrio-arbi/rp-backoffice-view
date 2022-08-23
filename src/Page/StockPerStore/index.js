@@ -40,7 +40,7 @@ import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 
 import {getStockPerStore,getStore,getBankSearch,getBankAdd,getBankUpdate,getBankDelete} from '../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
@@ -101,15 +101,26 @@ const headCells = [
       disablePadding: true,
       numeric: false,
     }
+    ,
+    
+    {
+      id: "detail",
+      label: "Detail",
+      disablePadding: true,
+      numeric: false,
+    }
 ];
 
 function EnhancedTableHead(props) {
-  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
+  const { checkChange,checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
   const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  React.useEffect(()=>{
+    setCheck(false)
+  },[checkChange])
   const checkAll =()=>{
     checkAllList(!check)
     setCheck(!check)
@@ -117,14 +128,14 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-      <TableCell
+      {/* <TableCell
             key={'check'}
             // align="center"
             // padding={'normal'}
             // sortDirection={orderBy === headCell.id ? order : false}
           >
            <input type="checkbox" checked={check} onClick={()=>checkAll()} />
-          </TableCell>
+          </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -155,6 +166,7 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
   data: PropTypes.any,
   checkAllList: PropTypes.func,
+  checkChange: PropTypes.any,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -179,6 +191,7 @@ export default function MasterKatgori() {
   const [idStore, setIdStore] = React.useState();
   const [data,setData] = React.useState([]);
   const [store,setStore] = React.useState([]);
+  const [check, setCheck] = React.useState(false);
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
   useEffect(()=>{
@@ -195,12 +208,15 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getDataPerStore()
+    }else{
+      alertError('Error','Fail add data')
     }
     console.log({res:res})
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({array:array?.length})
+    let idx = array?.findIndex(a=>a.check==true)
+    if(idx>-1){
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
@@ -210,7 +226,11 @@ export default function MasterKatgori() {
     
     }
     getDataPerStore()
+    setCheck(!check)
     alertSuccess('Success','Success delete data')
+  }else{
+    alertError('Error','Fail, no data chose for delete')
+  }
   }
   const submitUpdateBank =async(acc_number,owner_name,bank_name,image)=>{
     setOpenDetail(false)
@@ -225,8 +245,9 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getDataPerStore()
+    }else{
+      alertError('Error','Fail update data')
     }
-    console.log({res:res})
   }
   useEffect(()=>{
     getDataStore()
@@ -265,11 +286,12 @@ export default function MasterKatgori() {
     setData(array)
 
   }
-  const searching =async()=>{
+  const searching =async(e,type)=>{
     
+    if((type==='enter'&&e.keyCode === 13)||type==='klik'){
     let res = await getBankSearch(searched)
     setData(res?.data)
-    
+    } 
   }
   useEffect(()=>{
    
@@ -407,9 +429,9 @@ export default function MasterKatgori() {
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
+            onKeyUp={(e)=>{
+              searching(e,'enter')
+            }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -417,7 +439,7 @@ export default function MasterKatgori() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon onClick={()=>searching()}/>
+                 <SearchIcon onClick={()=>searching('','klik')}/>
                 </IconButton>
               </InputAdornment>
             }
@@ -452,7 +474,8 @@ export default function MasterKatgori() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
-              checkAllList={(v)=>checkSemua(v)}
+             checkAllList={(v)=>checkSemua(v)}
+              checkChange={check}
               numSelected={selected.length}
               data={data}
               order={order}
@@ -480,14 +503,14 @@ export default function MasterKatgori() {
                       selected={isItemSelected}
                     >
                       
-                       <TableCell align="left">
+                       {/* <TableCell align="left">
                       <input 
                        type="checkbox" 
                        value={row?.check} 
                        checked={row?.check?row?.check:false} 
                        onChange={()=>{}} 
                        onClick={(e)=>checkSingle(row,index)}/>
-                       </TableCell>
+                       </TableCell> */}
                        
                       <TableCell align="left">{index+1}</TableCell>
                       <TableCell align="left">{row.id}</TableCell>
@@ -495,7 +518,17 @@ export default function MasterKatgori() {
                       <TableCell align="left">{row.lokasi_store}</TableCell>
                       
                       <TableCell align="left">{row.total_per_store}</TableCell>
-                     
+                      <TableCell align="right">
+                      <div style={{
+                        
+                      }}>
+                      <IconButton onClick={()=>{
+                        handleOpenDetail(row)
+                      }}>
+                          <RemoveRedEyeOutlinedIcon />
+                        </IconButton>
+                      </div>
+                        </TableCell>
                     </TableRow>
                   );
                 })}

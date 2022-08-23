@@ -2,14 +2,14 @@
 import {
    Modal,Box,Button
   } from "@mui/material";
-  
+  import CloseIcon from '@mui/icons-material/Close';
   import React,{useState,useEffect} from 'react';
   import DeleteIcon from '@mui/icons-material/Delete';
   import moment from 'moment';
 import  Input  from "../../Component/input";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import {getPengirimanOfficekeStoreSearch,getProdukByArtikel} from '../../Config/Api-new'
+import {getProdukBySKU,getProdukByArtikel} from '../../Config/Api-new'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 const ModalAddPembelian =(props)=>{
     // const [detail_pengiriman,setDetail_pengiriman] = useState([])
@@ -31,6 +31,7 @@ const ModalAddPembelian =(props)=>{
     const [harga_jual,setHarga_jual] = useState('')
     const [date_from,setDate_from] = useState(moment(new Date()).format('YYYY-MM-DD'))
     const [date_to,setDate_to] = useState(moment(new Date()).format('YYYY-MM-DD'))
+    const [detail,setDetail]= useState({})
     useEffect(()=>{
         setTanggal_transaksi(moment(new Date()).format('YYYY-MM-DD'))
         setSku_code('')
@@ -79,8 +80,6 @@ const ModalAddPembelian =(props)=>{
       arr.push({
         artikel,
         sku_code,
-        date_from,
-        date_to,
         hpp,
         harga_jual,
         type:tipe,
@@ -92,7 +91,17 @@ const ModalAddPembelian =(props)=>{
         nama_barang,
 
       })
-      console.log({arr})
+      // setDetail({})
+      setNama_barang('')
+        setSku_code('')
+        
+        setUkuran('')
+        setArtikel('')
+      setTipe('')
+      setKategori('')
+      setKuantitas('')
+      setHpp('')
+      setHarga_jual('')
       setListDetail(arr)
     }
     const deleteData = (idx)=>{
@@ -101,7 +110,42 @@ const ModalAddPembelian =(props)=>{
       datas.splice(idx, 1);
       setListDetail(datas)
     }
-  
+    const getArticle = async (e)=>{
+      if(e.charCode === 13){
+        e.preventDefault();
+      let res = await getProdukByArtikel(artikel)
+      setSku_code(res?.data?.sku_code)
+      setDetail(res?.data) 
+      setUkuran(res?.data?.ukuran)
+      setKuantitas(res?.data?.kuantitas)
+      setNama_barang(res?.data?.nama_product)
+      setTipe(res?.data?.type)
+      setKategori(res?.data?.kategori)
+      setKuantitas(res?.data?.kuantitas)
+      setHpp(res?.data.hpp)
+      setHarga_jual(res?.data?.harga_jual)
+      }
+    }
+    const getSKU = async (e)=>{
+     
+      if(e.charCode === 13){
+        e.preventDefault();
+        
+      let res = await getProdukBySKU(sku_code)
+      // console.log({a:res?.data[0]?.detailPengirimanList,b:res?.data})
+      setDetail(res?.data)
+      setArtikel(res?.data?.artikel_product) 
+      setUkuran(res?.data?.ukuran)
+      setKuantitas(res?.data?.kuantitas)
+      setNama_barang(res?.data?.nama_product)
+      setTipe(res?.data?.type)
+      setKategori(res?.data?.kategori)
+      setKuantitas(res?.data?.kuantitas)
+      setHpp(res?.data.hpp)
+      setHarga_jual(res?.data?.harga_jual)
+      }
+    }
+    
     return (
         <>
         
@@ -123,7 +167,10 @@ const ModalAddPembelian =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Add Pembelian</h2>
+                 <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Add Pembelian</h2>
+                    <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                 {/* <Input 
                                 value={pengiriman}
@@ -169,6 +216,14 @@ const ModalAddPembelian =(props)=>{
                                 value={artikel}
                                 onChange={(v)=>setArtikel(v?.target?.value)}
                                 label='Artikel'
+                                onKeyPress={(e)=>getArticle(e)}
+                               style={{width:'100%',marginTop:20}}
+                               />
+                               <Input 
+                                value={sku_code}
+                                onChange={(v)=>setSku_code(v?.target?.value)}
+                                label='SKU CODE'
+                                onKeyPress={(e)=>getSKU(e)}
                                style={{width:'100%',marginTop:20}}
                                />
                                 {/* <p style={{textColor:'gray',fontSize:'13px'}}>Artikel</p> */}
@@ -297,12 +352,12 @@ const ModalAddPembelian =(props)=>{
                                      padding: '8px',
                                      border: '1px solid #ddd'
                                 }}>No</th>
-                                <th style={{
+                                {/* <th style={{
                                      textAlign: 'left',
                                      padding: '8px',
                                      border: '1px solid #ddd'
                                      
-                                }}>SKU CODE</th>
+                                }}>SKU CODE</th> */}
                                 <th style={{
                                      textAlign: 'left',
                                      padding: '8px',

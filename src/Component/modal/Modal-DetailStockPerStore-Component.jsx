@@ -6,6 +6,7 @@ import {
   import Paper from '@mui/material/Paper';
   import { visuallyHidden } from '@mui/utils';
   import React,{useState,useEffect} from 'react';
+  import CloseIcon from '@mui/icons-material/Close';
 import  Input  from "../../Component/input";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -200,6 +201,9 @@ function EnhancedTableHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  // React.useEffect(()=>{
+  //   setCheck(false)
+  // },[checkChange])
   const [head,setHead] = useState([])
   useEffect(()=>{
     let a = []
@@ -355,7 +359,10 @@ const ModalStorePerStock =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Detail</h2>
+                 <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Detail</h2>
+                    <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
       {tipe!==0?
       <div style={{ marginTop:50}}>
         <h3 >Periode</h3>
@@ -405,9 +412,9 @@ const ModalStorePerStock =(props)=>{
           <OutlinedInput
             value={search}
             onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
+             onKeyUp={(e)=>{
+              searching(e,'enter')
+            }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -415,7 +422,7 @@ const ModalStorePerStock =(props)=>{
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon onClick={()=>searching()}/>
+                 <SearchIcon onClick={()=>searching('','klik')}/>
                 </IconButton>
               </InputAdornment>
             }
@@ -476,7 +483,8 @@ const ModalStorePerStock =(props)=>{
             size={dense ? 'small' : 'medium'}
           >
              <EnhancedTableHead
-              // checkAllList={(v)=>checkSemua(v)}
+              //checkAllList={(v)=>checkSemua(v)}
+              // checkChange={check}
               tipe={tipe}
               numSelected={selected.length}
               data={data}

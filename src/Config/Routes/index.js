@@ -94,7 +94,7 @@ function Routes() {
         <PrivateRoute exact path='/pemasok' component={Pemasok}/>
         <PrivateRoute exact path='/manajemen-user' component={ManajemenUser}/>
         <PrivateRoute exact path='/produk' component={Produk}/>
-        <PrivateRoute exact path='/pengiriman/gudang' component={PengirimanGudang}/>
+        <PrivateRoute exact path='/pengiriman/office-to-store' component={PengirimanGudang}/>
         <PrivateRoute exact path='/pengiriman/store' component={PengirimanStore}/>
         <PrivateRoute exact path='/pengiriman/retur-gudang' component={PengirimanReturGudang}/>
         <PrivateRoute exact path='/penerimaan/ByStore' component={PenerimaanByStore}/>

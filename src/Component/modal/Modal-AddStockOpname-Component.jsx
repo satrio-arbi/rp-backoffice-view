@@ -2,7 +2,7 @@
 import {
    Modal,Box,Button
   } from "@mui/material";
-  
+  import CloseIcon from '@mui/icons-material/Close';
   import React,{useState,useEffect} from 'react';
   import DeleteIcon from '@mui/icons-material/Delete';
   import moment from 'moment';
@@ -110,7 +110,10 @@ const ModalAddStockOpname =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Add Stock Opname</h2>
+                <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}}  id="parent-modal-title">Add Stock Opname</h2>
+                <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                     {/* <p>Tanggal Pengiriman</p> */}
                    
@@ -176,7 +179,7 @@ const ModalAddStockOpname =(props)=>{
                                 />
                                 {/* <p style={{textColor:'gray',fontSize:'13px'}}>Ukuran</p> */}
                             
-                        <p style={{textColor:'gray',fontSize:'13px'}}>Hpp</p> 
+                        {/* <p style={{textColor:'gray',fontSize:'13px'}}>Hpp</p> 
                                 <Input 
                                 value={detail?.hpp}
                                 readOnly={true}
@@ -193,12 +196,12 @@ const ModalAddStockOpname =(props)=>{
                                 // label={'Harga jual'}
                                 // onChange={(v)=>setTanggal_pengiriman(v?.target?.value)}
                                 style={{width:'100%'}}
-                                />
-                                <div style={{marginTop:10}}>
+                                /> */}
+                                {/* <div style={{marginTop:10}}>
                                 <p style={{textColor:'gray',fontSize:'13px'}}>Foto Barang</p> 
                                 
                                   {detail?.image?<img src={convertImage(detail?.image)} style={{width:200,height:200}} />:null}
-                                  </div>
+                                  </div> */}
                             </div>
                         </div>
                     

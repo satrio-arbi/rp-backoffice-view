@@ -2,7 +2,7 @@
 import {
    Modal,Box,Button
   } from "@mui/material";
-  
+  import CloseIcon from '@mui/icons-material/Close';
   import React,{useState,useEffect} from 'react';
   import DeleteIcon from '@mui/icons-material/Delete';
   import moment from 'moment';
@@ -35,13 +35,22 @@ const ModaEditStorekeStore =(props)=>{
       props?.detail?.map((d,i)=>{
         arr[i]['rowstatus'] = 1
       })
-      console.log({arr})
+      
       setListDetail(arr)
       setDetail('')
       setArticle('')
       setId_store_tujuan((data?.id_store_tujuan))
       setKuantitas('')
     },[props?.open])
+    useEffect(()=>{
+      
+      if(id_store_asal!==''&&id_store_tujuan!==''){
+        if(id_store_asal===id_store_tujuan){
+          alert('Store asal dan tunjuan tidak boleh sama !')
+          setId_store_tujuan('')
+        }
+      }
+    },[id_store_asal,id_store_tujuan])
     const getSKU = async (e)=>{
       
       if(e.charCode === 13){
@@ -114,11 +123,18 @@ const ModaEditStorekeStore =(props)=>{
       setListDetail(datas)
     }
     const setDataDetail = (d)=>{
-      let kon = !isUpdate
+      let kon = true
       
       setUpdateDetail(!kon?{}:d)
       
       setIsUpdate(kon)
+    }
+    const saveUpdate = ()=>{
+      // let kon = true
+      
+      setUpdateDetail({})
+      
+      setIsUpdate(false)
     }
     const updateDataDetail = (v,type)=>{
       let datas = [...listDetail]
@@ -149,7 +165,10 @@ const ModaEditStorekeStore =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Update Pengiriman Store to Store</h2>
+                <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Update Pengiriman Store to Store</h2>
+                <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                     {/* <p>Tanggal Pengiriman</p> */}
                     <Input 
@@ -305,7 +324,7 @@ const ModaEditStorekeStore =(props)=>{
                             </div>
                         </div>
                         <div style={{marginTop:10,justifyContent:'end',display:'flex'}}>
-                          <Button onClick={()=>isUpdate?setDataDetail():addDetailProduk()} variant="contained">{isUpdate?'Update':'Save'} Produk detail</Button>
+                          <Button onClick={()=>isUpdate?saveUpdate():addDetailProduk()} variant="contained">{isUpdate?'Update':'Save'} Produk detail</Button>
                         </div>
                         <div style={{overflowX:'auto',marginTop:20}}>
                         <tabel style={{

@@ -6,6 +6,7 @@ import {
   import React,{useState,useEffect} from 'react';
 import  Input  from "../../Component/input";
 import moment from 'moment';
+import CloseIcon from '@mui/icons-material/Close';
 const ModalDownloadReport =(props)=>{
     const [start,setStart] = useState('')
     const [end,setEnd] = useState('')
@@ -33,7 +34,10 @@ const ModalDownloadReport =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Report {props?.title}</h2>
+                 <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Report {props?.title}</h2>
+                    <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div style={{display: 'flex',flexDirection:'row'}}>
                     {/* <p>Nama Kategori</p> */}
                     <div style={{width:'100%',marginRight:10}}>

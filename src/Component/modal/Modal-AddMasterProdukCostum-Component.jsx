@@ -2,7 +2,7 @@
 import {
     Modal,Box,Button
    } from "@mui/material";
-   
+   import CloseIcon from '@mui/icons-material/Close';
    import React,{useState,useEffect} from 'react';
    import Select, { SelectChangeEvent } from '@mui/material/Select';
  import MenuItem from '@mui/material/MenuItem';
@@ -86,6 +86,7 @@ import {
         if(sku_code_f&&sku_code_s){
             a = [{value:prodOption[idx].artikel_product,label:prodOption[idx].artikel_frame},{value:prodOption[idx1].artikel_product,label:prodOption[idx1].artikel_frame}]
             b = [{value:prodOption[idx].artikel_product,label:prodOption[idx].artikel_lens},{value:prodOption[idx1].artikel_product,label:prodOption[idx1].artikel_lens}]
+            
             setFrame(a)
             setLens(b)
         }
@@ -159,7 +160,11 @@ import {
                  boxShadow: 24,
                  p: 4, 
          }}>
-                 <h2 id="parent-modal-title">Add Master Produk Custom </h2>
+                
+                <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Add Master Produk Custom </h2>
+                    <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                  <div>
                  <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
                            <InputLabel id="demo-simple-select-label">Type</InputLabel>

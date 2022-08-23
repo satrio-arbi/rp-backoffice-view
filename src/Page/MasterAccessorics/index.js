@@ -133,6 +133,9 @@ function EnhancedTableHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  React.useEffect(()=>{
+    setCheck(false)
+  },[checkChange])
 
   return (
     <TableHead>
@@ -187,6 +190,7 @@ export default function MasterAccessorics() {
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
   const [cari, setCari] = React.useState();
+  const [check, setCheck] = React.useState(false);
   useEffect(()=>{
     dispatch(getPembelian())
   },[])

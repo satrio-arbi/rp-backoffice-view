@@ -2,16 +2,17 @@
 import {
   Modal,Box,Button
  } from "@mui/material";
- 
+ import CloseIcon from '@mui/icons-material/Close';
  import React,{useState,useEffect} from 'react';
  import DeleteIcon from '@mui/icons-material/Delete';
  import moment from 'moment';
 import  Input  from "../../Component/input";
+import {alertError} from '../../Component/alert/sweetalert'
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import {getProdukBySKU,getProdukByArtikel} from '../../Config/Api-new'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
-const ModalUpdatePenjualanOffice =(props)=>{
+const ModalAddPenjualanOffice =(props)=>{
    // const [detail_pengiriman,setDetail_pengiriman] = useState([])
    const [tanggal_transaksi,setTanggal_transaksi] = useState(moment(new Date()).format('YYYY-MM-DD'))
    const [id_office,setId_office] = useState('')
@@ -26,24 +27,31 @@ const ModalUpdatePenjualanOffice =(props)=>{
    const [harga_satuan_barang,setHarga_satuan_barang] = useState('')
    const [ongkos_kirim,setOngkos_kirim] = useState('')
    const [pajak,setPajak] = useState('')
+   const [check,setCheck] = useState('')
    const [karyawan,setKaryawan] = useState('')
+   const [diskon,setDiskon] = useState(0)
+   const [diskon_remark,setDiskon_remark] = useState('')
+   const [ekspedisi,setEkspedisi] = useState('')
    const data = props?.data
    useEffect(()=>{
-    console.log({data})
-      setHarga_satuan_barang('')
-      setOngkos_kirim('')
-      setPajak('')
-       setTanggal_transaksi(data?.tanggal_transaksi)
-       setId_office(data?.id_office)
-       setSku('')
-       setUkuran('')
-       setListDetail(data?.detail_penjualan)
-       setDetail('')
-       setArticle('')
-       setId_pelanggan(convertPelangganFromHp(data?.no_hp_pelanggan))
-       setKuantitas('')
-       setBank('')
-       setKaryawan(data?.id_karyawan)
+    setHarga_satuan_barang('')
+    setOngkos_kirim(data?.ongkos_kirim)
+    setPajak(data?.pajak_biaya)
+     setTanggal_transaksi(data?.tanggal_transaksi)
+     setId_office(data?.id_office)
+     setCheck(data?.metode_pembayaran==='NON TUNAI'?true:false)
+     setSku('')
+     setUkuran('')
+     setListDetail(data?.detail_penjualan)
+     setDetail('')
+     setDiskon(data?.diskon)
+     setDiskon_remark(data?.diskon_remark)
+     setEkspedisi(data?.ekspedisi)
+     setArticle('')
+     setId_pelanggan(convertPelangganFromHp(data?.no_hp_pelanggan))
+     setKuantitas('')
+     setBank(data?.metode_pembayaran==='NON TUNAI'?convertBankByAccAndName(data?.bank_name,data?.no_rek):"")
+     setKaryawan(data?.id_karyawan)
    },[props?.open])
    const getSKU = async (e)=>{
      
@@ -69,20 +77,31 @@ const ModalUpdatePenjualanOffice =(props)=>{
      setKuantitas(res?.data?.kuantitas)
      }
    }
+   const convertPelangganFromHp = (v) =>{
+    let idx = props?.pelanggan?.findIndex(a=>a.no_hp==v)
+    
+    return props?.pelanggan?props?.pelanggan[idx]?.id:''
+  }
    const convertPelanggan = (v) =>{
        let idx = props?.pelanggan?.findIndex(a=>a.id==v)
        
        return {hp:props?.pelanggan?props?.pelanggan[idx]?.no_hp:'',nama:props?.pelanggan?props?.pelanggan[idx]?.nama_pelanggan:''}
      }
-     const convertPelangganFromHp = (v) =>{
-      let idx = props?.pelanggan?.findIndex(a=>a.no_hp==v)
-      
-      return props?.pelanggan?props?.pelanggan[idx]?.id:''
-    }
-    const convertKaryawan = (v) =>{
+     
+     const convertKaryawan = (v) =>{
       let idx = props?.karyawan?.findIndex(a=>a.id==v)
       
       return props?.karyawan[idx]
+    }
+    const convertBank = (v) =>{
+      let idx = props?.bank?.findIndex(a=>a.id==v)
+      
+      return props?.bank[idx]
+    }
+    const convertBankByAccAndName = (nm,acc) =>{
+      let idx = props?.bank?.findIndex(a=>a.bank_name==nm&&a.acc_number==acc)
+      
+      return props?.bank[idx]?.id
     }
      const convertOffice=(v) =>{
        let idx = props?.office?.findIndex(a=>a.id==v)
@@ -98,6 +117,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
      
      arr.push({
       //  id:detail?.id,
+        rowstatus:2,
        sku_code:sku,
        artikel:article,
        type_name:detail?.type_name,
@@ -106,27 +126,41 @@ const ModalUpdatePenjualanOffice =(props)=>{
        kategori:detail?.kategori,
        nama_barang:detail?.nama_product,
        kuantitas,
-       ukuran,
-       rowstatus:1,
-       metode_pembayaran:bank,
+      //  ukuran,
+      //  metode_pembayaran:bank,
        harga_satuan_barang,
-       ongkos_kirim,
-       pajak_biaya:pajak,
-       total:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim)
+      //  ongkos_kirim,
+      //  pajak_biaya:pajak,
+      //  total:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim)
      })
-     console.log({
-      tot:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim),
-      pajak:(parseInt(harga_satuan_barang)*parseInt(kuantitas)),
+    //  console.log({
+    //   tot:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim),
+    //   pajak:(parseInt(harga_satuan_barang)*parseInt(kuantitas)),
       
-    })
+    // })
      setListDetail(arr)
    }
    const deleteData = (idx)=>{
      let datas = [...listDetail]
      // let idx = listDetail?.findIndex(a=>a.id==id)
+     if(datas[idx]['rowstatus']===2){
+      datas.splice(idx, 1);
+    }else{
       datas[idx]['rowstatus'] =0
-    //  datas.splice(idx, 1);
+    }
      setListDetail(datas)
+   }
+   useEffect(()=>{
+    checkDiskon()
+   },[diskon])
+   const checkDiskon = async ()=>{
+    if(diskon>100){
+      await alert('Diskon tidak boleh lebih dari 100')
+      setDiskon(100)
+    }else if(diskon<0){
+      await alert('Diskon tidak boleh kurang dari 0')
+      setDiskon(0)
+    }
    }
    return (
        <>
@@ -149,7 +183,10 @@ const ModalUpdatePenjualanOffice =(props)=>{
        border: '2px solid #000',
        boxShadow: 24,
        p: 4, }}>
-               <h2 id="parent-modal-title">Add Penjualan office</h2>
+               <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}}  id="parent-modal-title">Add Penjualan office</h2>
+               <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                <div>
                    {/* <p>Tanggal Pengiriman</p> */}
                    <Input 
@@ -214,6 +251,74 @@ const ModalUpdatePenjualanOffice =(props)=>{
                            })}
                          </Select>
                        </FormControl>
+                       <Input 
+                        value={ekspedisi}
+                        disable={false}
+                        
+                        label={'Ekspedisi'}
+                        onChange={(v)=>setEkspedisi(v?.target?.value)}
+                        style={{width:'100%',marginTop:10}}
+                        />
+                        <Input 
+                               value={ongkos_kirim}
+                             
+                               // type='date'
+                               label={'Ongkos kirim'}
+                               onChange={(v)=>setOngkos_kirim(v?.target?.value)}
+                               style={{width:'100%',marginTop:10}}
+                               />
+                          <Input 
+                               value={pajak} 
+                               label={'pajak'}
+                               // type='date'
+                               // label={'Tipe'}
+                               onChange={(v)=>setPajak(v?.target?.value)}
+                               style={{width:'100%',marginTop:10}}
+                               />
+                       <Input 
+                        value={diskon}
+                        disable={false}
+                        type='number'
+                        label={'Diskon'}
+                        onChange={(v)=>setDiskon(v?.target?.value)}
+                        style={{width:'100%',marginTop:10}}
+                        />
+                         <Input 
+                        value={diskon_remark}
+                        disable={false}
+                        
+                        label={'Diskon Remark'}
+                        onChange={(v)=>setDiskon_remark(v?.target?.value)}
+                        style={{width:'100%',marginTop:10}}
+                        />
+                       <div style={{display: 'flex',flexDirection: 'row'}}>
+                          <input 
+                              //   disabled={props?.read}
+                              style={{marginTop:12}}
+                                onChange={()=>{}} type='checkbox' 
+                                checked={check} onClick={()=>setCheck(!check)} />
+                                <p style={{textColor:'gray',fontSize:'13px',marginLeft:5}}>checklist bila metode pembayaran non tunai ?</p>
+                          </div>
+                         {check?
+                          <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
+                         <InputLabel id="demo-simple-select-label">Select Bank</InputLabel>
+                         <Select
+                           labelId="demo-simple-select-label"
+                           id="demo-simple-select"
+                           value={bank}
+                           label="Select Toko Tujuan"
+                           onChange={(v)=>{setBank(v?.target?.value)}}
+                         >
+                           {props?.bank?.map((d,i)=>{
+                             return(
+                               
+                                 <MenuItem value={d?.id} >{d?.acc_number}-{d?.bank_name}</MenuItem>
+                               
+                             )
+                           })}
+                         </Select>
+                       </FormControl>
+                       :null}
                        <p>Produk</p>
                        <div style={{ display: 'flex',flexDirection:'row'}}>
                            <div style={{width:'100%',marginRight:10}}>
@@ -264,8 +369,8 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                // onChange={(v)=>setTanggal_transaksi(v?.target?.value)}
                                style={{width:'100%'}}
                                />
-                                <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                         <InputLabel id="demo-simple-select-label">Ukuran</InputLabel>
+                                {/* <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
+                         <InputLabel id="demo-simple-select-label">Select Ukuran</InputLabel>
                          <Select
                            labelId="demo-simple-select-label"
                            id="demo-simple-select"
@@ -281,7 +386,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
                              )
                            })}
                          </Select>
-                       </FormControl>
+                       </FormControl> */}
                            </div>
                            <div style={{width:'100%',marginRight:10}}>
                            <p style={{textColor:'gray',fontSize:'13px'}}>Kuantitas</p> 
@@ -295,24 +400,6 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                />
                                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Ukuran</p> */}
                               
-                       <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                         <InputLabel id="demo-simple-select-label">Metode Bayar</InputLabel>
-                         <Select
-                           labelId="demo-simple-select-label"
-                           id="demo-simple-select"
-                           value={bank}
-                           label="Toko Tujuan"
-                           onChange={(v)=>{setBank(v?.target?.value)}}
-                         >
-                           {props?.bank?.map((d,i)=>{
-                             return(
-                               
-                                 <MenuItem value={d?.id} >{d?.acc_number}-{d?.bank_name}</MenuItem>
-                               
-                             )
-                           })}
-                         </Select>
-                       </FormControl>
                        <p style={{textColor:'gray',fontSize:'13px'}}>Harga satuan barang</p>
                                <Input 
                                value={harga_satuan_barang}
@@ -322,24 +409,10 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                onChange={(v)=>setHarga_satuan_barang(v?.target?.value)}
                                style={{width:'100%'}}
                                />
-                                <p style={{textColor:'gray',fontSize:'13px'}}>Pajak</p>
-                               <Input 
-                               value={pajak} 
+                                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Pajak</p> */}
                              
-                               // type='date'
-                               // label={'Tipe'}
-                               onChange={(v)=>setPajak(v?.target?.value)}
-                               style={{width:'100%'}}
-                               />
-                                <p style={{textColor:'gray',fontSize:'13px'}}>Ongkos kirim</p>
-                               <Input 
-                               value={ongkos_kirim}
-                             
-                               // type='date'
-                               // label={'Tipe'}
-                               onChange={(v)=>setOngkos_kirim(v?.target?.value)}
-                               style={{width:'100%'}}
-                               />
+                                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Ongkos kirim</p> */}
+                               
                                <div style={{marginTop:10}}>
                                <p style={{textColor:'gray',fontSize:'13px'}}>Foto Barang</p> 
                                
@@ -390,7 +463,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                     padding: '8px',
                                     border: '1px solid #ddd'
                                }}>Kuantitas</th>
-                               <th style={{
+                               {/* <th style={{
                                     textAlign: 'left',
                                     padding: '8px',
                                     border: '1px solid #ddd'
@@ -399,13 +472,13 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                     textAlign: 'left',
                                     padding: '8px',
                                     border: '1px solid #ddd'
-                               }}>Metode pembayaran</th>
+                               }}>Metode pembayaran</th> */}
                                <th style={{
                                     textAlign: 'left',
                                     padding: '8px',
                                     border: '1px solid #ddd'
                                }}>Harga satuan</th>
-                                <th style={{
+                                {/* <th style={{
                                     textAlign: 'left',
                                     padding: '8px',
                                     border: '1px solid #ddd'
@@ -419,7 +492,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                     textAlign: 'left',
                                     padding: '8px',
                                     border: '1px solid #ddd'
-                               }}>Total</th>
+                               }}>Total</th> */}
                                <th style={{
                                     textAlign: 'left',
                                     padding: '8px',
@@ -428,8 +501,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
                            </tr>
                            <tbody>
                              {listDetail?.map((d,i)=>{return(
-                              d?.rowstatus===1?
-                             <>
+                               d?.rowstatus>0?
                                <tr key={i}>
                                    <td style={{
                                        textAlign: 'left',
@@ -473,7 +545,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                    }}>
                                      {d?.kuantitas}
                                    </td>
-                                   <td style={{
+                                   {/* <td style={{
                                        textAlign: 'left',
                                        padding: '8px',
                                        border: '1px solid #ddd'
@@ -487,7 +559,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                        border: '1px solid #ddd'
                                    }}>
                                      {d?.metode_pembayaran}
-                                   </td>
+                                   </td> */}
                                    <td style={{
                                        textAlign: 'left',
                                        padding: '8px',
@@ -495,7 +567,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                    }}>
                                      {d?.harga_satuan_barang}
                                    </td>
-                                   <td style={{
+                                   {/* <td style={{
                                        textAlign: 'left',
                                        padding: '8px',
                                        border: '1px solid #ddd'
@@ -515,7 +587,7 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                        border: '1px solid #ddd'
                                    }}>
                                      {d?.total}
-                                   </td>
+                                   </td> */}
                                    <td style={{
                                        textAlign: 'left',
                                        padding: '8px',
@@ -524,20 +596,32 @@ const ModalUpdatePenjualanOffice =(props)=>{
                                    <DeleteIcon onClick={()=>deleteData(i)}/>
                                    </td>
                                </tr>
-                               </>:null
+                               :null
                                )})}
                            </tbody>
                        </tabel>
                        </div>
                    <div style={{marginTop:10}}>
-                       <Button onClick={()=>props?.submit(  {detail_penjualan:listDetail,
+                       <Button onClick={()=>props?.submit(  {
+                        detail_penjualan:listDetail,
                         tanggal_transaksi:moment(tanggal_transaksi).format('YYYY-MM-DD'),
+                        id_office,
                         id_karyawan:convertKaryawan(karyawan)?.id,
                         nama_karyawan:convertKaryawan(karyawan)?.nama_karyawan,
-                        id_office,
                         lokasi_office:convertOffice(id_office),
                         nama_pelanggan:convertPelanggan(id_pelanggan)?.nama,
-                        no_hp_pelanggan:convertPelanggan(id_pelanggan)?.hp})} variant="contained">Save</Button>
+                        no_hp_pelanggan:convertPelanggan(id_pelanggan)?.hp,
+                        pajak_biaya: pajak,
+                        ongkos_kirim,
+                        ekspedisi,
+                        diskon,
+                        diskon_remark,
+                        metode_pembayaran:check?"NON TUNAI":"TUNAI",
+                        bank_name:check?convertBank(bank)?.bank_name:'',
+                        no_rek:check?convertBank(bank)?.acc_number:''
+                      })} 
+                        
+                        variant="contained">Save</Button>
                    </div>
                </div>
               
@@ -548,4 +632,4 @@ const ModalUpdatePenjualanOffice =(props)=>{
    )
 
 }
-export default ModalUpdatePenjualanOffice
+export default ModalAddPenjualanOffice

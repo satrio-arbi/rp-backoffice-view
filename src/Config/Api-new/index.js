@@ -668,6 +668,21 @@ export const getPenjualanOfficeDelete = async (id) => {
   return res
   
 }
+export const getDownloadInvoicePEnjualanOffice = async (data) => {
+
+  const res = await NET("GET", `report/invoice?id_office=${data?.office}&id_transaksi=${data?.trx}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `penjualan_office_${new Date()}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  // console.log({link})
+  
+}
 //dashboard
 export const getBiaya = async () => {
 
@@ -967,6 +982,7 @@ export const updateProduk = async (
     formData.append('harga_jual',harga_jual)
     formData.append('sku_code',sku_code)
     formData.append('remarks',remarks)
+    formData.append('rowstatus',1)
     formData.append('nama_kategori',nama_kategori)
     formData.append('image',image)
   const res = await NET("POST", `master/product/update`, formData)

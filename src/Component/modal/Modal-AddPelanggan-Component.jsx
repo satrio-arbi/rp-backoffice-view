@@ -2,7 +2,7 @@
 import {
    Modal,Box,Button
   } from "@mui/material";
-  
+  import CloseIcon from '@mui/icons-material/Close';
   import React,{useState,useEffect} from 'react';
 import  Input  from "../../Component/input";
 const ModalAddPelanggan =(props)=>{
@@ -48,7 +48,10 @@ const ModalAddPelanggan =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Add Pelanggan</h2>
+                 <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Add Pelanggan</h2>
+                    <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                     {/* <p>Nama Kategori</p> */}
                     <Input 
@@ -76,6 +79,7 @@ const ModalAddPelanggan =(props)=>{
                     value={kuantitas}
                     disable={false}
                     label={'Kuantitas'}
+                    type='number'
                     onChange={(v)=>setKuantitas(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
                     />
@@ -97,6 +101,7 @@ const ModalAddPelanggan =(props)=>{
                     value={pembelian}
                     disable={false}
                     label={'Pembelian pelanggan'}
+                    type='number'
                     onChange={(v)=>setPembelian(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
                     />
@@ -104,6 +109,7 @@ const ModalAddPelanggan =(props)=>{
                     value={poin}
                     disable={false}
                     label={'Poin pelanggan'}
+                    type='number'
                     onChange={(v)=>setPoin(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
                     />
@@ -111,6 +117,7 @@ const ModalAddPelanggan =(props)=>{
                     value={total_kunjungan}
                     disable={false}
                     label={'Total kunjungan pelanggan'}
+                    type='number'
                     onChange={(v)=>setTotal_kunjungan(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
                     />

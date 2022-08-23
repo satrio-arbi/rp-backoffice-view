@@ -2,14 +2,14 @@
 import {
    Modal,Box,Button
   } from "@mui/material";
-  
+  import CloseIcon from '@mui/icons-material/Close';
   import React,{useState,useEffect} from 'react';
   import DeleteIcon from '@mui/icons-material/Delete';
   import moment from 'moment';
 import  Input  from "../../Component/input";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import {getPengirimanOfficekeStoreSearch,getProdukByArtikel} from '../../Config/Api-new'
+import {getProdukBySKU,getProdukByArtikel} from '../../Config/Api-new'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 const ModalUpdatePembelian =(props)=>{
     // const [detail_pengiriman,setDetail_pengiriman] = useState([])
@@ -32,6 +32,7 @@ const ModalUpdatePembelian =(props)=>{
     const [date_from,setDate_from] = useState(moment(new Date()).format('YYYY-MM-DD'))
     const [date_to,setDate_to] = useState(moment(new Date()).format('YYYY-MM-DD'))
     const dats = props?.data
+    const [detail,setDetail]= useState({})
     useEffect(()=>{
         setTanggal_transaksi(moment(dats?.tanggal_transaksi).format('YYYY-MM-DD'))
         setSku_code('')
@@ -79,12 +80,11 @@ const ModalUpdatePembelian =(props)=>{
       
       arr.push({
         artikel,
-        sku_code,
-        date_from,
-        date_to,
+        sku_code, 
         hpp,
         harga_jual,
         type:tipe,
+        rowstatus:2,
         type_name:convertType(tipe),
         kategori,
         nama_kategori:convertKategori(kategori),
@@ -93,16 +93,64 @@ const ModalUpdatePembelian =(props)=>{
         nama_barang,
 
       })
-      console.log({arr})
+      setNama_barang('')
+      setSku_code('')
+      
+      setUkuran('')
+      setArtikel('')
+    setTipe('')
+    setKategori('')
+    setKuantitas('')
+    setHpp('')
+    setHarga_jual('')
       setListDetail(arr)
     }
     const deleteData = (idx)=>{
       let datas = [...listDetail]
       // let idx = listDetail?.findIndex(a=>a.id==id)
-      datas.splice(idx, 1);
+      // datas.splice(idx, 1);
+      if(datas[idx]['rowstatus']===2){
+        datas.splice(idx, 1);
+      }else{
+        datas[idx]['rowstatus'] =0
+      }
       setListDetail(datas)
     }
-  
+    const getArticle = async (e)=>{
+      if(e.charCode === 13){
+        e.preventDefault();
+      let res = await getProdukByArtikel(artikel)
+      setSku_code(res?.data?.sku_code)
+      setDetail(res?.data) 
+      setUkuran(res?.data?.ukuran)
+      setKuantitas(res?.data?.kuantitas)
+      setNama_barang(res?.data?.nama_product)
+      setTipe(res?.data?.type)
+      setKategori(res?.data?.kategori)
+      setKuantitas(res?.data?.kuantitas)
+      setHpp(res?.data.hpp)
+      setHarga_jual(res?.data?.harga_jual)
+      }
+    }
+    const getSKU = async (e)=>{
+     
+      if(e.charCode === 13){
+        e.preventDefault();
+        
+      let res = await getProdukBySKU(sku_code)
+      // console.log({a:res?.data[0]?.detailPengirimanList,b:res?.data})
+      setDetail(res?.data)
+      setArtikel(res?.data?.artikel_product) 
+      setUkuran(res?.data?.ukuran)
+      setKuantitas(res?.data?.kuantitas)
+      setNama_barang(res?.data?.nama_product)
+      setTipe(res?.data?.type)
+      setKategori(res?.data?.kategori)
+      setKuantitas(res?.data?.kuantitas)
+      setHpp(res?.data.hpp)
+      setHarga_jual(res?.data?.harga_jual)
+      }
+    }
     return (
         <>
         
@@ -124,7 +172,10 @@ const ModalUpdatePembelian =(props)=>{
         border: '2px solid #000',
         boxShadow: 24,
         p: 4, }}>
-                <h2 id="parent-modal-title">Update Pembelian</h2>
+                <div style={{display: 'flex', flexDirection:'row' }}>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Update Pembelian</h2>
+                    <CloseIcon onClick={()=>props?.onClickOpen()} />
+                </div>
                 <div>
                 {/* <Input 
                                 value={pengiriman}
@@ -170,6 +221,14 @@ const ModalUpdatePembelian =(props)=>{
                                 value={artikel}
                                 onChange={(v)=>setArtikel(v?.target?.value)}
                                 label='Artikel'
+                                onKeyPress={(e)=>getArticle(e)}
+                               style={{width:'100%',marginTop:20}}
+                               />
+                               <Input 
+                                value={sku_code}
+                                onChange={(v)=>setSku_code(v?.target?.value)}
+                                label='SKU CODE'
+                                onKeyPress={(e)=>getSKU(e)}
                                style={{width:'100%',marginTop:20}}
                                />
                                 {/* <p style={{textColor:'gray',fontSize:'13px'}}>Artikel</p> */}
@@ -364,7 +423,8 @@ const ModalUpdatePembelian =(props)=>{
                             </tr>
                             <tbody>
                               {listDetail?.map((d,i)=>{return(
-                              
+                              d?.rowstatus>0?
+                              <>
                                 <tr key={i}>
                                     <td style={{
                                         textAlign: 'left',
@@ -374,13 +434,7 @@ const ModalUpdatePembelian =(props)=>{
                                       {i+1}
                                     </td>
                                     
-                                     {/* <td style={{
-                                        textAlign: 'left',
-                                        padding: '8px',
-                                        border: '1px solid #ddd'
-                                    }}>
-                                      {d?.sku_code}
-                                    </td> */}
+                                  
                                     <td style={{
                                         textAlign: 'left',
                                         padding: '8px',
@@ -446,27 +500,10 @@ const ModalUpdatePembelian =(props)=>{
                                         border: '1px solid #ddd'
                                     }}>
                                       
-                                      {/* <input onChange={(v)=>changeTabel('keterangan',i,v?.target?.value)} value={d?.keterangan}/> */}
+                                     
                                       {d?.ukuran}
                                     </td>
-                                    {/* <td style={{
-                                        textAlign: 'left',
-                                        padding: '8px',
-                                        border: '1px solid #ddd'
-                                    }}>
-                                      
-                                    
-                                      {d?.date_from}
-                                    </td>
-                                    <td style={{
-                                        textAlign: 'left',
-                                        padding: '8px',
-                                        border: '1px solid #ddd'
-                                    }}>
-                                      
-                                      
-                                      {d?.date_to}
-                                    </td> */}
+                                 
                                     <td style={{
                                         textAlign: 'left',
                                         padding: '8px',
@@ -476,6 +513,8 @@ const ModalUpdatePembelian =(props)=>{
                                       <DeleteIcon onClick={(v)=>deleteData(i)}/>
                                     </td>
                                 </tr>
+                                </>
+                                :null
                                 )})}
                             </tbody>
                         </tabel>

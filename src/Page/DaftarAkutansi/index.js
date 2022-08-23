@@ -38,7 +38,7 @@ import { useEffect } from 'react';
 import Gap from '../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess} from '../../Component/alert/sweetalert'
+import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 // getDaftarAkun,addDaftarAkun,updateDaftarAkun,
 // deleteDaftarAkun,importDaftarAkun
 import {getDaftarAkun,getDaftarAkunSearch,addDaftarAkun,updateDaftarAkun,deleteDaftarAkun} from '../../Config/Api-new'
@@ -124,12 +124,15 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
+  const { checkChange,checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
     props;
   const [check,setCheck] = React.useState(false)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  React.useEffect(()=>{
+    setCheck(false)
+  },[checkChange])
   const checkAll =()=>{
     checkAllList(!check)
     setCheck(!check)
@@ -175,6 +178,7 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
   data: PropTypes.any,
   checkAllList: PropTypes.func,
+  checkChange: PropTypes.any,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -197,6 +201,7 @@ export default function MasterKatgori() {
   const [rows, setRows] = React.useState(dataStore)
   const [searched, setSearched] = React.useState();
   const [cari, setCari] = React.useState();
+  const [check, setCheck] = React.useState(false);
   const [data,setData] = React.useState([]);
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
@@ -218,12 +223,14 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllDaftarAkun()
-    }
-    console.log({res:res})
+    }else{
+      alertError('Error','Fail add data')
+    } 
   }
   const deleteData = async ()=>{
     let array = [...data]
-    console.log({array:array?.length})
+    let idx = array?.findIndex(a=>a.check==true)
+    if(idx>-1){
     for(let i = 0;i<array?.length;i++){
       if(array[i]?.check===true){
         
@@ -233,7 +240,11 @@ export default function MasterKatgori() {
     
     }
     getAllDaftarAkun()
+    setCheck(!check)
     alertSuccess('Success','Success delete data')
+  }else{
+    alertError('Error','Fail, no data chose for delete')
+  }
   }
   const submitUpdateDaftarAkun =async(data)=>{
     setOpenDetail(false)
@@ -251,8 +262,9 @@ export default function MasterKatgori() {
     if(res?.status){
       alertSuccess('Success','')
       getAllDaftarAkun()
-    }
-    console.log({res:res})
+    }else{
+      alertError('Error','Fail update data')
+    } 
   }
   const getAllDaftarAkun =async()=>{
     
@@ -284,10 +296,11 @@ export default function MasterKatgori() {
     setData(array)
 
   }
-  const searching =async()=>{
-    
+  const searching =async(e,type)=>{
+    if((type==='enter'&&e.keyCode === 13)||type==='klik'){
     let res = await getDaftarAkunSearch(searched)
     setData(res?.data)
+  }
     
   }
   useEffect(()=>{
@@ -424,9 +437,9 @@ export default function MasterKatgori() {
           <OutlinedInput
             value={searched}
             onChange={handleChangeSearch}
-            // onKeyUp={()=>{
-            //   dispatch(getPenjualanOffice(`/search`))
-            // }}
+            onKeyUp={(e)=>{
+              searching(e,'enter')
+            }}
             id="outlined-adornment-password"
             endAdornment={
               <InputAdornment position="end">
@@ -434,7 +447,7 @@ export default function MasterKatgori() {
                   aria-label="toggle password visibility"
                   edge="end"
                 >
-                 <SearchIcon onClick={()=>searching()}/>
+                  <SearchIcon onClick={()=>searching('','klik')}/>
                 </IconButton>
               </InputAdornment>
             }
@@ -451,7 +464,8 @@ export default function MasterKatgori() {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
-              checkAllList={(v)=>checkSemua(v)}
+             checkAllList={(v)=>checkSemua(v)}
+              checkChange={check}
               numSelected={selected.length}
               data={data}
               order={order}
