@@ -20,6 +20,7 @@ import ModalUploadKategori from '../../../Component/modal/Modal-UploadKategori-C
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
+import DownloadIcon from '@mui/icons-material/Download';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -40,7 +41,7 @@ import Gap from '../../../Component/gap/index';
 import clsx from 'clsx';
 import { getPembelian } from '../../../Config/Redux/action';
 import {alertSuccess,alertError} from '../../../Component/alert/sweetalert'
-import {getUkuran,addReturGudang,getOffice,getStore,getReturGudang,getReturGudangSearch,updateReturGudang,deleteReturGudang} from '../../../Config/Api-new'
+import {getDownloadDeliveryReceipt,getUkuran,addReturGudang,getOffice,getStore,getReturGudang,getReturGudangSearch,updateReturGudang,deleteReturGudang} from '../../../Config/Api-new'
 import { set } from 'date-fns/esm';
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -209,7 +210,10 @@ export default function PengirimanStoreStore() {
   const [modal, setModal] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
   const [detail, setDetail] = React.useState([]);
-  const [office,setOffice] = React.useState([])
+  const [office,setOffice] = React.useState([]);
+  const downloadDeliveryReceipt = async (v)=>{
+    let res = await getDownloadDeliveryReceipt({pengiriman_code:v?.pengiriman_code})
+  }
   useEffect(()=>{
     getAllKategori()
   },[])
@@ -219,7 +223,7 @@ export default function PengirimanStoreStore() {
   id_store_asal,
   lokasi_store_asal,
   id_store_tujuan,
-  lokasi_store_tujuan
+  lokasi_store_tujuan,pengiriman_code
   )=>{
     setModal(false)
 
@@ -229,10 +233,11 @@ export default function PengirimanStoreStore() {
   id_store_asal,
   lokasi_store_asal,
   id_store_tujuan,
-  lokasi_store_tujuan
+  lokasi_store_tujuan,pengiriman_code
     )
     if(res?.status){
       alertSuccess('Success','')
+      downloadDeliveryReceipt(res?.data)
       getAllKategori()
     }else{
       alertError('Error','Fail add data')
@@ -559,6 +564,11 @@ export default function PengirimanStoreStore() {
                         handleOpenDetail(row,row?.detailPengirimanList)
                       }}>
                           <RemoveRedEyeOutlinedIcon />
+                        </IconButton>
+                        <IconButton onClick={()=>{
+                        downloadDeliveryReceipt(row)
+                      }}>
+                          <DownloadIcon />
                         </IconButton>
                       </div>
                         </TableCell>
