@@ -683,6 +683,22 @@ export const getDownloadInvoicePEnjualanOffice = async (data) => {
   // console.log({link})
   
 }
+
+export const getDownloadTransferRequest = async (data) => {
+
+  const res = await NET("GET", `pengirimanOffice/transferRequest?pengiriman_code=${data?.pengiriman_code}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `TransferRequest_${new Date()}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  // console.log({link})
+  
+}
 //dashboard
 export const getBiaya = async () => {
 
@@ -1136,7 +1152,7 @@ export const addPengirimanOfficekeStore = async (
   id_office,
   lokasi_office,
   id_store,
-  lokasi_store
+  lokasi_store,pengiriman_code
 ) => {
   
   const res = await NET("POST", `pengirimanOffice/add`, {
@@ -1145,7 +1161,7 @@ export const addPengirimanOfficekeStore = async (
     id_office,
     lokasi_office,
     id_store,
-    lokasi_store
+    lokasi_store,pengiriman_code
   })
   
   return res

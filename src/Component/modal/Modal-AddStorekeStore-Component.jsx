@@ -40,7 +40,7 @@ const ModalAddStorekeStore =(props)=>{
       
       if(id_store_asal!==''&&id_store_tujuan!==''){
         if(id_store_asal===id_store_tujuan){
-          alert('Store asal dan tunjuan tidak boleh sama !')
+          alert('Store asal dan tujuan tidak boleh sama !')
           setId_store_tujuan('')
         }
       }

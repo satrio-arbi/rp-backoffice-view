@@ -4,6 +4,7 @@ import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import DownloadIcon from '@mui/icons-material/Download';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -41,7 +42,7 @@ import clsx from 'clsx';
 import { getPembelian } from '../../../Config/Redux/action';
 import {alertSuccess,alertError} from '../../../Component/alert/sweetalert'
 import ModalDownloadReport from '../../../Component/modal/Modal-DownloadReport-Component'
-import {geReportPengirimanOfficetoStore,addPengirimanOfficekeStore,getUkuran,getStore,getOffice,getPengirimanOfficekeStore,getPengirimanOfficekeStoreSearch,updatePengirimanOfficekeStore,deletePengirimanOfficekeStore} from '../../../Config/Api-new'
+import {getDownloadTransferRequest,geReportPengirimanOfficetoStore,addPengirimanOfficekeStore,getUkuran,getStore,getOffice,getPengirimanOfficekeStore,getPengirimanOfficekeStoreSearch,updatePengirimanOfficekeStore,deletePengirimanOfficekeStore} from '../../../Config/Api-new'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -210,6 +211,9 @@ export default function PengirimanOfficeStore() {
   const [ukuran,setUkuran] = React.useState([]);
   const [detail, setDetail] = React.useState([]);
   const [modalReport, setModalReport] = React.useState();
+  const downloadTransferRequest = async (v)=>{
+    let res = await getDownloadTransferRequest({pengiriman_code:v?.pengiriman_code})
+  }
   useEffect(()=>{
     getAllKategori()
   },[])
@@ -218,16 +222,18 @@ export default function PengirimanOfficeStore() {
     id_office,
     lokasi_office,
     id_store,
-    lokasi_store)=>{
+    lokasi_store,pengiriman_code)=>{
     setModal(false)
     let res = await addPengirimanOfficekeStore( detail_pengiriman,
       tanggal_pengiriman,
       id_office,
       lokasi_office,
       id_store,
-      lokasi_store)
+      lokasi_store,pengiriman_code)
     if(res?.status){
       alertSuccess('Success','')
+      console.log(res?.data)
+      downloadTransferRequest(res?.data)
       getAllKategori()
     }else{
       alertError('Error','Fail add data')
@@ -575,6 +581,11 @@ export default function PengirimanOfficeStore() {
                         handleOpenDetail(row)
                       }}>
                           <RemoveRedEyeOutlinedIcon />
+                        </IconButton>
+                        <IconButton onClick={()=>{
+                        downloadTransferRequest(row)
+                      }}>
+                          <DownloadIcon />
                         </IconButton>
                       </div>
                         </TableCell>
