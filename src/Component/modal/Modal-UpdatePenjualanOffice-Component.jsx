@@ -106,7 +106,7 @@ const ModalAddPenjualanOffice =(props)=>{
      const convertOffice=(v) =>{
        let idx = props?.office?.findIndex(a=>a.id==v)
        
-       return props?.office?props?.office[idx]?.alamat:''
+       return props?.office?props?.office[idx]?.office_name:''
      }
      const convertImage = (v) => {
    

@@ -10,7 +10,7 @@ import {
 import  Input  from "../../Component/input";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import {getPengirimanStorekeStoreSearch,getProdukByArtikel} from '../../Config/Api-new'
+import {getPengirimanOfficekeStoreSearch,getProdukByArtikel} from '../../Config/Api-new'
 import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 const ModalPenerimaanUpdateOfficekeStore =(props)=>{
     // const [detail_pengiriman,setDetail_pengiriman] = useState([])
@@ -41,7 +41,7 @@ const ModalPenerimaanUpdateOfficekeStore =(props)=>{
       if(e.charCode === 13){
         e.preventDefault();
         
-      let res = await getPengirimanStorekeStoreSearch(pengiriman)
+      let res = await getPengirimanOfficekeStoreSearch(pengiriman)
       // console.log({a:res?.data[0]?.detailPengirimanList,b:res?.data})
       setDetail(res?.data)
         let arr = []
@@ -77,7 +77,7 @@ const ModalPenerimaanUpdateOfficekeStore =(props)=>{
     const convertToko = (v) =>{
         let idx = props?.store?.findIndex(a=>a.id==v)
         
-        return props?.store?props?.store[idx]?.alamat:''
+        return props?.store?props?.store[idx]?.store_name:''
       }
       const convertImage = (v) => {
     
@@ -110,7 +110,7 @@ const ModalPenerimaanUpdateOfficekeStore =(props)=>{
     const convertOffice=(v) =>{
       let idx = props?.office?.findIndex(a=>a.id==v)
       
-      return props?.office?props?.office[idx]?.alamat:''
+      return props?.office?props?.office[idx]?.office_name:''
     }
     const deleteData = (idx)=>{
       let datas = [...listDetail]

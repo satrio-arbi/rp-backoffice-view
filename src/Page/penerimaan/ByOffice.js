@@ -436,7 +436,7 @@ pengiriman)=>{
       marginTop:"5%"
     }}>
       <div style={{display:'flex'}}>
-      <h1>Penerimaan Office from Store</h1>
+      <h1>Penerimaan Store from Office</h1>
             <div
              style={{
                  position:"absolute",

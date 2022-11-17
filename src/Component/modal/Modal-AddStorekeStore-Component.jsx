@@ -71,7 +71,7 @@ const ModalAddStorekeStore =(props)=>{
     const convertToko = (v) =>{
         let idx = props?.store?.findIndex(a=>a.id==v)
         
-        return props?.store?props?.store[idx]?.alamat:''
+        return props?.store?props?.store[idx]?.store_name:''
       }
       const convertImage = (v) => {
     

@@ -8,23 +8,16 @@ import  Input  from "../../Component/input";
 const ModalAddPelanggan =(props)=>{
     const [alamat,setAlamat] = useState('')
     const [email,setEmail] = useState('')
-    const [kuantitas,setKuantitas] = useState('')
     const [nama_pelanggan,setNama_pelanggan] = useState('')
     const [no_hp,setNo_hp] = useState('')
-    const [pembelian,setPembelian] = useState('')
-    const [poin,setPoin] = useState('')
     const [nik,setNik] = useState('')
-    const [total_kunjungan,setTotal_kunjungan] = useState('')
     
     useEffect(()=>{
         setAlamat('')
         setEmail('')
-        setKuantitas('')
         setNama_pelanggan('')
         setNo_hp('')
-        setPembelian('')
-        setPoin('')
-        setTotal_kunjungan('')
+        setNik('')
     },[props?.open])
    
     return (
@@ -75,15 +68,7 @@ const ModalAddPelanggan =(props)=>{
                     onChange={(v)=>setNik(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
                     />
-                     <Input 
-                    value={kuantitas}
-                    disable={false}
-                    label={'Kuantitas'}
-                    type='number'
-                    onChange={(v)=>setKuantitas(v?.target?.value)}
-                    style={{width:'100%',marginTop:10}}
-                    />
-                     <Input 
+                    <Input 
                     value={nama_pelanggan}
                     disable={false}
                     label={'Nama pelanggan'}
@@ -97,36 +82,10 @@ const ModalAddPelanggan =(props)=>{
                     onChange={(v)=>setNo_hp(v?.target?.value)}
                     style={{width:'100%',marginTop:10}}
                     />
-                     <Input 
-                    value={pembelian}
-                    disable={false}
-                    label={'Pembelian pelanggan'}
-                    type='number'
-                    onChange={(v)=>setPembelian(v?.target?.value)}
-                    style={{width:'100%',marginTop:10}}
-                    />
-                     <Input 
-                    value={poin}
-                    disable={false}
-                    label={'Poin pelanggan'}
-                    type='number'
-                    onChange={(v)=>setPoin(v?.target?.value)}
-                    style={{width:'100%',marginTop:10}}
-                    />
-                     <Input 
-                    value={total_kunjungan}
-                    disable={false}
-                    label={'Total kunjungan pelanggan'}
-                    type='number'
-                    onChange={(v)=>setTotal_kunjungan(v?.target?.value)}
-                    style={{width:'100%',marginTop:10}}
-                    />
-             
-                    
                     
                     <div style={{marginTop:10}}>
-                        <Button onClick={()=>props?.submit(alamat,email,kuantitas,nama_pelanggan,
-    no_hp,pembelian,poin,total_kunjungan,nik)} variant="contained">Save</Button>
+                        <Button onClick={()=>props?.submit(alamat,email,nama_pelanggan,
+    no_hp,nik)} variant="contained">Save</Button>
                     </div>
                 </div>
                

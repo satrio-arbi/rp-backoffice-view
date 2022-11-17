@@ -69,15 +69,6 @@ const ModalUpdateddKaryawan =(props)=>{
                             })}
                           </Select>
                         </FormControl>
-                      <Input 
-                    value={lokasiStore}
-                    disable={false}
-                    label={'Lokasi Store'}
-                    onChange={(v)=>setLokasiStore(v?.target?.value)}
-                    style={{width:'100%',marginTop:10}}
-                    />
-                    
-                   
                     <div style={{marginTop:10}}>
                         <Button onClick={()=>props?.submit( 
                            

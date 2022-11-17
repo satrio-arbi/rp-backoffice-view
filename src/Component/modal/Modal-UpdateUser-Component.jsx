@@ -41,8 +41,8 @@ const ModalUpdateUser =(props)=>{
         setLokasi_store(data?.lokasi_store)
         setMenu(valueConvert(data?.akses_modul))
         setUserName(data?.userName)
-        setId_store(data?.id_office)
-        setId_office(data?.id_store)
+        setId_store(data?.id_store)
+        setId_office(data?.id_office)
         setEmail(data?.email)
         
     },[props?.open])

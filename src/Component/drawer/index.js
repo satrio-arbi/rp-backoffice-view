@@ -319,18 +319,19 @@ console.log({aks:usr?.akses_modul})
                 </AccordionSummary>
                 <AccordionDetails>
                   <List style={{cursor:"pointer"}}>
+                  {usr?.akses_modul?.includes('MM-15')?
+                    <ListItem onClick={() => {
+                      history.push('/penerimaan/ByStoreOffice')
+                    }}>
+                      <ListItemText primary="Office from store" />
+                    </ListItem>:null}
                   {usr?.akses_modul?.includes('MM-14')?
                     <ListItem onClick={() => {
                       history.push('/penerimaan/ByOffice')
                     }}>
-                      <ListItemText primary="Office from store" />
-                    </ListItem>:null}
-                    {usr?.akses_modul?.includes('MM-15')?
-                    <ListItem onClick={() => {
-                      history.push('/penerimaan/ByStoreOffice')
-                    }}>
                       <ListItemText primary="Store from office" />
                     </ListItem>:null}
+                    
                     {usr?.akses_modul?.includes('MM-16')?
                     <ListItem onClick={() => {
                       history.push('/penerimaan/ByStore')

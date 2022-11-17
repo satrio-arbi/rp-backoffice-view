@@ -113,7 +113,6 @@ export const api = {
 const storedCreds = JSON.parse(localStorage.getItem("rd-prjt"));
 const token = storedCreds?.token;
 const BASE_URL = 'http://localhost:8282/'
-//const BASE_URL = 'http://174.138.16.110:8282/'
 // console.log(token,'ini token di awal')
 // function clearStoredCreds() {
 // 	localStorage.removeItem("rd-prjt");

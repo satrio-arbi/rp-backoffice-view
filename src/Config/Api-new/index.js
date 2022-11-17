@@ -124,6 +124,13 @@ export const getKaryawanStore = async (search) => {
   return res
   
 }
+export const getKaryawanOffice = async (search) => {
+
+  const res = await NET("GET", `karyawan/allForOffice?id_store=${search}`, {})
+  
+  return res
+  
+}
 export const getKaryawanSearchStore = async (search,id) => {
 
   const res = await NET("GET", `karyawan/searchForStore?keyword=${search}&id_store=${id}`, {})
@@ -700,6 +707,22 @@ export const getDownloadTransferRequest = async (data) => {
   
 }
 
+export const getDownloadTransferRequestStore = async (data) => {
+
+  const res = await NET("GET", `pengirimanStore/transferRequest?pengiriman_code=${data?.pengiriman_code}`, {}
+  ,'','','','blob')
+  let a = res?.data
+  
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `TransferRequest_${new Date()}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  // console.log({link})
+  
+}
+
 export const getDownloadDeliveryReceipt = async (data) => {
 
   const res = await NET("GET", `returGudang/deliveryReceipt?pengiriman_code=${data?.pengiriman_code}`, {}
@@ -1092,7 +1115,7 @@ export const addPengirimanStorekeStore = async (
   id_store_asal,
   lokasi_store_asal,
   id_store_tujuan,
-  lokasi_store_tujuan
+  lokasi_store_tujuan,pengiriman_code
 ) => {
   
   const res = await NET("POST", `pengirimanStore/add`, 
@@ -1102,7 +1125,7 @@ export const addPengirimanStorekeStore = async (
     id_store_asal,
     lokasi_store_asal,
     id_store_tujuan,
-    lokasi_store_tujuan
+    lokasi_store_tujuan,pengiriman_code
   }
   )
   
@@ -1422,7 +1445,7 @@ export const deletePenenrimaanStoreOffice = async (id) => {
   // const formData = new FormData();  
   //   formData.append('id',id)
   //   formData.append('kategori_name',kategori_name)
-  const res = await NET("GET", `penerimaanStore/delete?penerimaan_code=${id}`, {})
+  const res = await NET("GET", `penerimaanStore/delete?id=${id}`, {})
   
   return res
   

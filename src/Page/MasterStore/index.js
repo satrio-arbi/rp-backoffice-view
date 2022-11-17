@@ -76,7 +76,7 @@ const headCells = [
  
     {
       id: "id",
-      label: "Type Id",
+      label: "Id Store",
       disablePadding: true,
       numeric: false,
     },

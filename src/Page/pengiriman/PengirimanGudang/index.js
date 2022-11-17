@@ -232,7 +232,6 @@ export default function PengirimanOfficeStore() {
       lokasi_store,pengiriman_code)
     if(res?.status){
       alertSuccess('Success','')
-      console.log(res?.data)
       downloadTransferRequest(res?.data)
       getAllKategori()
     }else{

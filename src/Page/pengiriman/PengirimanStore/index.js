@@ -21,6 +21,7 @@ import ModalUploadKategori from '../../../Component/modal/Modal-UploadKategori-C
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
+import DownloadIcon from '@mui/icons-material/Download';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -42,7 +43,7 @@ import clsx from 'clsx';
 import { getPembelian } from '../../../Config/Redux/action';
 import {alertSuccess,alertError} from '../../../Component/alert/sweetalert'
 import ModalDownloadReport from '../../../Component/modal/Modal-DownloadReport-Component'
-import {geReportPengirimanStoretoStore,getUkuran,addPengirimanStorekeStore,getStore,getPengirimanStorekeStore,getPengirimanStorekeStoreSearch,updatePengirimanStorekeStore,deletePengirimanStorekeStore} from '../../../Config/Api-new'
+import {getDownloadTransferRequestStore,geReportPengirimanStoretoStore,getUkuran,addPengirimanStorekeStore,getStore,getPengirimanStorekeStore,getPengirimanStorekeStoreSearch,updatePengirimanStorekeStore,deletePengirimanStorekeStore} from '../../../Config/Api-new'
 import { set } from 'date-fns/esm';
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -212,6 +213,9 @@ export default function PengirimanStoreStore() {
   const [modalReport, setModalReport] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
   const [detail, setDetail] = React.useState([]);
+  const downloadTransferRequest = async (v)=>{
+    let res = await getDownloadTransferRequestStore({pengiriman_code:v?.pengiriman_code})
+  }
   useEffect(()=>{
     getAllKategori()
   },[])
@@ -221,7 +225,7 @@ export default function PengirimanStoreStore() {
   id_store_asal,
   lokasi_store_asal,
   id_store_tujuan,
-  lokasi_store_tujuan
+  lokasi_store_tujuan,pengiriman_code
   )=>{
     setModal(false)
 
@@ -231,10 +235,11 @@ export default function PengirimanStoreStore() {
   id_store_asal,
   lokasi_store_asal,
   id_store_tujuan,
-  lokasi_store_tujuan
+  lokasi_store_tujuan,pengiriman_code
     )
     if(res?.status){
       alertSuccess('Success','')
+      downloadTransferRequest(res?.data)
       getAllKategori()
     }else{
       alertError('Error','Fail add data')
@@ -578,6 +583,11 @@ export default function PengirimanStoreStore() {
                         handleOpenDetail(row,row?.detailPengirimanList)
                       }}>
                           <RemoveRedEyeOutlinedIcon />
+                        </IconButton>
+                        <IconButton onClick={()=>{
+                        downloadTransferRequest(row)
+                      }}>
+                          <DownloadIcon />
                         </IconButton>
                       </div>
                         </TableCell>

@@ -42,7 +42,7 @@ import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 
-import {getBank,getKaryawanStore,
+import {getBank,getKaryawanOffice,
   getOffice,geReportLaporanPembelian,getUkuran,
   getDownloadInvoicePEnjualanOffice,
   getPelanggan,getKategori,
@@ -306,7 +306,7 @@ export default function Pembelian() {
     // let res4 = await getUkuran()
     let res5 = await getOffice()
     let res6 = await getBank()
-    let res7 = await getKaryawanStore(1)
+    let res7 = await getKaryawanOffice(8)
     setPelanggan(res1?.data)
     setKategori(res2?.data)
     setTipe(res3?.data)

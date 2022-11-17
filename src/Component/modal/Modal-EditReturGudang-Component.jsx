@@ -45,7 +45,7 @@ const ModaEditReturGudang =(props)=>{
    const convertOffice=(v) =>{
      let idx = props?.office?.findIndex(a=>a.id==v)
      
-     return props?.office?props?.office[idx]?.alamat:''
+     return props?.office?props?.office[idx]?.office_name:''
    }
    const getSKU = async (e)=>{
      
@@ -72,7 +72,7 @@ const ModaEditReturGudang =(props)=>{
    const convertToko = (v) =>{
        let idx = props?.store?.findIndex(a=>a.id==v)
        
-       return props?.store?props?.store[idx]?.alamat:''
+       return props?.store?props?.store[idx]?.store_name:''
      }
      const convertImage = (v) => {
    

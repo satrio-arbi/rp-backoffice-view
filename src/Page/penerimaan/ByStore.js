@@ -42,7 +42,7 @@ import clsx from 'clsx';
 import { getPembelian } from '../../Config/Redux/action';
 import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
 import ModalDownloadReport from '../../Component/modal/Modal-DownloadReport-Component'
-import {geReportPenerimaanFromStore,getOffice,getUkuran,addPenenrimaanStore,getStore,getPenenrimaanStore,getPenenrimaanStoreSearch,updatePenerimaanOffice,deletePenenrimaanStore} from '../../Config/Api-new'
+import {geReportPenerimaanFromStore,getOffice,getUkuran,addPenenrimaanStore,getStore,getPenenrimaanStore,getPenenrimaanStoreSearch,updatePenenrimaanStore,deletePenenrimaanStore} from '../../Config/Api-new'
 import { set } from 'date-fns/esm';
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -277,7 +277,7 @@ export default function PengirimanStoreStore() {
     settoBeSelected({})
     setDetail([])
   
-    let res = await updatePenerimaanOffice( 
+    let res = await updatePenenrimaanStore( 
   detail_pengiriman,
   tanggal_pengiriman,
   id_store_asal,

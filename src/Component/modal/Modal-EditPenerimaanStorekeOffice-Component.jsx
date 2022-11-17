@@ -47,7 +47,7 @@ const ModalPenerimaanUpdateOfficekeStore =(props)=>{
      setId_store(res?.data[0]?.id_store_asal)
      setId_office(res?.data[0]?.id_office_tujuan)
        let arr = []
-       res?.data[0]?.detailPengirimanList?.map((d,i)=>{
+       res?.data[0]?.detail_pengiriman?.map((d,i)=>{
          arr.push({
            id:d?.id,
            sku_code:d?.sku_code,
@@ -64,10 +64,10 @@ const ModalPenerimaanUpdateOfficekeStore =(props)=>{
            type:d?.type,
            type_name:d?.type_name,
            ukuran:d?.ukuran,
-           keterangan:''
+           keterangan:d?.keterangan
          })
        })
-     // console.log({arr})
+     console.log({arr})
      setListDetail(arr)
      // setUkuran(res?.data?.ukuran)
      // setKuantitas(res?.data?.kuantitas)
@@ -77,7 +77,7 @@ const ModalPenerimaanUpdateOfficekeStore =(props)=>{
    const convertToko = (v) =>{
        let idx = props?.store?.findIndex(a=>a.id==v)
        
-       return props?.store?props?.store[idx]?.alamat:''
+       return props?.store?props?.store[idx]?.store_name:''
      }
      const convertImage = (v) => {
    
@@ -110,7 +110,7 @@ const ModalPenerimaanUpdateOfficekeStore =(props)=>{
    const convertOffice=(v) =>{
      let idx = props?.office?.findIndex(a=>a.id==v)
      
-     return props?.office?props?.office[idx]?.alamat:''
+     return props?.office?props?.office[idx]?.office_name:''
    }
    const deleteData = (idx)=>{
      let datas = [...listDetail]

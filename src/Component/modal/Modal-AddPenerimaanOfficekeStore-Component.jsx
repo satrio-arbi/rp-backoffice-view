@@ -90,12 +90,12 @@ const ModalPenerimaanAddOfficeStore =(props)=>{
     const convertToko = (v) =>{
         let idx = props?.store?.findIndex(a=>a.id==v)
         
-        return props?.store?props?.store[idx]?.alamat:''
+        return props?.store?props?.store[idx]?.store_name:''
       }
       const convertOffice=(v) =>{
         let idx = props?.office?.findIndex(a=>a.id==v)
         
-        return props?.office?props?.office[idx]?.alamat:''
+        return props?.office?props?.office[idx]?.office_name:''
       }
       const convertImage = (v) => {
     
@@ -148,7 +148,7 @@ const ModalPenerimaanAddOfficeStore =(props)=>{
         boxShadow: 24,
         p: 4, }}>
                  <div style={{display: 'flex', flexDirection:'row' }}>
-                    <h2 style={{width: '100%'}} id="parent-modal-title">Add Penerimaan Store from office</h2>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Add Penerimaan Store from Office</h2>
                     <CloseIcon onClick={()=>props?.onClickOpen()} />
                 </div>
                 <div>

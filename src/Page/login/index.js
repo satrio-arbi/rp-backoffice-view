@@ -154,16 +154,6 @@ function Login(props) {
                         display:"flex",
                         position:"relative"
                     }}>
-                    <FormGroup>
-                    <FormControlLabel control={<Checkbox defaultChecked />} label="Ingat Saya" />
-                    </FormGroup>
-                    <span
-                        style={{
-                            position:"absolute",
-                            right:"0",
-                            marginTop:"10px"
-                        }}
-                    >Lupa Password ?</span>
                     </div>
                     <Button
                         onClick={handleSubmit}
