@@ -541,9 +541,7 @@ export default function PengirimanStoreStore() {
                       <TableCell align="left">{row.id}</TableCell>
                       <TableCell align="left">{row.pengiriman_code}</TableCell>
                       <TableCell align="left">{row.tanggal_retur}</TableCell>
-                      <TableCell align="left">{convertToko(row.id_store_asal)}</TableCell>
                       <TableCell align="left">{row.lokasi_store_asal}</TableCell>
-                      <TableCell align="left">{convertOffice(row.id_office_tujuan)}</TableCell>
                       <TableCell align="left">{row.lokasi_office_tujuan}</TableCell>
                       
                       <TableCell align="right">
