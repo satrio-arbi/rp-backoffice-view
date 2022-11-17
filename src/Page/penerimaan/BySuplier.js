@@ -107,12 +107,7 @@ const headCells = [
       disablePadding: true,
       numeric: false,
     },
-    {
-      id: "lokasi_office",
-      label: "Lokasi Office",
-      disablePadding: true,
-      numeric: false,
-    },
+    
     {
       id: "supplier",
       label: "Supplier",
@@ -570,7 +565,7 @@ export default function PengirimanStoreStore() {
                       <TableCell align="left">{row.penerimaan_code}</TableCell>
                       <TableCell align="left">{row.pembelian_code}</TableCell>
                       <TableCell align="left">{row.tanggal_penerimaan}</TableCell>
-                      <TableCell align="left">{convertOffice(row.id_office)}</TableCell>
+                      
                       <TableCell align="left">{row.lokasi_office}</TableCell>
                       {/* <TableCell align="left">{convertToko(row.id_supplier)}</TableCell> */}
                       <TableCell align="left">{row.nama_supplier}</TableCell>

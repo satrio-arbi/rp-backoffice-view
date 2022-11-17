@@ -567,9 +567,9 @@ export default function PengirimanOfficeStore() {
                        <TableCell align="left">{row.id}</TableCell>
                       <TableCell align="left">{row.pengiriman_code}</TableCell>
                       <TableCell align="left">{row.tanggal_pengiriman}</TableCell>
-                      <TableCell align="left">{convertOffice(row.id_office)}</TableCell>
+                      
                       <TableCell align="left">{row.lokasi_office}</TableCell>
-                      <TableCell align="left">{convertToko(row.id_store)}</TableCell>
+                      
                       <TableCell align="left">{row.lokasi_store}</TableCell>
                        
                       <TableCell align="right">

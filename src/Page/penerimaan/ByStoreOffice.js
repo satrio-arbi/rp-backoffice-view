@@ -99,24 +99,14 @@ const headCells = [
       disablePadding: true,
       numeric: false,
     },
-    {
-      id: "lokasi_office",
-      label: "Lokasi Office",
-      disablePadding: true,
-      numeric: false,
-    },
+    
     {
       id: "store",
       label: "Store",
       disablePadding: true,
       numeric: false,
     },
-    {
-      id: "lokasi_store",
-      label: "Lokasi Store",
-      disablePadding: true,
-      numeric: false,
-    },
+    
     {
       id: "aksi",
       label: "Aksi",
@@ -549,9 +539,9 @@ pengiriman)=>{
                       <TableCell align="left">{row.id}</TableCell>
                       <TableCell align="left">{row.penerimaan_code}</TableCell>
                       <TableCell align="left">{row.tanggal_penerimaan}</TableCell>
-                      <TableCell align="left">{convertOffice(row.id_office)}</TableCell>
+                      
                       <TableCell align="left">{row.lokasi_office}</TableCell>
-                      <TableCell align="left">{convertToko(row.id_store)}</TableCell>
+                      
                       <TableCell align="left">{row.lokasi_store}</TableCell>
                       
                       <TableCell align="right">

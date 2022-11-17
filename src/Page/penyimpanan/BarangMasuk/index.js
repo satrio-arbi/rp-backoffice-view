@@ -98,12 +98,7 @@ const headCells = [
       disablePadding: true,
       numeric: false,
     },
-    {
-      id: "lokasi_office",
-      label: "Lokasi Office",
-      disablePadding: true,
-      numeric: false,
-    },
+    
     {
       id: "nama_barang",
       label: "Nama barang",
@@ -519,7 +514,6 @@ export default function BarangMasuk() {
                       {/* <TableCell align="left">{row.kategori_name}</TableCell> */}
                       <TableCell align="left">{row.penerimaan_code}</TableCell>
                       <TableCell align="left">{row.artikel}</TableCell>
-                      <TableCell align="left">{convertOffice(row.id_office)}</TableCell>
                       <TableCell align="left">{row.lokasi_office}</TableCell>
                       <TableCell align="left">{row.nama_barang}</TableCell>
                       <TableCell align="left">{row.kuantitas}</TableCell>
