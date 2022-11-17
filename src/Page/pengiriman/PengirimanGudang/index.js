@@ -100,24 +100,14 @@ const headCells = [
     disablePadding: true,
     numeric: false,
   },
-  {
-    id: "lokasi_office",
-    label: "Lokasi office",
-    disablePadding: true,
-    numeric: false,
-  },
+  
   {
     id: "store_tujuan",
     label: "Store Tujuan",
     disablePadding: true,
     numeric: false,
   },
-  {
-    id: "lokasi_store",
-    label: "Lokasi Store",
-    disablePadding: true,
-    numeric: false,
-  },
+  
   {
     id: "aksi",
     label: "Aksi",
