@@ -143,7 +143,7 @@ const ModalEditSupplier =(props)=>{
        boxShadow: 24,
        p: 4, }}>
                 <div style={{display: 'flex', flexDirection:'row' }}>
-                    <h2 style={{width: '100%'}} id="parent-modal-title">Edit Penenerimaan Supplier</h2>
+                    <h2 style={{width: '100%'}} id="parent-modal-title">Edit Penerimaan Supplier</h2>
                     <CloseIcon onClick={()=>props?.onClickOpen()} />
                 </div>
                <div>
