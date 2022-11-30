@@ -1,45 +1,58 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import AddIcon from '@mui/icons-material/Add';
-import ModalAddUser from '../../Component/modal/Modal-AddUser-Component'
-import ModalUpdateUser from '../../Component/modal/Modal-UpdateUser-Component'
-import ModalUploadTipe from '../../Component/modal/Modal-UploadTipe-Component'
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import Button from '../../Component/button/index'
-import Input from '../../Component/input/index'
-import {FormControl, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import SearchIcon from '@mui/icons-material/Search'
-import FormPembelian from '../../Page/FormPembelian/index'
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import Gap from '../../Component/gap/index';
-import clsx from 'clsx';
-import { getPembelian } from '../../Config/Redux/action';
-import {alertSuccess,alertError} from '../../Component/alert/sweetalert'
-import {addUser,getUser,getMenu,getOffice,getStore,updateUser,deleteTipe} from '../../Config/Api-new'
+import * as React from "react";
+import PropTypes from "prop-types";
+import { alpha } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import AddIcon from "@mui/icons-material/Add";
+import ModalAddUser from "../../Component/modal/Modal-AddUser-Component";
+import ModalUpdateUser from "../../Component/modal/Modal-UpdateUser-Component";
+import ModalUploadTipe from "../../Component/modal/Modal-UploadTipe-Component";
+import Paper from "@mui/material/Paper";
+import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import { visuallyHidden } from "@mui/utils";
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import Button from "../../Component/button/index";
+import Input from "../../Component/input/index";
+import {
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import SearchIcon from "@mui/icons-material/Search";
+import FormPembelian from "../../Page/FormPembelian/index";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import Gap from "../../Component/gap/index";
+import clsx from "clsx";
+import { getPembelian } from "../../Config/Redux/action";
+import { alertSuccess, alertError } from "../../Component/alert/sweetalert";
+import {
+  addUser,
+  getUser,
+  getMenu,
+  getOffice,
+  getStore,
+  updateUser,
+  deleteTipe,
+} from "../../Config/Api-new";
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -51,7 +64,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -67,109 +80,117 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
-  console.log({stabilizedThis})
+  console.log({ stabilizedThis });
   return stabilizedThis.map((el) => el[0]);
 }
 
 const headCells = [
- 
-    {
-      id: "id",
-      label: "Type Id",
-      disablePadding: true,
-      numeric: false,
-    },
-   
-    {
-      id: "userName",
-      label: "User Name",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "name",
-      label: "Name",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "email",
-      label: "Email",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "phone",
-      label: "Phone Number",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "office",
-      label: "Lokasi Office",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "store",
-      label: "Lokasi Store",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "created_at",
-      label: "Tanggal Dibuat",
-      disablePadding: true,
-      numeric: false,
-    },
-    {
-      id: "aksi",
-      label: "Aksi",
-    }
+  {
+    id: "id",
+    label: "Type Id",
+    disablePadding: true,
+    numeric: false,
+  },
+
+  {
+    id: "userName",
+    label: "User Name",
+    disablePadding: true,
+    numeric: false,
+  },
+  {
+    id: "name",
+    label: "Name",
+    disablePadding: true,
+    numeric: false,
+  },
+  {
+    id: "email",
+    label: "Email",
+    disablePadding: true,
+    numeric: false,
+  },
+  {
+    id: "phone",
+    label: "Phone Number",
+    disablePadding: true,
+    numeric: false,
+  },
+  {
+    id: "office",
+    label: "Lokasi Office",
+    disablePadding: true,
+    numeric: false,
+  },
+  {
+    id: "store",
+    label: "Lokasi Store",
+    disablePadding: true,
+    numeric: false,
+  },
+  {
+    id: "created_at",
+    label: "Tanggal Dibuat",
+    disablePadding: true,
+    numeric: false,
+  },
+  {
+    id: "aksi",
+    label: "Aksi",
+  },
 ];
 
 function EnhancedTableHead(props) {
-  const { checkChange,checkAllList,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,data } =
-    props;
-  const [check,setCheck] = React.useState(false)
+  const {
+    checkChange,
+    checkAllList,
+    onSelectAllClick,
+    order,
+    orderBy,
+    numSelected,
+    rowCount,
+    onRequestSort,
+    data,
+  } = props;
+  const [check, setCheck] = React.useState(false);
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-  React.useEffect(()=>{
-    setCheck(false)
-  },[checkChange])
-  const checkAll =()=>{
-    checkAllList(!check)
-    setCheck(!check)
-  }
+  React.useEffect(() => {
+    setCheck(false);
+  }, [checkChange]);
+  const checkAll = () => {
+    checkAllList(!check);
+    setCheck(!check);
+  };
   return (
     <TableHead>
       <TableRow>
-      <TableCell
-            key={'check'}
-            // align="center"
-            // padding={'normal'}
-            // sortDirection={orderBy === headCell.id ? order : false}
-          >
-           <input type="checkbox" checked={check} onClick={()=>checkAll()} />
-          </TableCell>
+        <TableCell
+          key={"check"}
+          // align="center"
+          // padding={'normal'}
+          // sortDirection={orderBy === headCell.id ? order : false}
+        >
+          <input type="checkbox" checked={check} onClick={() => checkAll()} />
+        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align="center"
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
-              style={{fontWeight:'bold', padding:'1em'}}
+              style={{ fontWeight: "bold", padding: "1em" }}
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
+              direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </Box>
               ) : null}
             </TableSortLabel>
@@ -187,35 +208,36 @@ EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
 
 export default function MasterKatgori() {
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [toBeSelected, settoBeSelected] = React.useState({});
   const dispatch = useDispatch();
-  const dataStore = useSelector((state)=> state.reducer.getPembelian.data)
-  const [openDetail,setOpenDetail] = React.useState(false)
-  const [rows, setRows] = React.useState(dataStore)
+  const dataStore = useSelector((state) => state.reducer.getPembelian.data);
+  const [openDetail, setOpenDetail] = React.useState(false);
+  const [rows, setRows] = React.useState(dataStore);
   const [menu, setMenu] = React.useState([]);
   const [store, setStore] = React.useState([]);
   const [office, setOffice] = React.useState([]);
-  const [data,setData] = React.useState([]);
+  const [data, setData] = React.useState([]);
   const [modal, setModal] = React.useState();
-  const [search, setSearch] = React.useState('');
+  const [search, setSearch] = React.useState("");
   const [check, setCheck] = React.useState(false);
   const [modalUplaod, setModalUplaod] = React.useState();
-  useEffect(()=>{
-    getAllKategori()
-  },[])
-  const submitUser =async(firstName,
+  useEffect(() => {
+    getAllKategori();
+  }, []);
+  const submitUser = async (
+    firstName,
     lastName,
     password,
     phoneNumber,
@@ -225,10 +247,11 @@ export default function MasterKatgori() {
     userName,
     id_store,
     id_office,
-    email)=>{
-     
-    setModal(false)
-    let res = await addUser(firstName,
+    email
+  ) => {
+    setModal(false);
+    let res = await addUser(
+      firstName,
       lastName,
       password,
       phoneNumber,
@@ -238,35 +261,34 @@ export default function MasterKatgori() {
       userName,
       id_store,
       id_office,
-      email)
-    if(res?.status){
-      alertSuccess('Success','')
-      getAllKategori()
-    }else{
-      alertError('Error','Fail add data')
+      email
+    );
+    if (res?.status) {
+      alertSuccess("Success", "");
+      getAllKategori();
+    } else {
+      alertError("Error", "Fail add data");
     }
-    console.log({res:res})
-  }
-  const deleteData = async ()=>{
-    let array = [...data]
-    let idx = array?.findIndex(a=>a.check==true)
-    if(idx>-1){
-    for(let i = 0;i<array?.length;i++){
-      if(array[i]?.check===true){
-        
-      await deleteTipe(array[i]?.id)
+    console.log({ res: res });
+  };
+  const deleteData = async () => {
+    let array = [...data];
+    let idx = array?.findIndex((a) => a.check == true);
+    if (idx > -1) {
+      for (let i = 0; i < array?.length; i++) {
+        if (array[i]?.check === true) {
+          await deleteTipe(array[i]?.id);
+        }
+      }
+      getAllKategori();
+      setCheck(!check);
+      alertSuccess("Success", "Success delete data");
+    } else {
+      alertError("Error", "Fail, no data chose for delete");
     }
-    
-    
-    }
-    getAllKategori()
-    setCheck(!check)
-    alertSuccess('Success','Success delete data')
-  }else{
-    alertError('Error','Fail, no data chose for delete')
-  }
-  }
-  const submitUpdateUser =async(firstName,
+  };
+  const submitUpdateUser = async (
+    firstName,
     lastName,
     password,
     phoneNumber,
@@ -276,10 +298,12 @@ export default function MasterKatgori() {
     userName,
     id_store,
     id_office,
-    email)=>{
-    setOpenDetail(false)
-    settoBeSelected({})
-    let res = await updateUser(firstName,
+    email
+  ) => {
+    setOpenDetail(false);
+    settoBeSelected({});
+    let res = await updateUser(
+      firstName,
       lastName,
       password,
       phoneNumber,
@@ -289,79 +313,73 @@ export default function MasterKatgori() {
       userName,
       id_store,
       id_office,
-      email,toBeSelected?.id)
-    if(res?.status){
-      alertSuccess('Success','')
-      getAllKategori()
-    }else{
-      alertError('Error','Fail update data')
+      email,
+      toBeSelected?.id
+    );
+    if (res?.status) {
+      alertSuccess("Success", "");
+      getAllKategori();
+    } else {
+      alertError("Error", "Fail update data");
     }
-    console.log({res:res})
-  }
-  const getAllKategori =async()=>{
-    
-    let res = await getUser(search)
-    let res1 = await getMenu()
-    let res2 = await getStore()
-    let res3 = await getOffice()
-    let arr = []
-    res1?.data?.map((d)=>{
+    console.log({ res: res });
+  };
+  const getAllKategori = async () => {
+    let res = await getUser(search);
+    let res1 = await getMenu();
+    let res2 = await getStore();
+    let res3 = await getOffice();
+    let arr = [];
+    res1?.data?.map((d) => {
       arr.push({
-        value:d?.kode_menu,
-        label:d?.nama_menu
-      })
-    })
-    setData(res?.data)
-    setMenu(arr)
-    setStore(res2?.data)
-    setOffice(res3?.data)
-    
-    
-  }
-  const checkSingle=(d,i)=>{
-    let array = [...data]
-    let idx = array?.findIndex(a=>a.id==d?.id)
-    if(!d?.check){
-      array[idx]['check'] = true
-    }else{
-      array[idx]['check'] = false
+        value: d?.kode_menu,
+        label: d?.nama_menu,
+      });
+    });
+    setData(res?.data);
+    setMenu(arr);
+    setStore(res2?.data);
+    setOffice(res3?.data);
+  };
+  const checkSingle = (d, i) => {
+    let array = [...data];
+    let idx = array?.findIndex((a) => a.id == d?.id);
+    if (!d?.check) {
+      array[idx]["check"] = true;
+    } else {
+      array[idx]["check"] = false;
     }
-    
-    setData(array)
 
-  }
-  const checkSemua=(v)=>{
-    let array = [...data]
-    array?.map((d,i)=>{
-      array[i]['check'] = v
-    })
-  
-    
-    setData(array)
+    setData(array);
+  };
+  const checkSemua = (v) => {
+    let array = [...data];
+    array?.map((d, i) => {
+      array[i]["check"] = v;
+    });
 
-  }
-  const searching =async(e,type)=>{
-    
-    if((type==='enter'&&e.keyCode === 13)||type==='klik'){
-    getAllKategori()
+    setData(array);
+  };
+  const searching = async (e, type) => {
+    if ((type === "enter" && e.keyCode === 13) || type === "klik") {
+      getAllKategori();
     }
-  //   let res = await getTipeSearch(searched)
-  //   setData(res?.data)
-    
-  }
-  useEffect(()=>{
-    setRows(dataStore)
-  },[dataStore])
-  const handleOpenDetail=(dataStore)=>{
-    settoBeSelected(dataStore)
-    console.log({dataStore})
-    setOpenDetail(true)
-  }
-  console.log(rows)
+    //   let res = await getTipeSearch(searched)
+    //   setData(res?.data)
+  };
+  useEffect(() => {
+    setRows(dataStore);
+  }, [dataStore]);
+  const handleOpenDetail = (dataStore) => {
+    settoBeSelected(dataStore);
+    console.log({ dataStore });
+    setOpenDetail(true);
+  };
+  console.log(rows);
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
@@ -373,7 +391,7 @@ export default function MasterKatgori() {
     }
     setSelected([]);
   };
-  
+
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -387,7 +405,7 @@ export default function MasterKatgori() {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
 
@@ -412,23 +430,25 @@ export default function MasterKatgori() {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-    const handleChangeSearch = (event) => {
-      setSearch(event.target.value);
-    };
+  const handleChangeSearch = (event) => {
+    setSearch(event.target.value);
+  };
   return (
-    <div style={{
-      marginTop:"5%"
-    }}>
-      <div style={{display:'flex'}}>
-      <h1>Management User</h1>
-            <div
-             style={{
-                 position:"absolute",
-                 right:0,
-                 display:"flex"
-             }}
-            >
-            {/* <Button
+    <div
+      style={{
+        marginTop: "5%",
+      }}
+    >
+      <div style={{ display: "flex" }}>
+        <h1>Management User</h1>
+        <div
+          style={{
+            position: "absolute",
+            right: 0,
+            display: "flex",
+          }}
+        >
+          {/* <Button
                 style={{
                     background: "#E14C4C",
                     color: 'white',
@@ -456,202 +476,213 @@ export default function MasterKatgori() {
                 onClick={()=>setModalUplaod(true)}
                 startIcon={<CloudUploadIcon/>} 
            />*/}
-            <Button
-                style={{
-                    background: "#03fc35",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                label="Add"
-                onClick={()=>setModal(true)}
-                startIcon={<AddIcon/>}
-           />
-           </div>
-      </div>
-           <Gap height={15}/>
-<Box sx={{ width: '100%', marginTop:"20px" }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-      <div align='left'>
-      <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Cari</InputLabel>
-          <OutlinedInput
-            value={search}
-            onChange={handleChangeSearch}
-            onKeyUp={(e)=>{
-              searching(e,'enter')
+          <Button
+            style={{
+              background: "#03fc35",
+              color: "white",
+              textTransform: "capitalize",
+              marginRight: "15px",
+              width: "100%",
+              padding: "1em",
+              borderRadius: "14px",
             }}
-            id="outlined-adornment-password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  edge="end"
-                >
-                 <SearchIcon onClick={()=>searching('','klik')}/>
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Cari"
+            label="Add"
+            onClick={() => setModal(true)}
+            startIcon={<AddIcon />}
           />
-        </FormControl>
+        </div>
       </div>
-      
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-             checkAllList={(v)=>checkSemua(v)}
-              checkChange={check}
-              numSelected={selected.length}
-              data={data}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {stableSort(data, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
+      <Gap height={15} />
+      <Box sx={{ width: "100%", marginTop: "20px" }}>
+        <Paper sx={{ width: "100%", mb: 2 }}>
+          <div align="left">
+            <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Cari
+              </InputLabel>
+              <OutlinedInput
+                value={search}
+                onChange={handleChangeSearch}
+                onKeyUp={(e) => {
+                  searching(e, "enter");
+                }}
+                id="outlined-adornment-password"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      edge="end"
                     >
-                       <TableCell align="left">
-                      <input 
-                       type="checkbox" 
-                       value={row?.check} 
-                       checked={row?.check?row?.check:false} 
-                       onChange={()=>{}} 
-                       onClick={(e)=>checkSingle(row,index)}/>
-                       </TableCell>
-                      <TableCell align="left">{row?.id}</TableCell>
-                      <TableCell align="left">{row?.userName}</TableCell>
-                      <TableCell align="left">{row?.firstName} {row?.lastName}</TableCell>
-                      <TableCell align="left">{row?.email}</TableCell>
-                      <TableCell align="left">{row?.phoneNumber}</TableCell>
-                      <TableCell align="left">{row?.lokasi_office}</TableCell>
-                      <TableCell align="left">{row?.lokasi_store}</TableCell>
-                      <TableCell align="left">{row?.createdAt?row?.createdAt?.replace('T',' ')?.split('.')[0]:null}</TableCell>
-                      
-                      <TableCell align="right">
-                      <div style={{
-                        
-                      }}>
-                      <IconButton onClick={()=>{
-                        handleOpenDetail(row)
-                      }}>
-                          <RemoveRedEyeOutlinedIcon />
-                        </IconButton>
-                      </div>
+                      <SearchIcon onClick={() => searching("", "klik")} />
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Cari"
+              />
+            </FormControl>
+          </div>
+
+          {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={dense ? "small" : "medium"}
+            >
+              <EnhancedTableHead
+                checkAllList={(v) => checkSemua(v)}
+                checkChange={check}
+                numSelected={selected.length}
+                data={data}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+              <TableBody>
+                {stableSort(data, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
+
+                    return (
+                      <TableRow
+                        hover
+                        onClick={(event) => handleClick(event, row.id)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
+                      >
+                        <TableCell align="left">
+                          <input
+                            type="checkbox"
+                            value={row?.check}
+                            checked={row?.check ? row?.check : false}
+                            onChange={() => {}}
+                            onClick={(e) => checkSingle(row, index)}
+                          />
                         </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {/* {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </Box>
-    <ModalUpdateUser
-    open={openDetail}
-    menu={menu}
-    store={store}
-    office={office}
-    data={toBeSelected}
-    submit ={(firstName,
-      lastName,
-      password,
-      phoneNumber,
-      lokasi_office,
-      lokasi_store,
-      akses_modul,
-      userName,
-      id_store,
-      id_office,
-      email)=>submitUpdateUser(firstName,
-        lastName,
-        password,
-        phoneNumber,
-        lokasi_office,
-        lokasi_store,
-        akses_modul,
-        userName,
-        id_store,
-        id_office,
-        email)}
-    onClickOpen = {()=>setOpenDetail(!openDetail)}
-    />
-    <ModalAddUser
-    open={modal}
-    menu={menu}
-    store={store}
-    office={office}
-    submit ={(firstName,
-      lastName,
-      password,
-      phoneNumber,
-      lokasi_office,
-      lokasi_store,
-      akses_modul,
-      userName,
-      id_store,
-      id_office,
-      email)=>submitUser(firstName,
-        lastName,
-        password,
-        phoneNumber,
-        lokasi_office,
-        lokasi_store,
-        akses_modul,
-        userName,
-        id_store,
-        id_office,
-        email)}
-    onClickOpen = {()=>setModal(!modal)}
-    />
-     <ModalUploadTipe
-    open={modalUplaod}
-    mutate={()=>getAllKategori()}
-    
-    onClickOpen = {()=>setModalUplaod(!modalUplaod)}
-    />
+                        <TableCell align="left">{row?.id}</TableCell>
+                        <TableCell align="left">{row?.userName}</TableCell>
+                        <TableCell align="left">
+                          {row?.firstName} {row?.lastName}
+                        </TableCell>
+                        <TableCell align="left">{row?.email}</TableCell>
+                        <TableCell align="left">{row?.phoneNumber}</TableCell>
+                        <TableCell align="left">{row?.lokasi_office}</TableCell>
+                        <TableCell align="left">{row?.lokasi_store}</TableCell>
+                        <TableCell align="left">
+                          {row?.createdAt
+                            ? row?.createdAt?.replace("T", " ")?.split(".")[0]
+                            : null}
+                        </TableCell>
+
+                        <TableCell align="right">
+                          <div style={{}}>
+                            <IconButton
+                              onClick={() => {
+                                handleOpenDetail(row);
+                              }}
+                            >
+                              <RemoveRedEyeOutlinedIcon />
+                            </IconButton>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={data.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Box>
+      <ModalUpdateUser
+        open={openDetail}
+        menu={menu}
+        store={store}
+        office={office}
+        data={toBeSelected}
+        submit={(
+          firstName,
+          lastName,
+          password,
+          phoneNumber,
+          lokasi_office,
+          lokasi_store,
+          akses_modul,
+          userName,
+          id_store,
+          id_office,
+          email
+        ) =>
+          submitUpdateUser(
+            firstName,
+            lastName,
+            password,
+            phoneNumber,
+            lokasi_office,
+            lokasi_store,
+            akses_modul,
+            userName,
+            id_store,
+            id_office,
+            email
+          )
+        }
+        onClickOpen={() => setOpenDetail(!openDetail)}
+      />
+      <ModalAddUser
+        open={modal}
+        menu={menu}
+        store={store}
+        office={office}
+        submit={(
+          firstName,
+          lastName,
+          password,
+          phoneNumber,
+          lokasi_office,
+          lokasi_store,
+          akses_modul,
+          userName,
+          id_store,
+          id_office,
+          email
+        ) =>
+          submitUser(
+            firstName,
+            lastName,
+            password,
+            phoneNumber,
+            lokasi_office,
+            lokasi_store,
+            akses_modul,
+            userName,
+            id_store,
+            id_office,
+            email
+          )
+        }
+        onClickOpen={() => setModal(!modal)}
+      />
+      <ModalUploadTipe
+        open={modalUplaod}
+        mutate={() => getAllKategori()}
+        onClickOpen={() => setModalUplaod(!modalUplaod)}
+      />
     </div>
-      );
+  );
 }
