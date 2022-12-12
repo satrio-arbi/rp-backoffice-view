@@ -88,7 +88,7 @@ const ModalAddReturGudang = (props) => {
       ukuran,
       hpp: detail?.hpp,
       harga_jual: detail?.harga_jual,
-      keterangan: detail?.keterangan,
+      keterangan,
     });
     setDetail({});
     setSku("");
