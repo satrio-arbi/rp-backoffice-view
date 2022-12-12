@@ -85,8 +85,6 @@ const ModalAddReturGudang = (props) => {
       kategori: detail?.kategori,
       nama_barang: detail?.nama_product,
       kuantitas,
-      ukuran,
-      hpp: detail?.hpp,
       harga_jual: detail?.harga_jual,
       keterangan,
     });
@@ -306,41 +304,6 @@ const ModalAddReturGudang = (props) => {
                   }
                   style={{ width: "100%" }}
                 />
-                <FormControl
-                  sx={{ marginTop: 2, width: "100%" }}
-                  variant="outlined"
-                >
-                  <InputLabel id="demo-simple-select-label">
-                    Select Ukuran
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={isUpdate ? updateDetail?.ukuran : ukuran}
-                    label="Select Toko Tujuan"
-                    onChange={(v) => {
-                      isUpdate
-                        ? updateDataDetail(v?.target?.value, "ukuran")
-                        : setUkuran(v?.target?.value);
-                    }}
-                  >
-                    {props?.ukuran?.map((d, i) => {
-                      return <MenuItem value={d?.ukuran}>{d?.ukuran}</MenuItem>;
-                    })}
-                  </Select>
-                </FormControl>
-                <p style={{ textColor: "gray", fontSize: "13px" }}>Hpp</p>
-                <Input
-                  value={
-                    isUpdate
-                      ? updateDetail?.hpp
-                      : detail?.hpp
-                      ? detail?.hpp
-                      : ""
-                  }
-                  readOnly={true}
-                  style={{ width: "100%" }}
-                />
                 <p style={{ textColor: "gray", fontSize: "13px" }}>
                   Harga Jual
                 </p>
@@ -453,24 +416,7 @@ const ModalAddReturGudang = (props) => {
                   >
                     Kuantitas
                   </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "8px",
-                      border: "1px solid #ddd",
-                    }}
-                  >
-                    Ukuran
-                  </th>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "8px",
-                      border: "1px solid #ddd",
-                    }}
-                  >
-                    Hpp
-                  </th>
+
                   <th
                     style={{
                       textAlign: "left",
@@ -562,26 +508,6 @@ const ModalAddReturGudang = (props) => {
                           }}
                         >
                           {d?.kuantitas}
-                        </td>
-                        <td
-                          onClick={() => setDataDetail(d)}
-                          style={{
-                            textAlign: "left",
-                            padding: "8px",
-                            border: "1px solid #ddd",
-                          }}
-                        >
-                          {d?.ukuran}
-                        </td>
-                        <td
-                          onClick={() => setDataDetail(d)}
-                          style={{
-                            textAlign: "left",
-                            padding: "8px",
-                            border: "1px solid #ddd",
-                          }}
-                        >
-                          {d?.hpp}
                         </td>
                         <td
                           onClick={() => setDataDetail(d)}

@@ -692,6 +692,7 @@ export default function PengirimanStoreStore() {
             lokasi_store_asal,
             id_store_tujuan,
             lokasi_store_tujuan,
+            "",
             keterangan
           )
         }

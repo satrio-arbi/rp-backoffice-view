@@ -122,7 +122,12 @@ const headCells = [
     disablePadding: true,
     numeric: false,
   },
-
+  {
+    id: "keterangan",
+    label: "Keterangan",
+    disablePadding: true,
+    numeric: false,
+  },
   {
     id: "aksi",
     label: "Aksi",
@@ -240,7 +245,8 @@ export default function PengirimanOfficeStore() {
     lokasi_office,
     id_store,
     lokasi_store,
-    pengiriman_code
+    pengiriman_code,
+    keterangan
   ) => {
     setModal(false);
     let res = await addPengirimanOfficekeStore(
@@ -250,7 +256,8 @@ export default function PengirimanOfficeStore() {
       lokasi_office,
       id_store,
       lokasi_store,
-      pengiriman_code
+      pengiriman_code,
+      keterangan
     );
     if (res?.status) {
       alertSuccess("Success", "");
@@ -485,20 +492,6 @@ export default function PengirimanOfficeStore() {
             label="Hapus"
             startIcon={<DeleteIcon />}
           />
-          {/* <Button
-                style={{
-                    background: "#828EED",
-                    color: 'white',
-                    textTransform: 'capitalize',
-                    marginRight:"15px",
-                    width:"100%",
-                    padding:"1em",
-                    borderRadius:"14px"
-                }}
-                label="Upload"
-                onClick={()=>setModalUplaod(true)}
-                startIcon={<CloudUploadIcon/>}
-           /> */}
           <Button
             style={{
               background: "#03fc35",
@@ -600,6 +593,7 @@ export default function PengirimanOfficeStore() {
                         <TableCell align="left">{row.lokasi_office}</TableCell>
 
                         <TableCell align="left">{row.lokasi_store}</TableCell>
+                        <TableCell align="left">{row.keterangan}</TableCell>
 
                         <TableCell align="right">
                           <div style={{}}>
@@ -622,15 +616,6 @@ export default function PengirimanOfficeStore() {
                       </TableRow>
                     );
                   })}
-                {/* {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
               </TableBody>
             </Table>
           </TableContainer>
@@ -700,6 +685,7 @@ export default function PengirimanOfficeStore() {
             lokasi_office,
             id_store,
             lokasi_store,
+            "",
             keterangan
           )
         }

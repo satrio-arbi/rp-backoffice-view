@@ -1,14 +1,10 @@
-import {
-  Dialog,
-  DialogContent,
-  Typography,
-} from "@mui/material";
+import { Dialog, DialogContent, Typography } from "@mui/material";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import Gap from "../../Component/gap";
-import  Input  from "../../Component/input";
+import Input from "../../Component/input";
 import Button from "../../Component/button";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -20,7 +16,6 @@ import Paper from "@mui/material/Paper";
 import data from "../../Component/table/dummyData.json";
 import { getDetailPesanan } from "../../Config/Redux/action";
 import { useDispatch, useSelector } from "react-redux";
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -43,13 +38,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function DetailPenjualanStore(props) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const detail = props.data;
   const id = props.data?.id_transaksi;
   // const [dataDetail, setDataDetail] = useState(data[0]);
-  useEffect(()=>{
-      dispatch(getDetailPesanan(`id_transaksi=${id}`))
-  },[])
+  useEffect(() => {
+    dispatch(getDetailPesanan(`id_transaksi=${id}`));
+  }, []);
   // console.log(detail,'detail');
   // const [dataTable, setDataTable] = useState(dataDetail.detailPenjualan);
 
@@ -57,7 +52,7 @@ function DetailPenjualanStore(props) {
   const loginForm = (
     <Formik
       initialValues={{
-         kodeTransaksi: detail.id_transaksi,
+        kodeTransaksi: detail.id_transaksi,
         kodeStore: detail.id_store,
         lokasiStore: detail.lokasi_store,
         diskon: detail.diskon,
@@ -83,15 +78,12 @@ function DetailPenjualanStore(props) {
         const user = {
           user: values.username,
         };
-        console.log("login");
+
         localStorage.setItem("rdprjt");
         setSubmitting(false);
       }}
     >
-      {({
-        values,
-        handleChange,
-      }) => (
+      {({ values, handleChange }) => (
         <Dialog
           open={props.open}
           onClose={props.onClose}
@@ -212,33 +204,34 @@ function DetailPenjualanStore(props) {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {detail?.detailPesananList && detail?.detailPesananList.map((row) => {
-                          return (
-                            <StyledTableRow key={row.id}>
-                              <StyledTableCell component="th" scope="row">
-                                {row.id}
-                              </StyledTableCell>
-                              <StyledTableCell
-                                align="left"
-                                style={{
-                                  display: "flow",
-                                }}
-                              >
-                                <div>
-                                  {row.nama_barang}
-                                  <br />
-                                  Rp {row.harga}
-                                </div>
-                              </StyledTableCell>
-                              <StyledTableCell align="left">
-                                {row.kuantitas}
-                              </StyledTableCell>
-                              <StyledTableCell align="left">
-                                Rp {row.kuantitas * row.harga}
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          );
-                        })}
+                        {detail?.detailPesananList &&
+                          detail?.detailPesananList.map((row) => {
+                            return (
+                              <StyledTableRow key={row.id}>
+                                <StyledTableCell component="th" scope="row">
+                                  {row.id}
+                                </StyledTableCell>
+                                <StyledTableCell
+                                  align="left"
+                                  style={{
+                                    display: "flow",
+                                  }}
+                                >
+                                  <div>
+                                    {row.nama_barang}
+                                    <br />
+                                    Rp {row.harga}
+                                  </div>
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  {row.kuantitas}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  Rp {row.kuantitas * row.harga}
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            );
+                          })}
                       </TableBody>
                     </Table>
                   </TableContainer>

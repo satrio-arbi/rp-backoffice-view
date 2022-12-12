@@ -363,6 +363,7 @@ export default function PengirimanStoreStore() {
         ukuran: d?.ukuran,
         hpp: d?.hpp,
         harga_jual: d?.harga_jual,
+        keterangan: d?.keterangan,
       });
     });
     setDetail(arr);

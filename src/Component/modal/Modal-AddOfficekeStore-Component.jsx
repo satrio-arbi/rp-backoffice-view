@@ -371,15 +371,7 @@ const ModalAddOfficeStore = (props) => {
               </Button>
             </div>
             <div style={{ overflowX: "auto", marginTop: 20 }}>
-              <tabel
-                style={{
-                  // borderCollapse: 'collapse',
-                  // borderSpacing: 0,
-                  width: "100%",
-                  // overflow:'hidden',
-                  // border: '1px solid #ddd'
-                }}
-              >
+              <tabel style={{ width: "100%" }}>
                 <tr>
                   <th
                     style={{
