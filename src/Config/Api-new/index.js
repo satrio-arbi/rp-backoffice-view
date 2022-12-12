@@ -30,9 +30,6 @@ export const updateKategori = async (kategori_name, id) => {
   return res;
 };
 export const deleteKategori = async (id) => {
-  // const formData = new FormData();
-  //   formData.append('id',id)
-  //   formData.append('kategori_name',kategori_name)
   const res = await NET("GET", `master/kategori/delete?id=${id}`, {});
 
   return res;
@@ -73,9 +70,6 @@ export const updateTipe = async (type_name, id) => {
   return res;
 };
 export const deleteTipe = async (id) => {
-  // const formData = new FormData();
-  //   formData.append('id',id)
-  //   formData.append('kategori_name',kategori_name)
   const res = await NET("GET", `master/tipe/delete?id=${id}`, {});
 
   return res;
@@ -189,17 +183,11 @@ export const updateKaryawan = async (
   return res;
 };
 export const deleteKaryawan = async (id) => {
-  // const formData = new FormData();
-  //   formData.append('id',id)
-  //   formData.append('kategori_name',kategori_name)
   const res = await NET("GET", `karyawan/delete?id=${id}`, {});
 
   return res;
 };
 export const pindahStoreKaryawan = async (d) => {
-  // const formData = new FormData();
-  //   formData.append('karyawan',d)
-  //   formData.append('kategori_name',kategori_name)
   const res = await NET("POST", `karyawan/pindahStore`, d);
 
   return res;
@@ -996,7 +984,8 @@ export const addPengirimanStorekeStore = async (
   lokasi_store_asal,
   id_store_tujuan,
   lokasi_store_tujuan,
-  pengiriman_code
+  pengiriman_code,
+  keterangan
 ) => {
   const res = await NET("POST", `pengirimanStore/add`, {
     detailPengirimanList,
@@ -1006,6 +995,7 @@ export const addPengirimanStorekeStore = async (
     id_store_tujuan,
     lokasi_store_tujuan,
     pengiriman_code,
+    keterangan,
   });
 
   return res;
@@ -1018,7 +1008,8 @@ export const updatePengirimanStorekeStore = async (
   id_store_tujuan,
   lokasi_store_tujuan,
   pengiriman_code,
-  id
+  id,
+  keterangan
 ) => {
   const res = await NET("POST", `pengirimanStore/update`, {
     detailPengirimanList,
@@ -1030,6 +1021,7 @@ export const updatePengirimanStorekeStore = async (
     pengiriman_code,
     rowstatus: 1,
     id,
+    keterangan,
   });
 
   return res;
@@ -1062,7 +1054,8 @@ export const addPengirimanOfficekeStore = async (
   lokasi_office,
   id_store,
   lokasi_store,
-  pengiriman_code
+  pengiriman_code,
+  keterangan
 ) => {
   const res = await NET("POST", `pengirimanOffice/add`, {
     detailPengirimanList,
@@ -1072,6 +1065,7 @@ export const addPengirimanOfficekeStore = async (
     id_store,
     lokasi_store,
     pengiriman_code,
+    keterangan,
   });
 
   return res;
@@ -1084,20 +1078,9 @@ export const updatePengirimanOfficekeStore = async (
   id_store,
   lokasi_store,
   pengiriman_code,
-  id
+  id,
+  keterangan
 ) => {
-  console.log({
-    detailPengirimanList,
-    tanggal_pengiriman,
-    id_office,
-    lokasi_office,
-    id_store,
-    lokasi_store,
-    pengiriman_code,
-    rowstatus: 1,
-    id,
-  });
-
   const res = await NET("POST", `pengirimanOffice/update`, {
     detailPengirimanList,
     tanggal_pengiriman,
@@ -1108,14 +1091,12 @@ export const updatePengirimanOfficekeStore = async (
     pengiriman_code,
     rowstatus: 1,
     id,
+    keterangan,
   });
 
   return res;
 };
 export const deletePengirimanOfficekeStore = async (id) => {
-  // const formData = new FormData();
-  //   formData.append('id',id)
-  //   formData.append('kategori_name',kategori_name)
   const res = await NET("GET", `pengirimanOffice/delete?id=${id}`, {});
 
   return res;
@@ -1776,9 +1757,6 @@ export const updateReturGudang = async (
   return res;
 };
 export const deleteReturGudang = async (id) => {
-  // const formData = new FormData();
-  //   formData.append('id',id)
-  //   formData.append('kategori_name',kategori_name)
   const res = await NET("GET", `returGudang/delete?id=${id}`, {});
 
   return res;
