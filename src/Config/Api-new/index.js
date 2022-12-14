@@ -234,6 +234,16 @@ export const getStockPerStore = async () => {
   return res;
 };
 
+export const searchStockPerStore = async (search) => {
+  const res = await NET(
+    "GET",
+    `stockPerStore/searchStock?keyword=${search}`,
+    {}
+  );
+
+  return res;
+};
+
 //akutansi
 export const getDaftarAkun = async () => {
   const res = await NET("GET", `akutansi/coa/all`, {});
