@@ -1701,9 +1701,6 @@ export const updateStockOpnameMasuk = async (
   return res;
 };
 export const deleteStockOpnameMasuk = async (id) => {
-  // const formData = new FormData();
-  //   formData.append('id',id)
-  //   formData.append('kategori_name',kategori_name)
   const res = await NET("GET", `stockOpname/delete?id=${id}`, {});
 
   return res;
@@ -1719,6 +1716,80 @@ export const getStockOpnameSearch = async (search) => {
   return res;
 };
 
+//Stock Opname Store
+
+export const addStockOpnameStore = async (
+  id_store,
+  lokasi_store,
+  artikel,
+  kategori,
+  nama_barang,
+  nama_kategori,
+  sku_code,
+  stock_opname,
+  type,
+  type_name
+) => {
+  const formData = new FormData();
+  formData.append("id_store", id_store);
+  formData.append("lokasi_store", lokasi_store);
+  formData.append("artikel", artikel);
+  formData.append("kategori", kategori);
+  formData.append("nama_barang", nama_barang);
+  formData.append("nama_kategori", nama_kategori);
+  formData.append("sku_code", sku_code);
+  formData.append("stock_opname", stock_opname);
+  formData.append("type", type);
+  formData.append("type_name", type_name);
+  const res = await NET("POST", `stockOpnameStore/add`, formData);
+
+  return res;
+};
+export const updateStockOpnameStoreMasuk = async (
+  id_store,
+  lokasi_store,
+  artikel,
+  kategori,
+  nama_barang,
+  nama_kategori,
+  sku_code,
+  stock_opname,
+  type,
+  type_name,
+  id
+) => {
+  const formData = new FormData();
+  formData.append("id_store", id_store);
+  formData.append("lokasi_store", lokasi_store);
+  formData.append("artikel", artikel);
+  formData.append("kategori", kategori);
+  formData.append("nama_barang", nama_barang);
+  formData.append("nama_kategori", nama_kategori);
+  formData.append("sku_code", sku_code);
+  formData.append("stock_opname", stock_opname);
+  formData.append("type", type);
+  formData.append("type_name", type_name);
+  formData.append("id", id);
+
+  const res = await NET("POST", `stockOpnameStore/update`, formData);
+
+  return res;
+};
+export const deleteStockOpnameStoreMasuk = async (id) => {
+  const res = await NET("GET", `stockOpnameStore/delete?id=${id}`, {});
+
+  return res;
+};
+export const getStockOpnameStoreMasuk = async () => {
+  const res = await NET("GET", `stockOpnameStore/all`, {});
+
+  return res;
+};
+export const getStockOpnameStoreSearch = async (search) => {
+  const res = await NET("GET", `stockOpnameStore/search?keyword=${search}`, {});
+
+  return res;
+};
 //Retur Gudang
 
 export const addReturGudang = async (
