@@ -478,7 +478,6 @@ export const getDownloadPelanggan = async () => {
   link.setAttribute("download", `pelanggan_${new Date()}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 //pemasok
 export const getPemasok = async () => {
@@ -523,7 +522,6 @@ export const getDownloadPemasok = async () => {
   link.setAttribute("download", `pemasok_${new Date()}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 //penjualan store
 export const getPenjualanStore = async () => {
@@ -580,7 +578,7 @@ export const getDownloadInvoicePEnjualanOffice = async (data) => {
   link.setAttribute("download", `penjualan_office_${new Date()}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  // console.log({link})
+  //
 };
 
 export const getDownloadTransferRequest = async (data) => {
@@ -601,7 +599,7 @@ export const getDownloadTransferRequest = async (data) => {
   link.setAttribute("download", `TransferRequest_${new Date()}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  // console.log({link})
+  //
 };
 
 export const getDownloadTransferRequestStore = async (data) => {
@@ -622,7 +620,7 @@ export const getDownloadTransferRequestStore = async (data) => {
   link.setAttribute("download", `TransferRequest_${new Date()}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  // console.log({link})
+  //
 };
 
 export const getDownloadDeliveryReceipt = async (data) => {
@@ -643,7 +641,7 @@ export const getDownloadDeliveryReceipt = async (data) => {
   link.setAttribute("download", `DeliveryReceipt_${new Date()}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  // console.log({link})
+  //
 };
 //dashboard
 export const getBiaya = async () => {
@@ -1134,9 +1132,6 @@ export const getPengirimanOfficekeStoreTransferRequest = async (search) => {
 //ukuran
 
 export const getUkuran = async (id) => {
-  // const formData = new FormData();
-  //   formData.append('id',id)
-  //   formData.append('kategori_name',kategori_name)
   const res = await NET("GET", `master/ukuran/all`, {});
 
   return res;
@@ -1908,7 +1903,6 @@ export const geReportBestArticleByOffice = async (start, end, id) => {
   link.setAttribute("download", `best_article_by_office_${start}_${end}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportBestArticleByStore = async (start, end, id) => {
   const res = await NET(
@@ -1928,7 +1922,6 @@ export const geReportBestArticleByStore = async (start, end, id) => {
   link.setAttribute("download", `best_article_by_store_${start}_${end}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportLaporanPembelian = async (start, end) => {
   const res = await NET(
@@ -1948,7 +1941,6 @@ export const geReportLaporanPembelian = async (start, end) => {
   link.setAttribute("download", `laporan_pembelian_${start}_${end}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportBarangMasuk = async (start, end) => {
   const res = await NET(
@@ -1968,7 +1960,6 @@ export const geReportBarangMasuk = async (start, end) => {
   link.setAttribute("download", `barang_masuk_${start}_${end}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportBarangKeluar = async (start, end) => {
   const res = await NET(
@@ -1988,7 +1979,6 @@ export const geReportBarangKeluar = async (start, end) => {
   link.setAttribute("download", `barang_keluar_${start}_${end}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportPengirimanStoretoStore = async (start, end) => {
   const res = await NET(
@@ -2011,7 +2001,6 @@ export const geReportPengirimanStoretoStore = async (start, end) => {
   ); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportPengirimanOfficetoStore = async (start, end) => {
   const res = await NET(
@@ -2034,7 +2023,6 @@ export const geReportPengirimanOfficetoStore = async (start, end) => {
   ); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportPenerimaanFromStore = async (start, end) => {
   const res = await NET(
@@ -2054,7 +2042,6 @@ export const geReportPenerimaanFromStore = async (start, end) => {
   link.setAttribute("download", `penerimaan_store_${start}_${end}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportPenerimaanFromSupplier = async (start, end) => {
   const res = await NET(
@@ -2074,7 +2061,6 @@ export const geReportPenerimaanFromSupplier = async (start, end) => {
   link.setAttribute("download", `penerimaan_supplier_${start}_${end}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 
 export const geReportPengirimanGudangToStore = async (start, end) => {
@@ -2098,7 +2084,6 @@ export const geReportPengirimanGudangToStore = async (start, end) => {
   ); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportPengirimanStoreToStore = async (start, end) => {
   const res = await NET(
@@ -2121,7 +2106,6 @@ export const geReportPengirimanStoreToStore = async (start, end) => {
   ); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportPurchaseStoreByArticle = async (start, end, artikel) => {
   const res = await NET(
@@ -2144,7 +2128,6 @@ export const geReportPurchaseStoreByArticle = async (start, end, artikel) => {
   ); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportPurchaseStoreBySummary = async (start, end, hp) => {
   const res = await NET(
@@ -2167,7 +2150,6 @@ export const geReportPurchaseStoreBySummary = async (start, end, hp) => {
   ); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportSalesByOffice = async (start, end, id) => {
   const res = await NET(
@@ -2187,7 +2169,6 @@ export const geReportSalesByOffice = async (start, end, id) => {
   link.setAttribute("download", `sales_by_office_${start}_${end}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };
 export const geReportStockOpname = async (start, end) => {
   const res = await NET(
@@ -2207,5 +2188,4 @@ export const geReportStockOpname = async (start, end) => {
   link.setAttribute("download", `stock_opname_${start}_${end}.pdf`); //or any other extension
   document.body.appendChild(link);
   link.click();
-  console.log({ link });
 };

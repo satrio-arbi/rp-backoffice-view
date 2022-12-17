@@ -1,49 +1,49 @@
-import { Modal, Box, Button } from '@mui/material';
+import { Modal, Box, Button } from "@mui/material";
 
-import React, { useState, useEffect } from 'react';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CloseIcon from '@mui/icons-material/Close';
-import moment from 'moment';
-import Input from '../../Component/input';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import { getPembelian, getProdukByArtikel } from '../../Config/Api-new';
+import React, { useState, useEffect } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
+import moment from "moment";
+import Input from "../../Component/input";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import { getPembelian, getProdukByArtikel } from "../../Config/Api-new";
 import {
   FormControl,
   InputAdornment,
   InputLabel,
   OutlinedInput,
-} from '@mui/material';
+} from "@mui/material";
 const ModalEditSupplier = (props) => {
   // const [detail_pengiriman,setDetail_pengiriman] = useState([])
   const [tanggal_pengiriman, setTanggal_pengiriman] = useState(
-    moment(new Date()).format('YYYY-MM-DD')
+    moment(new Date()).format("YYYY-MM-DD")
   );
-  const [id_office, setId_office] = useState('');
-  const [sku, setSku] = useState('');
-  const [ukuran, setUkuran] = useState('');
-  const [kuantitas, setKuantitas] = useState('');
-  const [id_store, setId_store] = useState('');
-  const [article, setArticle] = useState('');
-  const [detail, setDetail] = useState('');
+  const [id_office, setId_office] = useState("");
+  const [sku, setSku] = useState("");
+  const [ukuran, setUkuran] = useState("");
+  const [kuantitas, setKuantitas] = useState("");
+  const [id_store, setId_store] = useState("");
+  const [article, setArticle] = useState("");
+  const [detail, setDetail] = useState("");
   const [listDetail, setListDetail] = useState([]);
-  const [pengiriman, setPengiriman] = useState('');
-  const [nama_supplier, setNama_supplier] = useState('');
+  const [pengiriman, setPengiriman] = useState("");
+  const [nama_supplier, setNama_supplier] = useState("");
   const data = props?.data;
-  //  console.log({supl:'sss',data})
+
   useEffect(() => {
     setTanggal_pengiriman(
-      moment(data?.tanggal_penerimaan).format('YYYY-MM-DD')
+      moment(data?.tanggal_penerimaan).format("YYYY-MM-DD")
     );
-    setId_office('');
+    setId_office("");
     setPengiriman(data?.pembelian_code);
-    setUkuran('');
+    setUkuran("");
     setNama_supplier(data?.nama_supplier);
     setListDetail(data?.detailPenerimaanList);
-    setDetail('');
-    setArticle('');
-    setId_store('');
-    setKuantitas('');
+    setDetail("");
+    setArticle("");
+    setId_store("");
+    setKuantitas("");
     setDetail(data);
   }, [props?.open]);
   const getSKU = async (e) => {
@@ -72,13 +72,10 @@ const ModalEditSupplier = (props) => {
           type: d?.type,
           type_name: d?.type_name,
           ukuran: d?.ukuran,
-          keterangan: '',
+          keterangan: "",
         });
       });
-      // console.log({arr})
       setListDetail(arr);
-      // setUkuran(res?.data?.ukuran)
-      // setKuantitas(res?.data?.kuantitas)
     }
   };
 
@@ -90,15 +87,15 @@ const ModalEditSupplier = (props) => {
   const convertToko = (v) => {
     let idx = props?.store?.findIndex((a) => a.id == v);
 
-    return props?.store ? props?.store[idx]?.store_name : '';
+    return props?.store ? props?.store[idx]?.store_name : "";
   };
   const convertOffice = (v) => {
     let idx = props?.office?.findIndex((a) => a.id == v);
 
-    return props?.office ? props?.office[idx]?.office_name : '';
+    return props?.office ? props?.office[idx]?.office_name : "";
   };
   const convertImage = (v) => {
-    return 'data:image/png;base64,' + v;
+    return "data:image/png;base64," + v;
   };
 
   const addDetailProduk = () => {
@@ -136,22 +133,22 @@ const ModalEditSupplier = (props) => {
       >
         <Box
           sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            overflow: 'hidden',
-            overflowY: 'scroll',
-            transform: 'translate(-50%, -50%)',
-            width: '90%',
-            height: '90%',
-            bgcolor: 'background.paper',
-            border: '2px solid #000',
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            overflow: "hidden",
+            overflowY: "scroll",
+            transform: "translate(-50%, -50%)",
+            width: "90%",
+            height: "90%",
+            bgcolor: "background.paper",
+            border: "2px solid #000",
             boxShadow: 24,
             p: 4,
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <h2 style={{ width: '100%' }} id="parent-modal-title">
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <h2 style={{ width: "100%" }} id="parent-modal-title">
               Edit Penerimaan Supplier
             </h2>
             <CloseIcon onClick={() => props?.onClickOpen()} />
@@ -162,35 +159,35 @@ const ModalEditSupplier = (props) => {
               disable={false}
               // type='date'
               onKeyPress={(e) => getSKU(e)}
-              label={'Kode Pembelian'}
+              label={"Kode Pembelian"}
               onChange={(v) => setPengiriman(v?.target?.value)}
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
             />
 
             <Input
               value={tanggal_pengiriman}
               disable={false}
               type="date"
-              label={'Tanggal Penerimaan'}
+              label={"Tanggal Penerimaan"}
               onChange={(v) => setTanggal_pengiriman(v?.target?.value)}
-              style={{ width: '100%', marginTop: 20 }}
+              style={{ width: "100%", marginTop: 20 }}
             />
             <Input
               value={nama_supplier}
               disable={false}
               readOnly={true}
               //  type='date'
-              label={'Supplier'}
+              label={"Supplier"}
               //  onChange={(v)=>setTanggal_pengiriman(v?.target?.value)}
-              style={{ width: '100%', marginTop: 20 }}
+              style={{ width: "100%", marginTop: 20 }}
             />
 
-            <div style={{ overflowX: 'auto', marginTop: 20 }}>
+            <div style={{ overflowX: "auto", marginTop: 20 }}>
               <tabel
                 style={{
                   // borderCollapse: 'collapse',
                   // borderSpacing: 0,
-                  width: '100%',
+                  width: "100%",
                   // overflow:'hidden',
                   // border: '1px solid #ddd'
                 }}
@@ -198,54 +195,54 @@ const ModalEditSupplier = (props) => {
                 <tr>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
                     No
                   </th>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
                     SKU CODE
                   </th>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
                     Artikel
                   </th>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
-                    Nama Barang{' '}
+                    Nama Barang{" "}
                   </th>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
                     Kuantitas
                   </th>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
                     Keterangan
@@ -257,9 +254,9 @@ const ModalEditSupplier = (props) => {
                       <tr key={i}>
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           {i + 1}
@@ -267,18 +264,18 @@ const ModalEditSupplier = (props) => {
 
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           {d?.sku_code}
                         </td>
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           {d?.artikel}
@@ -286,23 +283,23 @@ const ModalEditSupplier = (props) => {
 
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           {d?.nama_barang}
                         </td>
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           <input
                             onChange={(v) =>
-                              changeTabel('kuantitas', i, v?.target?.value)
+                              changeTabel("kuantitas", i, v?.target?.value)
                             }
                             value={d?.kuantitas}
                           />
@@ -310,14 +307,14 @@ const ModalEditSupplier = (props) => {
                         </td>
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           <input
                             onChange={(v) =>
-                              changeTabel('keterangan', i, v?.target?.value)
+                              changeTabel("keterangan", i, v?.target?.value)
                             }
                             value={d?.keterangan}
                           />
@@ -334,7 +331,7 @@ const ModalEditSupplier = (props) => {
                 onClick={() =>
                   props?.submit(
                     listDetail,
-                    moment(tanggal_pengiriman).format('YYYY-MM-DD'),
+                    moment(tanggal_pengiriman).format("YYYY-MM-DD"),
                     detail?.id_supplier,
                     detail?.nama_supplier,
                     pengiriman

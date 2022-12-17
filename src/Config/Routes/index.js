@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 // import { Redirect } from 'react-router';
-import { Login, Dashboard, DetailPenjualanStore } from "../../Page";
+import { Login, Dashboard } from "../../Page";
 import PenjualanStore from "../../Page/PenjualanStore";
 import PenjualanOffice from "../../Page/PenjualanOffice";
 import LaporanAll from "../../Page/laporan";

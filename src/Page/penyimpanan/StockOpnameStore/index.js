@@ -1,6 +1,5 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -27,7 +26,6 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import Gap from "../../../Component/gap/index";
@@ -161,17 +159,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const {
-    checkChange,
-    checkAllList,
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-    data,
-  } = props;
+  const { checkChange, checkAllList, order, orderBy, onRequestSort } = props;
   const [check, setCheck] = React.useState(false);
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -236,12 +224,10 @@ export default function BarangMasuk() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [toBeSelected, settoBeSelected] = React.useState({});
-  const dispatch = useDispatch();
   const dataStore = useSelector((state) => state.reducer.getPembelian.data);
   const [openDetail, setOpenDetail] = React.useState(false);
   const [rows, setRows] = React.useState(dataStore);
   const [searched, setSearched] = React.useState();
-  const [cari, setCari] = React.useState();
   const [check, setCheck] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [office, setOffice] = React.useState([]);
@@ -285,7 +271,7 @@ export default function BarangMasuk() {
   };
   const deleteData = async () => {
     let array = [...data];
-    let idx = array?.findIndex((a) => a.check == true);
+    let idx = array?.findIndex((a) => a.check === true);
     if (idx > -1) {
       for (let i = 0; i < array?.length; i++) {
         if (array[i]?.check === true) {
@@ -341,13 +327,10 @@ export default function BarangMasuk() {
     setData(res?.data);
     setOffice(res1?.data);
   };
-  const convertOffice = (v) => {
-    let idx = office?.findIndex((a) => a.id == v);
-    return office ? office[idx]?.office_name : "";
-  };
+
   const checkSingle = (d, i) => {
     let array = [...data];
-    let idx = array?.findIndex((a) => a.id == d?.id);
+    let idx = array?.findIndex((a) => a.id === d?.id);
     if (!d?.check) {
       array[idx]["check"] = true;
     } else {
@@ -423,15 +406,8 @@ export default function BarangMasuk() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
   const handleChangeSearch = (event) => {
     setSearched(event.target.value);
   };
@@ -533,7 +509,6 @@ export default function BarangMasuk() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
                       <TableRow
