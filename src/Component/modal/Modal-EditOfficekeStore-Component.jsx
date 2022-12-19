@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Input from "../../Component/input";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { getProdukBySKU, getProdukByArtikel } from "../../Config/Api-new";
+import { getProdukBySKU, officeGetProdukByArtikel } from "../../Config/Api-new";
 import {
   FormControl,
   InputAdornment,
@@ -68,12 +68,24 @@ const ModaEditOfficekeStore = (props) => {
   const getArticle = async (e) => {
     if (e.charCode === 13) {
       e.preventDefault();
-      let res = await getProdukByArtikel(article);
-      setDetail(res?.data);
-      setSku(res?.data?.sku_code);
-      setUkuran(res?.data?.ukuran);
-      setKuantitas(res?.data?.kuantitas);
+      let res = await officeGetProdukByArtikel(article);
+      if (res.status) {
+        setDetail(res?.data);
+        setSku(res?.data?.sku_code);
+        setUkuran(res?.data?.ukuran);
+        setKuantitas(res?.data?.kuantitas);
+      } else {
+        alert("Stock tidak ada!");
+        clear();
+      }
     }
+  };
+  const clear = () => {
+    setSku("");
+    setDetail({});
+    setUkuran("");
+    setHarga_satuan_barang("");
+    setKuantitas("");
   };
   const convertToko = (v) => {
     let idx = props?.store?.findIndex((a) => a.id == v);

@@ -963,9 +963,6 @@ export const officeGetProdukByArtikel = async (id) => {
 };
 
 export const getProdukByType = async (id) => {
-  // const formData = new FormData();
-  //   formData.append('id',id)
-  //   formData.append('kategori_name',kategori_name)
   const res = await NET("GET", `master/product/getByType?type=${id}`, {});
 
   return res;

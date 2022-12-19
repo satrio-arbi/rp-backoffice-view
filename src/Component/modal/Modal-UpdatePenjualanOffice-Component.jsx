@@ -7,7 +7,7 @@ import Input from "../../Component/input";
 import { alertError } from "../../Component/alert/sweetalert";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { getProdukBySKU, getProdukByArtikel } from "../../Config/Api-new";
+import { getProdukBySKU, officeGetProdukByArtikel } from "../../Config/Api-new";
 import {
   FormControl,
   InputAdornment,
@@ -76,13 +76,25 @@ const ModalAddPenjualanOffice = (props) => {
   const getArticle = async (e) => {
     if (e.charCode === 13) {
       e.preventDefault();
-      let res = await getProdukByArtikel(article);
-      setDetail(res?.data);
-      setSku(res?.data?.sku_code);
-      setHarga_satuan_barang(res?.data?.harga_jual);
-      setUkuran(res?.data?.ukuran);
-      setKuantitas(res?.data?.kuantitas);
+      let res = await officeGetProdukByArtikel(article);
+      if (res.status) {
+        setDetail(res?.data);
+        setSku(res?.data?.sku_code);
+        setHarga_satuan_barang(res?.data?.harga_jual);
+        setUkuran(res?.data?.ukuran);
+        setKuantitas(res?.data?.kuantitas);
+      } else {
+        alert("Stock tidak ada!");
+        clear();
+      }
     }
+  };
+  const clear = () => {
+    setSku("");
+    setDetail({});
+    setUkuran("");
+    setHarga_satuan_barang("");
+    setKuantitas("");
   };
   const convertPelangganFromHp = (v) => {
     let idx = props?.pelanggan?.findIndex((a) => a.no_hp == v);
@@ -137,18 +149,14 @@ const ModalAddPenjualanOffice = (props) => {
       kategori: detail?.kategori,
       nama_barang: detail?.nama_product,
       kuantitas,
-      //  ukuran,
-      //  metode_pembayaran:bank,
       harga_satuan_barang,
-      //  ongkos_kirim,
-      //  pajak_biaya:pajak,
-      //  total:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim)
     });
-    //  console.log({
-    //   tot:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim),
-    //   pajak:(parseInt(harga_satuan_barang)*parseInt(kuantitas)),
-
-    // })
+    setArticle("");
+    setSku("");
+    setDetail({});
+    setUkuran("");
+    setHarga_satuan_barang("");
+    setKuantitas("");
     setListDetail(arr);
   };
   const deleteData = (idx) => {
