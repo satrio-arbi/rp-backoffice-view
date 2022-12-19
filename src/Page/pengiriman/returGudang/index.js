@@ -112,7 +112,12 @@ const headCells = [
     disablePadding: true,
     numeric: false,
   },
-
+  {
+    id: "qty",
+    label: "Kuantitas",
+    disablePadding: true,
+    numeric: false,
+  },
   {
     id: "aksi",
     label: "Aksi",
@@ -341,6 +346,8 @@ export default function PengirimanStoreStore() {
     if ((type === "enter" && e.keyCode === 13) || type === "klik") {
       let res = await getReturGudangSearch(searched);
       setData(res?.data);
+      setPage(0);
+      setRowsPerPage(5);
     }
   };
   useEffect(() => {
@@ -561,7 +568,7 @@ export default function PengirimanStoreStore() {
                         <TableCell align="left">
                           {row.lokasi_office_tujuan}
                         </TableCell>
-
+                        <TableCell align="left">{row.qty}</TableCell>
                         <TableCell align="right">
                           <div style={{}}>
                             <IconButton

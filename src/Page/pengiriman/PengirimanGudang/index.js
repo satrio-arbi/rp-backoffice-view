@@ -86,7 +86,6 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
-  console.log({ stabilizedThis });
   return stabilizedThis.map((el) => el[0]);
 }
 
@@ -129,6 +128,12 @@ const headCells = [
     numeric: false,
   },
   {
+    id: "qty",
+    label: "Kuantitas",
+    disablePadding: true,
+    numeric: false,
+  },
+  {
     id: "aksi",
     label: "Aksi",
   },
@@ -160,12 +165,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell
-          key={"check"}
-          // align="center"
-          // padding={'normal'}
-          // sortDirection={orderBy === headCell.id ? order : false}
-        >
+        <TableCell key={"check"}>
           <input type="checkbox" checked={check} onClick={() => checkAll()} />
         </TableCell>
         {headCells.map((headCell) => (
@@ -269,7 +269,7 @@ export default function PengirimanOfficeStore() {
   };
   const deleteData = async () => {
     let array = [...data];
-    console.log({ array: array?.length });
+
     for (let i = 0; i < array?.length; i++) {
       if (array[i]?.check === true) {
         await deletePengirimanOfficekeStore(array[i]?.id);
@@ -354,6 +354,8 @@ export default function PengirimanOfficeStore() {
     if ((type === "enter" && e.keyCode === 13) || type === "klik") {
       let res = await getPengirimanOfficekeStoreSearch(searched);
       setData(res?.data);
+      setRowsPerPage(5);
+      setPage(0);
     }
   };
   useEffect(() => {
@@ -381,7 +383,6 @@ export default function PengirimanOfficeStore() {
     setDetail(arr);
     setOpenDetail(true);
   };
-  console.log(rows);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -594,6 +595,7 @@ export default function PengirimanOfficeStore() {
 
                         <TableCell align="left">{row.lokasi_store}</TableCell>
                         <TableCell align="left">{row.keterangan}</TableCell>
+                        <TableCell align="left">{row.qty}</TableCell>
 
                         <TableCell align="right">
                           <div style={{}}>

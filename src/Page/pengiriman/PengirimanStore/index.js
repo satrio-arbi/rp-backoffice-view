@@ -87,7 +87,6 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
-  console.log({ stabilizedThis });
   return stabilizedThis.map((el) => el[0]);
 }
 
@@ -120,6 +119,13 @@ const headCells = [
   {
     id: "store_tujuan",
     label: "Store Tujuan",
+    disablePadding: true,
+    numeric: false,
+  },
+
+  {
+    id: "total_pindah",
+    label: "Kuantitas",
     disablePadding: true,
     numeric: false,
   },
@@ -258,12 +264,6 @@ export default function PengirimanStoreStore() {
     } else {
       alertError("Error", "Fail add data");
     }
-    // console.log({detail_pengiriman,
-    //   tanggal_pengiriman,
-    //   id_store_asal,
-    //   lokasi_store_asal,
-    //   id_store_tujuan,
-    //   lokasi_store_tujuan})
   };
   const deleteData = async () => {
     let array = [...data];
@@ -365,6 +365,8 @@ export default function PengirimanStoreStore() {
     if ((type === "enter" && e.keyCode === 13) || type === "klik") {
       let res = await getPengirimanStorekeStoreSearch(searched);
       setData(res?.data);
+      setPage(0);
+      setRowsPerPage(5);
     }
   };
   useEffect(() => {
@@ -392,7 +394,6 @@ export default function PengirimanStoreStore() {
     setDetail(arr);
     setOpenDetail(true);
   };
-  console.log(rows);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -582,7 +583,6 @@ export default function PengirimanStoreStore() {
                             checked={row?.check ? row?.check : false}
                             onChange={() => {}}
                             onClick={(e) => {
-                              console.log({ row, index });
                               checkSingle(row, index);
                             }}
                           />
@@ -600,6 +600,7 @@ export default function PengirimanStoreStore() {
                         <TableCell align="left">
                           {row.lokasi_store_tujuan}
                         </TableCell>
+                        <TableCell align="left">{row.total_pindah}</TableCell>
 
                         <TableCell align="right">
                           <div style={{}}>
