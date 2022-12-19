@@ -71,7 +71,6 @@ const ModalAddOfficeStore = (props) => {
     setSku("");
     setDetail({});
     setUkuran("");
-    setHarga_satuan_barang("");
     setKuantitas("");
   };
   const convertToko = (v) => {
