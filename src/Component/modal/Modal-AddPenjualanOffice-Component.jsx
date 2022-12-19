@@ -58,10 +58,7 @@ const ModalAddPenjualanOffice = (props) => {
   const getSKU = async (e) => {
     if (e.charCode === 13) {
       e.preventDefault();
-
       let res = await getProdukBySKU(sku);
-      console.log("res :", res.data);
-
       setDetail(res?.data);
       setArticle(res?.data?.artikel_product);
       setHarga_satuan_barang(res?.data?.harga_jual);
@@ -73,7 +70,6 @@ const ModalAddPenjualanOffice = (props) => {
     if (e.charCode === 13) {
       e.preventDefault();
       let res = await officeGetProdukByArtikel(article);
-      console.log(res.status);
       if (res.status) {
         setDetail(res?.data);
         setSku(res?.data?.sku_code);
