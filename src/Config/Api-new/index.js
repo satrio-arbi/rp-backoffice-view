@@ -948,13 +948,20 @@ export const getProdukBySKU = async (id) => {
   return res;
 };
 export const getProdukByArtikel = async (id) => {
-  // const formData = new FormData();
-  //   formData.append('id',id)
-  //   formData.append('kategori_name',kategori_name)
   const res = await NET("GET", `master/product/getByArticle?article=${id}`, {});
 
   return res;
 };
+export const officeGetProdukByArtikel = async (id) => {
+  const res = await NET(
+    "GET",
+    `master/product/office/getByArticle?article=${id}`,
+    {}
+  );
+
+  return res;
+};
+
 export const getProdukByType = async (id) => {
   // const formData = new FormData();
   //   formData.append('id',id)

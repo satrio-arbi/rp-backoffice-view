@@ -7,7 +7,7 @@ import Input from "../../Component/input";
 import { alertError } from "../../Component/alert/sweetalert";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { getProdukBySKU, getProdukByArtikel } from "../../Config/Api-new";
+import { getProdukBySKU, officeGetProdukByArtikel } from "../../Config/Api-new";
 import {
   FormControl,
   InputAdornment,
@@ -60,6 +60,8 @@ const ModalAddPenjualanOffice = (props) => {
       e.preventDefault();
 
       let res = await getProdukBySKU(sku);
+      console.log("res :", res.data);
+
       setDetail(res?.data);
       setArticle(res?.data?.artikel_product);
       setHarga_satuan_barang(res?.data?.harga_jual);
@@ -70,13 +72,26 @@ const ModalAddPenjualanOffice = (props) => {
   const getArticle = async (e) => {
     if (e.charCode === 13) {
       e.preventDefault();
-      let res = await getProdukByArtikel(article);
-      setDetail(res?.data);
-      setSku(res?.data?.sku_code);
-      setHarga_satuan_barang(res?.data?.harga_jual);
-      setUkuran(res?.data?.ukuran);
-      setKuantitas(res?.data?.kuantitas);
+      let res = await officeGetProdukByArtikel(article);
+      console.log(res.status);
+      if (res.status) {
+        setDetail(res?.data);
+        setSku(res?.data?.sku_code);
+        setHarga_satuan_barang(res?.data?.harga_jual);
+        setUkuran(res?.data?.ukuran);
+        setKuantitas(res?.data?.kuantitas);
+      } else {
+        alert("Stock tidak ada!");
+        clear();
+      }
     }
+  };
+  const clear = () => {
+    setSku("");
+    setDetail({});
+    setUkuran("");
+    setHarga_satuan_barang("");
+    setKuantitas("");
   };
   const convertPelanggan = (v) => {
     let idx = props?.pelanggan?.findIndex((a) => a.id == v);
@@ -116,20 +131,16 @@ const ModalAddPenjualanOffice = (props) => {
       tipe: detail?.type,
       nama_kategori: detail?.nama_kategori,
       kategori: detail?.kategori,
-      nama_barang: detail?.nama_product,
+      nama_barang: detail?.nama_barang,
       kuantitas,
-      //  ukuran,
-      //  metode_pembayaran:bank,
       harga_satuan_barang,
-      //  ongkos_kirim,
-      //  pajak_biaya:pajak,
-      //  total:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim)
     });
-    //  console.log({
-    //   tot:((parseInt(harga_satuan_barang)*parseInt(kuantitas))*(parseInt(pajak)/100))+(parseInt(harga_satuan_barang)*parseInt(kuantitas))+parseInt(ongkos_kirim),
-    //   pajak:(parseInt(harga_satuan_barang)*parseInt(kuantitas)),
-
-    // })
+    setArticle("");
+    setSku("");
+    setDetail({});
+    setUkuran("");
+    setHarga_satuan_barang("");
+    setKuantitas("");
     setListDetail(arr);
   };
   const deleteData = (idx) => {
@@ -354,65 +365,32 @@ const ModalAddPenjualanOffice = (props) => {
                 />
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Tipe</p>
                 <Input
-                  value={detail?.type_name}
+                  value={detail?.type_name ? detail?.type_name : ""}
                   readOnly={true}
-                  // type='date'
-                  // label={'Tipe'}
-                  // onChange={(v)=>setTanggal_transaksi(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Kategori</p>
                 <Input
-                  value={detail?.nama_kategori}
+                  value={detail?.nama_kategori ? detail?.nama_kategori : ""}
                   readOnly={true}
-                  // type='date'
-                  // label={'Kategori'}
-                  // onChange={(v)=>setTanggal_transaksi(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
                 <p style={{ textColor: "gray", fontSize: "13px" }}>
                   Nama produk
                 </p>
                 <Input
-                  value={detail?.nama_product}
+                  value={detail?.nama_barang ? detail?.nama_barang : ""}
                   readOnly={true}
-                  // type='date'
-                  // label={'Nama Produk'}
-                  // onChange={(v)=>setTanggal_transaksi(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
-
-                {/* <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                         <InputLabel id="demo-simple-select-label">Select Ukuran</InputLabel>
-
-                         <Select
-                           labelId="demo-simple-select-label"
-                           id="demo-simple-select"
-                           value={ukuran}
-                           label="Toko Tujuan"
-                           onChange={(v)=>{setUkuran(v?.target?.value)}}
-                         >
-                           {props?.ukuran?.map((d,i)=>{
-                             return(
-                               
-                                 <MenuItem value={d?.ukuran} >{d?.ukuran}</MenuItem>
-                               
-                             )
-                           })}
-                         </Select>
-                       </FormControl> */}
               </div>
               <div style={{ width: "100%", marginRight: 10 }}>
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Kuantitas</p>
                 <Input
                   value={kuantitas}
-                  // disabe={true}
-                  // type='date'
-                  // label={'Kuantitas'}
                   onChange={(v) => setKuantitas(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
-                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Ukuran</p> */}
 
                 <p style={{ textColor: "gray", fontSize: "13px" }}>
                   Harga satuan barang
