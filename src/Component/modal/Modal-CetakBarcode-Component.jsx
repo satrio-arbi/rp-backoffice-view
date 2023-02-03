@@ -1,7 +1,31 @@
-import { Modal, Box } from "@mui/material";
+import { Modal, Box, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Barcode from "react-barcode";
+import ReactToPrint from "react-to-print";
+import { useRef } from "react";
+
 const ModalCetakBarcode = (props) => {
+  const ref = useRef();
+  const numberWithCommas = (x) => {
+    return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+  const pageStyle = `
+  @page {
+    size: 40mm 26mm;
+  };
+
+  @media all {
+    .pageBreak {
+      display: none
+    }
+  };
+
+  @media print {
+    .pageBreak {
+      page-break-before: always;
+    }
+  }
+`;
   return (
     <>
       <Modal
@@ -18,8 +42,8 @@ const ModalCetakBarcode = (props) => {
             transform: "translate(-50%, -50%)",
             overflow: "hidden",
             overflowY: "scroll",
-            width: "40%",
-            height: "55%",
+            width: "30%",
+            height: "45%",
             bgcolor: "background.paper",
             border: "2px solid #000",
             boxShadow: 24,
@@ -31,13 +55,36 @@ const ModalCetakBarcode = (props) => {
             <CloseIcon onClick={() => props?.onClickOpen()} /> */}
           </div>
           <div>
-            <p style={{ marginBottom: 1 }}>{props?.nama_product}</p>
-            <p style={{ marginTop: 1 }}>{props?.type_name}</p>
-            <Barcode value={props?.artikel_product} width="3" />
+            <div ref={ref}>
+              <Barcode
+                value={props?.artikel_product}
+                width={1}
+                height={25}
+                textMargin={2}
+                fontSize={15}
+                marginBottom={1}
+              />
+              <p
+                style={{
+                  marginTop: 0,
+                  marginBottom: 1,
+                  fontSize: 8,
+                  textAlign: "right",
+                }}
+              >
+                {props?.nama_product}
+              </p>
+              <p style={{ marginTop: 1, fontSize: 8, textAlign: "right" }}>
+                Rp
+                {numberWithCommas(props?.harga_jual)}
+              </p>
+            </div>
 
-            <p style={{ marginBottom: 1 }}>{props?.nama_product}</p>
-            <p style={{ marginTop: 1 }}>{props?.type_name}</p>
-            <Barcode value={props?.artikel_product} width="3" />
+            <ReactToPrint
+              trigger={() => <Button>Print</Button>}
+              content={() => ref.current}
+              pageStyle={pageStyle}
+            />
           </div>
         </Box>
       </Modal>

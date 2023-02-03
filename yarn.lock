@@ -7950,10 +7950,10 @@
     "prop-types" "^15.6.0"
     "react-transition-group" "^4.3.0"
 
-"react-to-print@^2.14.7":
-  "integrity" "sha512-lWVVAs9Co25uyE0toxcWeFsmaZObwUozXrJD9WMpDPclpBgk+WIzxlt3Q3omL/BCBG/cpf0XNvhayUWa+99YGw=="
-  "resolved" "https://registry.npmjs.org/react-to-print/-/react-to-print-2.14.7.tgz"
-  "version" "2.14.7"
+"react-to-print@^2.14.11":
+  "integrity" "sha512-sePHBaCtZLp8/g4d/gRyI9XQZkveZq6xoukanAHfkzlXOa7sTuXCEQOYq37lIa5MkUoxySdJxYuyClaXPa9Zpg=="
+  "resolved" "https://registry.npmjs.org/react-to-print/-/react-to-print-2.14.11.tgz"
+  "version" "2.14.11"
   dependencies:
     "prop-types" "^15.8.1"
 

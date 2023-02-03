@@ -10,8 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import DownloadIcon from "@mui/icons-material/Download";
-import Typography from "@mui/material/Typography";
+import PrintIcon from "@mui/icons-material/Print";
 import AddIcon from "@mui/icons-material/Add";
 import ModalAddMasterProduk from "../../Component/modal/Modal-AddMasterProduk-Component";
 import ModalAddMasterProdukCostum from "../../Component/modal/Modal-AddMasterProdukCostum-Component";
@@ -19,17 +18,11 @@ import ModalUpdateMasterProduk from "../../Component/modal/Modal-UpdateMasterPro
 import ModalUploadMasterProduk from "../../Component/modal/Modal-UploadMasterProduk-Component";
 import ModalCetakBarcode from "../../Component/modal/Modal-CetakBarcode-Component";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import Button from "../../Component/button/index";
-import Input from "../../Component/input/index";
 import {
   FormControl,
   InputAdornment,
@@ -271,7 +264,7 @@ export default function MasterKatgori() {
   const [ukuran, setUkuran] = React.useState([]);
   const [artikelProduct, setArtikelProduct] = React.useState();
   const [namaProduct, setNamaProduct] = React.useState();
-  const [typeName, setTypeName] = React.useState();
+  const [hargaJual, setHargaJual] = React.useState();
   useEffect(() => {
     getAllKategori();
   }, []);
@@ -279,7 +272,7 @@ export default function MasterKatgori() {
   const downloadBarcode = async (v) => {
     setArtikelProduct(v?.artikel_product);
     setNamaProduct(v?.nama_product);
-    setTypeName(v?.type_name);
+    setHargaJual(v?.harga_jual);
     setModalBarcode(true);
   };
   const submitMasterProdukCustom = async (
@@ -723,7 +716,7 @@ export default function MasterKatgori() {
                                 downloadBarcode(row);
                               }}
                             >
-                              <DownloadIcon />
+                              <PrintIcon />
                             </IconButton>
                           </div>
                         </TableCell>
@@ -889,7 +882,7 @@ export default function MasterKatgori() {
         open={modalBarcode}
         nama_product={namaProduct}
         artikel_product={artikelProduct}
-        type_name={typeName}
+        harga_jual={hargaJual}
         onClickOpen={() => setModalBarcode(!modalBarcode)}
       />
     </div>
