@@ -7,7 +7,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import SummarizeIcon from "@mui/icons-material/Summarize";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
@@ -55,6 +55,7 @@ import {
   getBankAdd,
   getBankUpdate,
   getBankDelete,
+  geStockStoreExcel,
 } from "../../Config/Api-new";
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -266,6 +267,12 @@ export default function MasterKatgori() {
       alertError("Error", "Fail update data");
     }
   };
+
+  const donwloadExcel = async () => {
+    await geStockStoreExcel();
+    alertSuccess("Success", "");
+  };
+
   useEffect(() => {
     getDataStore();
   }, []);
@@ -395,7 +402,22 @@ export default function MasterKatgori() {
             right: 0,
             display: "flex",
           }}
-        ></div>
+        >
+          <Button
+            style={{
+              background: "#0384fc",
+              color: "white",
+              textTransform: "capitalize",
+              marginRight: "15px",
+              width: "100%",
+              padding: "1em",
+              borderRadius: "14px",
+            }}
+            onClick={() => donwloadExcel()}
+            label="Download Excel"
+            startIcon={<SummarizeIcon />}
+          />
+        </div>
       </div>
       <Gap height={15} />
       <Box sx={{ width: "100%", marginTop: "20px" }}>

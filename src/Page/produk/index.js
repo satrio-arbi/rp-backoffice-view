@@ -10,13 +10,14 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
+import DownloadIcon from "@mui/icons-material/Download";
 import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
 import ModalAddMasterProduk from "../../Component/modal/Modal-AddMasterProduk-Component";
 import ModalAddMasterProdukCostum from "../../Component/modal/Modal-AddMasterProdukCostum-Component";
 import ModalUpdateMasterProduk from "../../Component/modal/Modal-UpdateMasterProduk-Component";
 import ModalUploadMasterProduk from "../../Component/modal/Modal-UploadMasterProduk-Component";
+import ModalCetakBarcode from "../../Component/modal/Modal-CetakBarcode-Component";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
@@ -86,7 +87,7 @@ function stableSort(array, comparator) {
     }
     return a[1] - b[1];
   });
-  console.log({ stabilizedThis });
+
   return stabilizedThis.map((el) => el[0]);
 }
 
@@ -201,12 +202,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell
-          key={"check"}
-          // align="center"
-          // padding={'normal'}
-          // sortDirection={orderBy === headCell.id ? order : false}
-        >
+        <TableCell key={"check"}>
           <input type="checkbox" checked={check} onClick={() => checkAll()} />
         </TableCell>
         {headCells.map((headCell) => (
@@ -267,15 +263,25 @@ export default function MasterKatgori() {
   const [modal, setModal] = React.useState();
   const [modalCostum, setModalCostum] = React.useState();
   const [modalUplaod, setModalUplaod] = React.useState();
+  const [modalBarcode, setModalBarcode] = React.useState();
   const [searchSKU, setSearchSKU] = React.useState();
   const [type, setType] = React.useState();
   const [kategori, setKategori] = React.useState();
   const [typeValue, setTypeValue] = React.useState();
   const [ukuran, setUkuran] = React.useState([]);
+  const [artikelProduct, setArtikelProduct] = React.useState();
+  const [namaProduct, setNamaProduct] = React.useState();
+  const [typeName, setTypeName] = React.useState();
   useEffect(() => {
     getAllKategori();
   }, []);
 
+  const downloadBarcode = async (v) => {
+    setArtikelProduct(v?.artikel_product);
+    setNamaProduct(v?.nama_product);
+    setTypeName(v?.type_name);
+    setModalBarcode(true);
+  };
   const submitMasterProdukCustom = async (
     artikel_frame_ns,
     artikel_lens_ns,
@@ -481,7 +487,6 @@ export default function MasterKatgori() {
     settoBeSelected(dataStore);
     setOpenDetail(true);
   };
-  console.log(rows);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -713,6 +718,13 @@ export default function MasterKatgori() {
                             >
                               <RemoveRedEyeOutlinedIcon />
                             </IconButton>
+                            <IconButton
+                              onClick={() => {
+                                downloadBarcode(row);
+                              }}
+                            >
+                              <DownloadIcon />
+                            </IconButton>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -872,6 +884,13 @@ export default function MasterKatgori() {
         mutate={() => getAllKategori()}
         submit={(name) => submitMasterProduk(name)}
         onClickOpen={() => setModalUplaod(!modalUplaod)}
+      />
+      <ModalCetakBarcode
+        open={modalBarcode}
+        nama_product={namaProduct}
+        artikel_product={artikelProduct}
+        type_name={typeName}
+        onClickOpen={() => setModalBarcode(!modalBarcode)}
       />
     </div>
   );

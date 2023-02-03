@@ -29,6 +29,7 @@ const ModalAddPenjualanOffice = (props) => {
   const [detail, setDetail] = useState("");
   const [listDetail, setListDetail] = useState([]);
   const [harga_satuan_barang, setHarga_satuan_barang] = useState("");
+  const [diskonSatuan, setDiskonSatuan] = useState("");
   const [ongkos_kirim, setOngkos_kirim] = useState("");
   const [pajak, setPajak] = useState("");
   const [check, setCheck] = useState("");
@@ -38,6 +39,7 @@ const ModalAddPenjualanOffice = (props) => {
   const [ekspedisi, setEkspedisi] = useState("");
   useEffect(() => {
     setHarga_satuan_barang("");
+    setDiskonSatuan("");
     setOngkos_kirim("");
     setPajak("");
     setTanggal_transaksi(moment(new Date()).format("YYYY-MM-DD"));
@@ -55,6 +57,7 @@ const ModalAddPenjualanOffice = (props) => {
     setBank("");
     setKaryawan("");
   }, [props?.open]);
+
   const getSKU = async (e) => {
     if (e.charCode === 13) {
       e.preventDefault();
@@ -62,6 +65,7 @@ const ModalAddPenjualanOffice = (props) => {
       setDetail(res?.data);
       setArticle(res?.data?.artikel_product);
       setHarga_satuan_barang(res?.data?.harga_jual);
+      setDiskonSatuan(0);
       setUkuran(res?.data?.ukuran);
       setKuantitas(res?.data?.kuantitas);
     }
@@ -74,6 +78,7 @@ const ModalAddPenjualanOffice = (props) => {
         setDetail(res?.data);
         setSku(res?.data?.sku_code);
         setHarga_satuan_barang(res?.data?.harga_jual);
+        setDiskonSatuan(0);
         setUkuran(res?.data?.ukuran);
         setKuantitas(res?.data?.kuantitas);
       } else {
@@ -87,6 +92,7 @@ const ModalAddPenjualanOffice = (props) => {
     setDetail({});
     setUkuran("");
     setHarga_satuan_barang("");
+    setDiskonSatuan("");
     setKuantitas("");
   };
   const convertPelanggan = (v) => {
@@ -130,12 +136,14 @@ const ModalAddPenjualanOffice = (props) => {
       nama_barang: detail?.nama_barang,
       kuantitas,
       harga_satuan_barang,
+      diskon: diskonSatuan,
     });
     setArticle("");
     setSku("");
     setDetail({});
     setUkuran("");
     setHarga_satuan_barang("");
+    setDiskonSatuan("");
     setKuantitas("");
     setListDetail(arr);
   };
@@ -393,15 +401,19 @@ const ModalAddPenjualanOffice = (props) => {
                 </p>
                 <Input
                   value={harga_satuan_barang}
-                  // type='date'
-                  // label={'Tipe'}
                   onChange={(v) => setHarga_satuan_barang(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
-                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Pajak</p> */}
-
-                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Ongkos kirim</p> */}
-
+                <p style={{ textColor: "gray", fontSize: "13px" }}>
+                  Diskon satuan barang
+                </p>
+                <Input
+                  value={diskonSatuan}
+                  disable={false}
+                  type="number"
+                  onChange={(v) => setDiskonSatuan(v?.target?.value)}
+                  style={{ width: "100%" }}
+                />
                 <div style={{ marginTop: 10 }}>
                   <p style={{ textColor: "gray", fontSize: "13px" }}>
                     Foto Barang
@@ -424,15 +436,7 @@ const ModalAddPenjualanOffice = (props) => {
               </Button>
             </div>
             <div style={{ overflowX: "auto", marginTop: 20 }}>
-              <tabel
-                style={{
-                  // borderCollapse: 'collapse',
-                  // borderSpacing: 0,
-                  width: "100%",
-                  // overflow:'hidden',
-                  // border: '1px solid #ddd'
-                }}
-              >
+              <tabel style={{ width: "100%" }}>
                 <tr>
                   <th
                     style={{
@@ -488,16 +492,6 @@ const ModalAddPenjualanOffice = (props) => {
                   >
                     Kuantitas
                   </th>
-                  {/* <th style={{
-                                    textAlign: 'left',
-                                    padding: '8px',
-                                    border: '1px solid #ddd'
-                               }}>Ukuran</th>
-                               <th style={{
-                                    textAlign: 'left',
-                                    padding: '8px',
-                                    border: '1px solid #ddd'
-                               }}>Metode pembayaran</th> */}
                   <th
                     style={{
                       textAlign: "left",
@@ -507,21 +501,15 @@ const ModalAddPenjualanOffice = (props) => {
                   >
                     Harga satuan
                   </th>
-                  {/* <th style={{
-                                    textAlign: 'left',
-                                    padding: '8px',
-                                    border: '1px solid #ddd'
-                               }}>Pajak</th>
-                                <th style={{
-                                    textAlign: 'left',
-                                    padding: '8px',
-                                    border: '1px solid #ddd'
-                               }}>Ongkos kirim</th>
-                                <th style={{
-                                    textAlign: 'left',
-                                    padding: '8px',
-                                    border: '1px solid #ddd'
-                               }}>Total</th> */}
+                  <th
+                    style={{
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
+                    }}
+                  >
+                    Diskon satuan
+                  </th>
                   <th
                     style={{
                       textAlign: "left",
@@ -614,27 +602,15 @@ const ModalAddPenjualanOffice = (props) => {
                         >
                           {d?.harga_satuan_barang}
                         </td>
-                        {/* <td style={{
-                                       textAlign: 'left',
-                                       padding: '8px',
-                                       border: '1px solid #ddd'
-                                   }}>
-                                     {d?.pajak_biaya}
-                                   </td>
-                                   <td style={{
-                                       textAlign: 'left',
-                                       padding: '8px',
-                                       border: '1px solid #ddd'
-                                   }}>
-                                     {d?.ongkos_kirim}
-                                   </td>
-                                   <td style={{
-                                       textAlign: 'left',
-                                       padding: '8px',
-                                       border: '1px solid #ddd'
-                                   }}>
-                                     {d?.total}
-                                   </td> */}
+                        <td
+                          style={{
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
+                          }}
+                        >
+                          {d?.diskon}
+                        </td>
                         <td
                           style={{
                             textAlign: "left",

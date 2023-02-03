@@ -2193,3 +2193,47 @@ export const geReportStockOpname = async (start, end) => {
   document.body.appendChild(link);
   link.click();
 };
+
+export const geReportStockOpnameStore = async (id_store, start, end) => {
+  const res = await NET(
+    "GET",
+    `report/stockOpnameStore?id_store=${id_store}&date_from=${start}&date_to=${end}`,
+    {},
+    "",
+    "",
+    "",
+    "blob"
+  );
+  let a = res?.data;
+
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", `stock_opname_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+};
+
+export const geStockStoreExcel = async () => {
+  const res = await NET(
+    "GET",
+    `stockPerStore/downloadStock`,
+    {},
+    "",
+    "",
+    "",
+    "blob"
+  );
+  let a = res?.data;
+
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement("a");
+  link.href = url; //or any other extension
+  var d = new Date();
+
+  var datestring =
+    d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+  link.setAttribute("download", "Stock Store_" + datestring + ".xlsx");
+  document.body.appendChild(link);
+  link.click();
+};

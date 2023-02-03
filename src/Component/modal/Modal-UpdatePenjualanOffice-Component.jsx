@@ -29,6 +29,7 @@ const ModalAddPenjualanOffice = (props) => {
   const [detail, setDetail] = useState("");
   const [listDetail, setListDetail] = useState([]);
   const [harga_satuan_barang, setHarga_satuan_barang] = useState("");
+  const [diskonSatuan, setDiskonSatuan] = useState("");
   const [ongkos_kirim, setOngkos_kirim] = useState("");
   const [pajak, setPajak] = useState("");
   const [check, setCheck] = useState("");
@@ -39,6 +40,7 @@ const ModalAddPenjualanOffice = (props) => {
   const data = props?.data;
   useEffect(() => {
     setHarga_satuan_barang("");
+    setDiskonSatuan("");
     setOngkos_kirim(data?.ongkos_kirim);
     setPajak(data?.pajak_biaya);
     setTanggal_transaksi(data?.tanggal_transaksi);
@@ -69,6 +71,7 @@ const ModalAddPenjualanOffice = (props) => {
       setDetail(res?.data);
       setArticle(res?.data?.artikel_product);
       setHarga_satuan_barang(res?.data?.harga_jual);
+      setDiskonSatuan(0);
       setUkuran(res?.data?.ukuran);
       setKuantitas(res?.data?.kuantitas);
     }
@@ -81,6 +84,7 @@ const ModalAddPenjualanOffice = (props) => {
         setDetail(res?.data);
         setSku(res?.data?.sku_code);
         setHarga_satuan_barang(res?.data?.harga_jual);
+        setDiskonSatuan(0);
         setUkuran(res?.data?.ukuran);
         setKuantitas(res?.data?.kuantitas);
       } else {
@@ -94,6 +98,7 @@ const ModalAddPenjualanOffice = (props) => {
     setDetail({});
     setUkuran("");
     setHarga_satuan_barang("");
+    setDiskonSatuan("");
     setKuantitas("");
   };
   const convertPelangganFromHp = (v) => {
@@ -147,15 +152,17 @@ const ModalAddPenjualanOffice = (props) => {
       tipe: detail?.type,
       nama_kategori: detail?.nama_kategori,
       kategori: detail?.kategori,
-      nama_barang: detail?.nama_product,
+      nama_barang: detail?.nama_barang,
       kuantitas,
       harga_satuan_barang,
+      diskon: diskonSatuan,
     });
     setArticle("");
     setSku("");
     setDetail({});
     setUkuran("");
     setHarga_satuan_barang("");
+    setDiskonSatuan("");
     setKuantitas("");
     setListDetail(arr);
   };
@@ -204,7 +211,7 @@ const ModalAddPenjualanOffice = (props) => {
         >
           <div style={{ display: "flex", flexDirection: "row" }}>
             <h2 style={{ width: "100%" }} id="parent-modal-title">
-              Add Penjualan office
+              Update Penjualan office
             </h2>
             <CloseIcon onClick={() => props?.onClickOpen()} />
           </div>
@@ -387,76 +394,48 @@ const ModalAddPenjualanOffice = (props) => {
                 <Input
                   value={detail?.type_name}
                   readOnly={true}
-                  // type='date'
-                  // label={'Tipe'}
-                  // onChange={(v)=>setTanggal_transaksi(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Kategori</p>
                 <Input
                   value={detail?.nama_kategori}
                   readOnly={true}
-                  // type='date'
-                  // label={'Kategori'}
-                  // onChange={(v)=>setTanggal_transaksi(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
                 <p style={{ textColor: "gray", fontSize: "13px" }}>
                   Nama produk
                 </p>
                 <Input
-                  value={detail?.nama_product}
+                  value={detail?.nama_barang}
                   readOnly={true}
-                  // type='date'
-                  // label={'Nama Produk'}
-                  // onChange={(v)=>setTanggal_transaksi(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
-                {/* <FormControl sx={{ marginTop:2, width: '100%' }} variant="outlined">
-                         <InputLabel id="demo-simple-select-label">Select Ukuran</InputLabel>
-                         <Select
-                           labelId="demo-simple-select-label"
-                           id="demo-simple-select"
-                           value={ukuran}
-                           label="Toko Tujuan"
-                           onChange={(v)=>{setUkuran(v?.target?.value)}}
-                         >
-                           {props?.ukuran?.map((d,i)=>{
-                             return(
-                               
-                                 <MenuItem value={d?.ukuran} >{d?.ukuran}</MenuItem>
-                               
-                             )
-                           })}
-                         </Select>
-                       </FormControl> */}
               </div>
               <div style={{ width: "100%", marginRight: 10 }}>
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Kuantitas</p>
                 <Input
                   value={kuantitas}
-                  // disabe={true}
-                  // type='date'
-                  // label={'Kuantitas'}
                   onChange={(v) => setKuantitas(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
-                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Ukuran</p> */}
-
                 <p style={{ textColor: "gray", fontSize: "13px" }}>
                   Harga satuan barang
                 </p>
                 <Input
                   value={harga_satuan_barang}
-                  // type='date'
-                  // label={'Tipe'}
                   onChange={(v) => setHarga_satuan_barang(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
-                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Pajak</p> */}
-
-                {/* <p style={{textColor:'gray',fontSize:'13px'}}>Ongkos kirim</p> */}
-
+                <p style={{ textColor: "gray", fontSize: "13px" }}>
+                  Diskon satuan barang
+                </p>
+                <Input
+                  value={diskonSatuan}
+                  disable={false}
+                  type="number"
+                  onChange={(v) => setDiskonSatuan(v?.target?.value)}
+                  style={{ width: "100%" }}
+                />
                 <div style={{ marginTop: 10 }}>
                   <p style={{ textColor: "gray", fontSize: "13px" }}>
                     Foto Barang
@@ -481,11 +460,7 @@ const ModalAddPenjualanOffice = (props) => {
             <div style={{ overflowX: "auto", marginTop: 20 }}>
               <tabel
                 style={{
-                  // borderCollapse: 'collapse',
-                  // borderSpacing: 0,
                   width: "100%",
-                  // overflow:'hidden',
-                  // border: '1px solid #ddd'
                 }}
               >
                 <tr>
@@ -543,16 +518,6 @@ const ModalAddPenjualanOffice = (props) => {
                   >
                     Kuantitas
                   </th>
-                  {/* <th style={{
-                                    textAlign: 'left',
-                                    padding: '8px',
-                                    border: '1px solid #ddd'
-                               }}>Ukuran</th>
-                               <th style={{
-                                    textAlign: 'left',
-                                    padding: '8px',
-                                    border: '1px solid #ddd'
-                               }}>Metode pembayaran</th> */}
                   <th
                     style={{
                       textAlign: "left",
@@ -562,21 +527,15 @@ const ModalAddPenjualanOffice = (props) => {
                   >
                     Harga satuan
                   </th>
-                  {/* <th style={{
-                                    textAlign: 'left',
-                                    padding: '8px',
-                                    border: '1px solid #ddd'
-                               }}>Pajak</th>
-                                <th style={{
-                                    textAlign: 'left',
-                                    padding: '8px',
-                                    border: '1px solid #ddd'
-                               }}>Ongkos kirim</th>
-                                <th style={{
-                                    textAlign: 'left',
-                                    padding: '8px',
-                                    border: '1px solid #ddd'
-                               }}>Total</th> */}
+                  <th
+                    style={{
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
+                    }}
+                  >
+                    Diskon satuan
+                  </th>
                   <th
                     style={{
                       textAlign: "left",
@@ -645,21 +604,7 @@ const ModalAddPenjualanOffice = (props) => {
                         >
                           {d?.kuantitas}
                         </td>
-                        {/* <td style={{
-                                       textAlign: 'left',
-                                       padding: '8px',
-                                       border: '1px solid #ddd'
-                                   }}>
-                                     {d?.ukuran}
-                                   </td>
-                                    
-                                   <td style={{
-                                       textAlign: 'left',
-                                       padding: '8px',
-                                       border: '1px solid #ddd'
-                                   }}>
-                                     {d?.metode_pembayaran}
-                                   </td> */}
+
                         <td
                           style={{
                             textAlign: "left",
@@ -669,27 +614,15 @@ const ModalAddPenjualanOffice = (props) => {
                         >
                           {d?.harga_satuan_barang}
                         </td>
-                        {/* <td style={{
-                                       textAlign: 'left',
-                                       padding: '8px',
-                                       border: '1px solid #ddd'
-                                   }}>
-                                     {d?.pajak_biaya}
-                                   </td>
-                                   <td style={{
-                                       textAlign: 'left',
-                                       padding: '8px',
-                                       border: '1px solid #ddd'
-                                   }}>
-                                     {d?.ongkos_kirim}
-                                   </td>
-                                   <td style={{
-                                       textAlign: 'left',
-                                       padding: '8px',
-                                       border: '1px solid #ddd'
-                                   }}>
-                                     {d?.total}
-                                   </td> */}
+                        <td
+                          style={{
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
+                          }}
+                        >
+                          {d?.diskon}
+                        </td>
                         <td
                           style={{
                             textAlign: "left",
