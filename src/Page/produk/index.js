@@ -265,6 +265,8 @@ export default function MasterKatgori() {
   const [artikelProduct, setArtikelProduct] = React.useState();
   const [namaProduct, setNamaProduct] = React.useState();
   const [hargaJual, setHargaJual] = React.useState();
+  const [skuCode, setSkuCode] = React.useState();
+  const [typeName, setTypeName] = React.useState();
   useEffect(() => {
     getAllKategori();
   }, []);
@@ -273,6 +275,8 @@ export default function MasterKatgori() {
     setArtikelProduct(v?.artikel_product);
     setNamaProduct(v?.nama_product);
     setHargaJual(v?.harga_jual);
+    setSkuCode(v?.sku_code);
+    setTypeName(v?.type_name);
     setModalBarcode(true);
   };
   const submitMasterProdukCustom = async (
@@ -880,6 +884,8 @@ export default function MasterKatgori() {
       />
       <ModalCetakBarcode
         open={modalBarcode}
+        sku_code={skuCode}
+        type_name={typeName}
         nama_product={namaProduct}
         artikel_product={artikelProduct}
         harga_jual={hargaJual}
