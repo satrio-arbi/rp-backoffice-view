@@ -581,6 +581,27 @@ export const getDownloadInvoicePEnjualanOffice = async (data) => {
   //
 };
 
+export const getDownloadProformaInvoice = async (data) => {
+  const res = await NET(
+    "GET",
+    `report/proformaInvoice?id_office=${data?.office}&pi_no=${data?.trx}`,
+    {},
+    "",
+    "",
+    "",
+    "blob"
+  );
+  let a = res?.data;
+
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", `proforma_invoice_${new Date()}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+  //
+};
+
 export const getDownloadTransferRequest = async (data) => {
   const res = await NET(
     "GET",
@@ -2236,4 +2257,35 @@ export const geStockStoreExcel = async () => {
   link.setAttribute("download", "Stock Store_" + datestring + ".xlsx");
   document.body.appendChild(link);
   link.click();
+};
+
+export const getProformaInvoice = async () => {
+  const res = await NET("GET", `proformaInvoice/pi`, {});
+
+  return res;
+};
+export const getProformaInvoiceSearch = async (search) => {
+  const res = await NET("GET", `proformaInvoice/search?keyword=${search}`, {});
+
+  return res;
+};
+export const getProformaInvoiceItem = async (pi_no) => {
+  const res = await NET("GET", `proformaInvoice/getPi?pi_no=${pi_no}`, {});
+
+  return res;
+};
+export const getProformaInvoiceAdd = async (data) => {
+  const res = await NET("POST", `proformaInvoice/add`, data);
+
+  return res;
+};
+export const getProformaInvoiceUpdate = async (data) => {
+  const res = await NET("POST", `proformaInvoice/update`, data);
+
+  return res;
+};
+export const getProformaInvoiceDelete = async (id) => {
+  const res = await NET("GET", `proformaInvoice/delete?id=${id}`, {});
+
+  return res;
 };

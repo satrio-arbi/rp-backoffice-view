@@ -37,6 +37,7 @@ import BukuBesar from "../../Page/buku-besar";
 import LabaRugi from "../../Page/laba-rugi";
 import NeracaKeuangan from "../../Page/neraca-keuangan";
 import NeracaSaldo from "../../Page/neraca-saldo";
+import ProformaInvoice from "../../Page/ProformaInvoice";
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const accessToken = localStorage.getItem("rd-prjt");
 
@@ -76,6 +77,11 @@ function Routes() {
         exact
         path="/penjualan-office"
         component={PenjualanOffice}
+      />
+      <PrivateRoute
+        exact
+        path="/proforma-invoice"
+        component={ProformaInvoice}
       />
       <PrivateRoute exact path="/penjualan-store" component={PenjualanStore} />
 

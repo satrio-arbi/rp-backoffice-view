@@ -260,6 +260,15 @@ export default function PersistentDrawerLeft() {
                           <ListItemText primary="Penjualan Office" />
                         </ListItem>
                       ) : null}
+                      {usr?.akses_modul?.includes("MM-58") ? (
+                        <ListItem
+                          onClick={() => {
+                            history.push("/proforma-invoice");
+                          }}
+                        >
+                          <ListItemText primary="Proforma Invoice" />
+                        </ListItem>
+                      ) : null}
                     </List>
                   </AccordionDetails>
                 </Accordion>

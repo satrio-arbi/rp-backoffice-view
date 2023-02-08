@@ -3,22 +3,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
-import Input from "../../Component/input";
-import { alertError } from "../../Component/alert/sweetalert";
+import Input from "../input";
+import { alertError } from "../alert/sweetalert";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import {
-  getProdukBySKU,
-  officeGetProdukByArtikel,
-  getProformaInvoiceItem,
-} from "../../Config/Api-new";
+import { getProdukBySKU, officeGetProdukByArtikel } from "../../Config/Api-new";
 import {
   FormControl,
   InputAdornment,
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
-const ModalAddPenjualanOffice = (props) => {
+const ModalAddProformaInvoice = (props) => {
   // const [detail_pengiriman,setDetail_pengiriman] = useState([])
   const [tanggal_transaksi, setTanggal_transaksi] = useState(
     moment(new Date()).format("YYYY-MM-DD")
@@ -30,8 +26,6 @@ const ModalAddPenjualanOffice = (props) => {
   const [kuantitas, setKuantitas] = useState("");
   const [id_pelanggan, setId_pelanggan] = useState("");
   const [article, setArticle] = useState("");
-  const [pi_no, setPi_no] = useState("");
-  const [dp, setDp] = useState(0);
   const [detail, setDetail] = useState("");
   const [listDetail, setListDetail] = useState([]);
   const [harga_satuan_barang, setHarga_satuan_barang] = useState("");
@@ -41,52 +35,40 @@ const ModalAddPenjualanOffice = (props) => {
   const [check, setCheck] = useState("");
   const [karyawan, setKaryawan] = useState("");
   const [diskon, setDiskon] = useState(0);
+  const [dp, setDp] = useState(0);
   const [diskon_remark, setDiskon_remark] = useState("");
   const [ekspedisi, setEkspedisi] = useState("");
+  const data = props?.data;
   useEffect(() => {
     setHarga_satuan_barang("");
     setDiskonSatuan("");
-    setOngkos_kirim("");
-    setPajak("");
-    setTanggal_transaksi(moment(new Date()).format("YYYY-MM-DD"));
-    setId_office("");
+    setOngkos_kirim(data?.ongkos_kirim);
+    setPajak(data?.pajak_biaya);
+    setTanggal_transaksi(data?.tanggal_transaksi);
+    setId_office(data?.id_office);
+    setCheck(data?.metode_pembayaran === "NON TUNAI" ? true : false);
     setSku("");
-    setEkspedisi("");
-    setDiskon(0);
-    setDiskon_remark("");
     setUkuran("");
-    setListDetail([]);
+    setListDetail(data?.detail_proforma_invoice);
     setDetail("");
+    setDiskon(data?.diskon);
+    setDp(data?.dp);
+    setDiskon_remark(data?.diskon_remark);
+    setEkspedisi(data?.ekspedisi);
     setArticle("");
-    setId_pelanggan("");
+    setId_pelanggan(convertPelangganFromHp(data?.no_hp_pelanggan));
     setKuantitas("");
-    setBank("");
-    setKaryawan("");
-    setPi_no("");
-    setDp(0);
+    setBank(
+      data?.metode_pembayaran === "NON TUNAI"
+        ? convertBankByAccAndName(data?.bank_name, data?.no_rek)
+        : ""
+    );
+    setKaryawan(data?.id_karyawan);
   }, [props?.open]);
-
-  const convertPelangganFromHp = (v) => {
-    let idx = props?.pelanggan?.findIndex((a) => a.no_hp == v);
-
-    return props?.pelanggan ? props?.pelanggan[idx]?.id : "";
-  };
-
-  const convertKaryawanFromId = (v) => {
-    let idx = props?.karyawan?.findIndex((a) => a.id == v);
-
-    return props?.karyawan ? props?.karyawan[idx]?.id : "";
-  };
-
-  const convertKaryawan = (v) => {
-    let idx = props?.karyawan?.findIndex((a) => a.id == v);
-
-    return props?.karyawan[idx];
-  };
-
   const getSKU = async (e) => {
     if (e.charCode === 13) {
       e.preventDefault();
+
       let res = await getProdukBySKU(sku);
       setDetail(res?.data);
       setArticle(res?.data?.artikel_product);
@@ -113,34 +95,6 @@ const ModalAddPenjualanOffice = (props) => {
       }
     }
   };
-
-  const getPi = async (e) => {
-    if (e.charCode === 13) {
-      e.preventDefault();
-      let res = await getProformaInvoiceItem(pi_no);
-      if (res.status) {
-        setOngkos_kirim(res?.data?.ongkos_kirim);
-        setPajak(res?.data?.pajak_biaya);
-        setTanggal_transaksi(
-          moment(res?.data?.tanggal_transaksi).format("YYYY-MM-DD")
-        );
-        setId_office(res?.data?.id_office);
-        setDp(res?.data?.dp);
-        setEkspedisi(res?.data?.ekspedisi);
-        setDiskon(res?.data?.diskon);
-        setDiskon_remark(res?.data?.diskon_remark);
-
-        setListDetail(res?.data?.detail_proforma_invoice);
-
-        setId_pelanggan(convertPelangganFromHp(res?.data?.no_hp_pelanggan));
-        setBank(res?.data?.bank_name);
-        setKaryawan(convertKaryawanFromId(res?.data?.id_karyawan));
-      } else {
-        alert("PI tidak ada!");
-        clear();
-      }
-    }
-  };
   const clear = () => {
     setSku("");
     setDetail({});
@@ -148,6 +102,11 @@ const ModalAddPenjualanOffice = (props) => {
     setHarga_satuan_barang("");
     setDiskonSatuan("");
     setKuantitas("");
+  };
+  const convertPelangganFromHp = (v) => {
+    let idx = props?.pelanggan?.findIndex((a) => a.no_hp == v);
+
+    return props?.pelanggan ? props?.pelanggan[idx]?.id : "";
   };
   const convertPelanggan = (v) => {
     let idx = props?.pelanggan?.findIndex((a) => a.id == v);
@@ -158,10 +117,22 @@ const ModalAddPenjualanOffice = (props) => {
     };
   };
 
+  const convertKaryawan = (v) => {
+    let idx = props?.karyawan?.findIndex((a) => a.id == v);
+
+    return props?.karyawan[idx];
+  };
   const convertBank = (v) => {
     let idx = props?.bank?.findIndex((a) => a.id == v);
 
     return props?.bank[idx];
+  };
+  const convertBankByAccAndName = (nm, acc) => {
+    let idx = props?.bank?.findIndex(
+      (a) => a.bank_name == nm && a.acc_number == acc
+    );
+
+    return props?.bank[idx]?.id;
   };
   const convertOffice = (v) => {
     let idx = props?.office?.findIndex((a) => a.id == v);
@@ -176,6 +147,7 @@ const ModalAddPenjualanOffice = (props) => {
 
     arr.push({
       //  id:detail?.id,
+      rowstatus: 2,
       sku_code: sku,
       artikel: article,
       type_name: detail?.type_name,
@@ -199,16 +171,27 @@ const ModalAddPenjualanOffice = (props) => {
   const deleteData = (idx) => {
     let datas = [...listDetail];
     // let idx = listDetail?.findIndex(a=>a.id==id)
-    datas.splice(idx, 1);
+    if (datas[idx]["rowstatus"] === 2) {
+      datas.splice(idx, 1);
+    } else {
+      datas[idx]["rowstatus"] = 0;
+    }
     setListDetail(datas);
   };
   useEffect(() => {
     checkDiskon();
-  }, [diskon]);
+    checkDp();
+  }, [diskon, dp]);
   const checkDiskon = async () => {
     if (diskon < 0) {
       await alert("Diskon tidak boleh kurang dari 0");
       setDiskon(0);
+    }
+  };
+  const checkDp = async () => {
+    if (dp < 0) {
+      await alert("DP tidak boleh kurang dari 0");
+      setDp(0);
     }
   };
   return (
@@ -237,7 +220,7 @@ const ModalAddPenjualanOffice = (props) => {
         >
           <div style={{ display: "flex", flexDirection: "row" }}>
             <h2 style={{ width: "100%" }} id="parent-modal-title">
-              Add Penjualan office
+              Update Proforma Invoice
             </h2>
             <CloseIcon onClick={() => props?.onClickOpen()} />
           </div>
@@ -245,27 +228,11 @@ const ModalAddPenjualanOffice = (props) => {
             {/* <p>Tanggal Pengiriman</p> */}
             <Input
               value={tanggal_transaksi}
-              disable={pi_no == "" ? false : true}
+              disable={false}
               type="date"
               label={"Tanggal Penjualan"}
               onChange={(v) => setTanggal_transaksi(v?.target?.value)}
               style={{ width: "100%" }}
-            />
-            <Input
-              value={pi_no}
-              disable={false}
-              label={"PI No"}
-              onKeyPress={(e) => getPi(e)}
-              onChange={(v) => setPi_no(v?.target?.value)}
-              style={{ width: "100%", marginTop: 15 }}
-            />
-            <Input
-              value={dp}
-              disable={true}
-              type="number"
-              label={"Down Payment"}
-              onChange={(v) => setDp(v?.target?.value)}
-              style={{ width: "100%", marginTop: 15 }}
             />
             <FormControl
               sx={{ marginTop: 2, width: "100%" }}
@@ -283,10 +250,7 @@ const ModalAddPenjualanOffice = (props) => {
               >
                 {props?.office?.map((d, i) => {
                   return (
-                    <MenuItem
-                      disabled={pi_no == "" ? false : true}
-                      value={d?.id}
-                    >
+                    <MenuItem value={d?.id}>
                       {d?.office_name}-{d?.alamat}
                     </MenuItem>
                   );
@@ -309,10 +273,7 @@ const ModalAddPenjualanOffice = (props) => {
               >
                 {props?.pelanggan?.map((d, i) => {
                   return (
-                    <MenuItem
-                      disabled={pi_no == "" ? false : true}
-                      value={d?.id}
-                    >
+                    <MenuItem value={d?.id}>
                       {d?.no_hp}-{d?.nama_pelanggan}
                     </MenuItem>
                   );
@@ -334,27 +295,20 @@ const ModalAddPenjualanOffice = (props) => {
                 }}
               >
                 {props?.karyawan?.map((d, i) => {
-                  return (
-                    <MenuItem
-                      disabled={pi_no == "" ? false : true}
-                      value={d?.id}
-                    >
-                      {d?.nama_karyawan}
-                    </MenuItem>
-                  );
+                  return <MenuItem value={d?.id}>{d?.nama_karyawan}</MenuItem>;
                 })}
               </Select>
             </FormControl>
             <Input
               value={ekspedisi}
-              disable={pi_no == "" ? false : true}
+              disable={false}
               label={"Ekspedisi"}
               onChange={(v) => setEkspedisi(v?.target?.value)}
               style={{ width: "100%", marginTop: 10 }}
             />
             <Input
               value={ongkos_kirim}
-              disable={pi_no == "" ? false : true}
+              // type='date'
               label={"Ongkos kirim"}
               onChange={(v) => setOngkos_kirim(v?.target?.value)}
               style={{ width: "100%", marginTop: 10 }}
@@ -362,14 +316,12 @@ const ModalAddPenjualanOffice = (props) => {
             <Input
               value={pajak}
               label={"pajak"}
-              disable={pi_no == "" ? false : true}
-              // label={'Tipe'}
               onChange={(v) => setPajak(v?.target?.value)}
               style={{ width: "100%", marginTop: 10 }}
             />
             <Input
               value={diskon}
-              disable={pi_no == "" ? false : true}
+              disable={false}
               type="number"
               label={"Diskon"}
               onChange={(v) => setDiskon(v?.target?.value)}
@@ -377,14 +329,22 @@ const ModalAddPenjualanOffice = (props) => {
             />
             <Input
               value={diskon_remark}
-              disable={pi_no == "" ? false : true}
+              disable={false}
               label={"Diskon Remark"}
               onChange={(v) => setDiskon_remark(v?.target?.value)}
               style={{ width: "100%", marginTop: 10 }}
             />
+            <Input
+              value={dp}
+              disable={false}
+              type="number"
+              label={"Down Payment"}
+              onChange={(v) => setDp(v?.target?.value)}
+              style={{ width: "100%", marginTop: 10 }}
+            />
             <div style={{ display: "flex", flexDirection: "row" }}>
               <input
-                disable={pi_no == "" ? false : true}
+                //   disabled={props?.read}
                 style={{ marginTop: 12 }}
                 onChange={() => {}}
                 type="checkbox"
@@ -406,7 +366,6 @@ const ModalAddPenjualanOffice = (props) => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  disable={pi_no == "" ? false : true}
                   value={bank}
                   label="Select Toko Tujuan"
                   onChange={(v) => {
@@ -429,7 +388,7 @@ const ModalAddPenjualanOffice = (props) => {
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Kode SKU</p>
                 <Input
                   value={sku}
-                  disable={pi_no == "" ? false : true}
+                  disable={false}
                   // type='date'
                   onKeyPress={(e) => getSKU(e)}
                   // label={'Kode SKU'}
@@ -439,7 +398,7 @@ const ModalAddPenjualanOffice = (props) => {
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Artikel</p>
                 <Input
                   value={article}
-                  disable={pi_no == "" ? false : true}
+                  disable={false}
                   // type='date'
                   onKeyPress={(e) => getArticle(e)}
                   // label={'Artikel'}
@@ -448,15 +407,13 @@ const ModalAddPenjualanOffice = (props) => {
                 />
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Tipe</p>
                 <Input
-                  value={detail?.type_name ? detail?.type_name : ""}
-                  disable={pi_no == "" ? false : true}
+                  value={detail?.type_name}
                   readOnly={true}
                   style={{ width: "100%" }}
                 />
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Kategori</p>
                 <Input
-                  value={detail?.nama_kategori ? detail?.nama_kategori : ""}
-                  disable={pi_no == "" ? false : true}
+                  value={detail?.nama_kategori}
                   readOnly={true}
                   style={{ width: "100%" }}
                 />
@@ -464,8 +421,7 @@ const ModalAddPenjualanOffice = (props) => {
                   Nama produk
                 </p>
                 <Input
-                  value={detail?.nama_barang ? detail?.nama_barang : ""}
-                  disable={pi_no == "" ? false : true}
+                  value={detail?.nama_barang}
                   readOnly={true}
                   style={{ width: "100%" }}
                 />
@@ -473,17 +429,14 @@ const ModalAddPenjualanOffice = (props) => {
               <div style={{ width: "100%", marginRight: 10 }}>
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Kuantitas</p>
                 <Input
-                  disable={pi_no == "" ? false : true}
                   value={kuantitas}
                   onChange={(v) => setKuantitas(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
-
                 <p style={{ textColor: "gray", fontSize: "13px" }}>
                   Harga satuan barang
                 </p>
                 <Input
-                  disable={pi_no == "" ? false : true}
                   value={harga_satuan_barang}
                   onChange={(v) => setHarga_satuan_barang(v?.target?.value)}
                   style={{ width: "100%" }}
@@ -493,7 +446,7 @@ const ModalAddPenjualanOffice = (props) => {
                 </p>
                 <Input
                   value={diskonSatuan}
-                  disable={pi_no == "" ? false : true}
+                  disable={false}
                   type="number"
                   onChange={(v) => setDiskonSatuan(v?.target?.value)}
                   style={{ width: "100%" }}
@@ -515,16 +468,16 @@ const ModalAddPenjualanOffice = (props) => {
             <div
               style={{ marginTop: 10, justifyContent: "end", display: "flex" }}
             >
-              <Button
-                onClick={() => addDetailProduk()}
-                variant="contained"
-                disabled={pi_no == "" ? false : true}
-              >
+              <Button onClick={() => addDetailProduk()} variant="contained">
                 Save Produk detail
               </Button>
             </div>
             <div style={{ overflowX: "auto", marginTop: 20 }}>
-              <tabel style={{ width: "100%" }}>
+              <tabel
+                style={{
+                  width: "100%",
+                }}
+              >
                 <tr>
                   <th
                     style={{
@@ -610,7 +563,7 @@ const ModalAddPenjualanOffice = (props) => {
                 </tr>
                 <tbody>
                   {listDetail?.map((d, i) => {
-                    return (
+                    return d?.rowstatus > 0 ? (
                       <tr key={i}>
                         <td
                           style={{
@@ -666,6 +619,7 @@ const ModalAddPenjualanOffice = (props) => {
                         >
                           {d?.kuantitas}
                         </td>
+
                         <td
                           style={{
                             textAlign: "left",
@@ -691,14 +645,10 @@ const ModalAddPenjualanOffice = (props) => {
                             border: "1px solid #ddd",
                           }}
                         >
-                          {pi_no == "" ? (
-                            <DeleteIcon onClick={() => deleteData(i)} />
-                          ) : (
-                            ""
-                          )}
+                          <DeleteIcon onClick={() => deleteData(i)} />
                         </td>
                       </tr>
-                    );
+                    ) : null;
                   })}
                 </tbody>
               </tabel>
@@ -707,7 +657,7 @@ const ModalAddPenjualanOffice = (props) => {
               <Button
                 onClick={() =>
                   props?.submit({
-                    detail_penjualan: listDetail,
+                    detail_proforma_invoice: listDetail,
                     tanggal_transaksi:
                       moment(tanggal_transaksi).format("YYYY-MM-DD"),
                     id_office,
@@ -721,6 +671,7 @@ const ModalAddPenjualanOffice = (props) => {
                     ekspedisi,
                     diskon,
                     diskon_remark,
+                    dp,
                     metode_pembayaran: check ? "NON TUNAI" : "TUNAI",
                     bank_name: check ? convertBank(bank)?.bank_name : "",
                     no_rek: check ? convertBank(bank)?.acc_number : "",
@@ -737,4 +688,4 @@ const ModalAddPenjualanOffice = (props) => {
     </>
   );
 };
-export default ModalAddPenjualanOffice;
+export default ModalAddProformaInvoice;
