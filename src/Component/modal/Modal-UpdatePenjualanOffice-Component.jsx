@@ -7,7 +7,11 @@ import Input from "../../Component/input";
 import { alertError } from "../../Component/alert/sweetalert";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { getProdukBySKU, officeGetProdukByArtikel } from "../../Config/Api-new";
+import {
+  getProdukBySKU,
+  officeGetProdukByArtikel,
+  getProformaInvoiceItemUpdate,
+} from "../../Config/Api-new";
 import {
   FormControl,
   InputAdornment,
@@ -26,6 +30,8 @@ const ModalAddPenjualanOffice = (props) => {
   const [kuantitas, setKuantitas] = useState("");
   const [id_pelanggan, setId_pelanggan] = useState("");
   const [article, setArticle] = useState("");
+  const [pi_no, setPi_no] = useState("");
+  const [dp, setDp] = useState(0);
   const [detail, setDetail] = useState("");
   const [listDetail, setListDetail] = useState([]);
   const [harga_satuan_barang, setHarga_satuan_barang] = useState("");
@@ -62,6 +68,8 @@ const ModalAddPenjualanOffice = (props) => {
         : ""
     );
     setKaryawan(data?.id_karyawan);
+    setPi_no(data?.pi_no);
+    setDp(data?.dp);
   }, [props?.open]);
   const getSKU = async (e) => {
     if (e.charCode === 13) {
@@ -93,6 +101,86 @@ const ModalAddPenjualanOffice = (props) => {
       }
     }
   };
+
+  const getPi = async (e) => {
+    if (e.charCode === 13) {
+      e.preventDefault();
+      let res = await getProformaInvoiceItemUpdate(pi_no);
+      if (res.status) {
+        if (res.data) {
+          let arr = [...listDetail];
+
+          for (var j in res?.data?.detail_proforma_invoice) {
+            arr.forEach(function (e) {
+              if (res?.data?.detail_proforma_invoice[j].artikel == e.artikel) {
+                e.kuantitas = res?.data?.detail_proforma_invoice[j].kuantitas;
+              }
+            });
+          }
+
+          if (listDetail.length != res?.data?.detail_proforma_invoice.length) {
+            // A comparer used to determine if two entries are equal.
+            const isSameArtikel = (a, b) => a.artikel === b.artikel;
+
+            // Get items that only occur in the left array,
+            // using the compareFunction to determine equality.
+            const onlyInLeft = (left, right, compareFunction) =>
+              left.filter(
+                (leftValue) =>
+                  !right.some((rightValue) =>
+                    compareFunction(leftValue, rightValue)
+                  )
+              );
+            const onlyInA = onlyInLeft(
+              listDetail,
+              res?.data?.detail_proforma_invoice,
+              isSameArtikel
+            );
+            const onlyInB = onlyInLeft(
+              res?.data?.detail_proforma_invoice,
+              listDetail,
+              isSameArtikel
+            );
+            const results = [...onlyInA, ...onlyInB];
+
+            if (results) {
+              for (let i = 0; i < results.length; i++) {
+                arr.push({
+                  rowstatus: 2,
+                  sku_code: results[i].sku_code,
+                  artikel: results[i].artikel,
+                  type_name: results[i].type_name,
+                  tipe: results[i].tipe,
+                  nama_kategori: results[i].nama_kategori,
+                  kategori: results[i].kategori,
+                  nama_barang: results[i].nama_barang,
+                  kuantitas: results[i].kuantitas,
+                  harga_satuan_barang: results[i].harga_satuan_barang,
+                  diskon: results[i].diskon,
+                });
+              }
+            }
+          }
+
+          setListDetail(arr);
+          setOngkos_kirim(res?.data?.ongkos_kirim);
+          setPajak(res?.data?.pajak_biaya);
+          setId_office(res?.data?.id_office);
+          setDp(res?.data?.dp);
+          setEkspedisi(res?.data?.ekspedisi);
+          setDiskon(res?.data?.diskon);
+          setDiskon_remark(res?.data?.diskon_remark);
+          setId_pelanggan(convertPelangganFromHp(res?.data?.no_hp_pelanggan));
+          setKaryawan(convertKaryawanFromId(res?.data?.id_karyawan));
+        } else {
+          alert("PI tidak ada!");
+        }
+      } else {
+        alert("PI tidak ada!");
+        clear();
+      }
+    }
+  };
   const clear = () => {
     setSku("");
     setDetail({});
@@ -120,6 +208,13 @@ const ModalAddPenjualanOffice = (props) => {
 
     return props?.karyawan[idx];
   };
+
+  const convertKaryawanFromId = (v) => {
+    let idx = props?.karyawan?.findIndex((a) => a.id == v);
+
+    return props?.karyawan ? props?.karyawan[idx]?.id : "";
+  };
+
   const convertBank = (v) => {
     let idx = props?.bank?.findIndex((a) => a.id == v);
 
@@ -216,14 +311,28 @@ const ModalAddPenjualanOffice = (props) => {
             <CloseIcon onClick={() => props?.onClickOpen()} />
           </div>
           <div>
-            {/* <p>Tanggal Pengiriman</p> */}
             <Input
               value={tanggal_transaksi}
-              disable={false}
               type="date"
               label={"Tanggal Penjualan"}
               onChange={(v) => setTanggal_transaksi(v?.target?.value)}
               style={{ width: "100%" }}
+            />
+            <Input
+              value={pi_no}
+              disable={false}
+              label={"PI No"}
+              onKeyPress={(e) => getPi(e)}
+              onChange={(v) => setPi_no(v?.target?.value)}
+              style={{ width: "100%", marginTop: 15 }}
+            />
+            <Input
+              value={pi_no == "" ? 0 : dp}
+              disable={true}
+              type="number"
+              label={"Down Payment"}
+              onChange={(v) => setDp(v?.target?.value)}
+              style={{ width: "100%", marginTop: 15 }}
             />
             <FormControl
               sx={{ marginTop: 2, width: "100%" }}
@@ -241,7 +350,10 @@ const ModalAddPenjualanOffice = (props) => {
               >
                 {props?.office?.map((d, i) => {
                   return (
-                    <MenuItem value={d?.id}>
+                    <MenuItem
+                      disabled={pi_no == "" ? false : true}
+                      value={d?.id}
+                    >
                       {d?.office_name}-{d?.alamat}
                     </MenuItem>
                   );
@@ -264,7 +376,10 @@ const ModalAddPenjualanOffice = (props) => {
               >
                 {props?.pelanggan?.map((d, i) => {
                   return (
-                    <MenuItem value={d?.id}>
+                    <MenuItem
+                      disabled={pi_no == "" ? false : true}
+                      value={d?.id}
+                    >
                       {d?.no_hp}-{d?.nama_pelanggan}
                     </MenuItem>
                   );
@@ -286,20 +401,27 @@ const ModalAddPenjualanOffice = (props) => {
                 }}
               >
                 {props?.karyawan?.map((d, i) => {
-                  return <MenuItem value={d?.id}>{d?.nama_karyawan}</MenuItem>;
+                  return (
+                    <MenuItem
+                      disabled={pi_no == "" ? false : true}
+                      value={d?.id}
+                    >
+                      {d?.nama_karyawan}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
             <Input
               value={ekspedisi}
-              disable={false}
+              disable={pi_no == "" ? false : true}
               label={"Ekspedisi"}
               onChange={(v) => setEkspedisi(v?.target?.value)}
               style={{ width: "100%", marginTop: 10 }}
             />
             <Input
               value={ongkos_kirim}
-              // type='date'
+              disable={pi_no == "" ? false : true}
               label={"Ongkos kirim"}
               onChange={(v) => setOngkos_kirim(v?.target?.value)}
               style={{ width: "100%", marginTop: 10 }}
@@ -307,14 +429,13 @@ const ModalAddPenjualanOffice = (props) => {
             <Input
               value={pajak}
               label={"pajak"}
-              // type='date'
-              // label={'Tipe'}
+              disable={pi_no == "" ? false : true}
               onChange={(v) => setPajak(v?.target?.value)}
               style={{ width: "100%", marginTop: 10 }}
             />
             <Input
               value={diskon}
-              disable={false}
+              disable={pi_no == "" ? false : true}
               type="number"
               label={"Diskon"}
               onChange={(v) => setDiskon(v?.target?.value)}
@@ -322,14 +443,13 @@ const ModalAddPenjualanOffice = (props) => {
             />
             <Input
               value={diskon_remark}
-              disable={false}
+              disable={pi_no == "" ? false : true}
               label={"Diskon Remark"}
               onChange={(v) => setDiskon_remark(v?.target?.value)}
               style={{ width: "100%", marginTop: 10 }}
             />
             <div style={{ display: "flex", flexDirection: "row" }}>
               <input
-                //   disabled={props?.read}
                 style={{ marginTop: 12 }}
                 onChange={() => {}}
                 type="checkbox"
@@ -352,7 +472,6 @@ const ModalAddPenjualanOffice = (props) => {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={bank}
-                  label="Select Toko Tujuan"
                   onChange={(v) => {
                     setBank(v?.target?.value);
                   }}
@@ -373,7 +492,7 @@ const ModalAddPenjualanOffice = (props) => {
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Kode SKU</p>
                 <Input
                   value={sku}
-                  disable={false}
+                  disable={pi_no == "" ? false : true}
                   // type='date'
                   onKeyPress={(e) => getSKU(e)}
                   // label={'Kode SKU'}
@@ -383,7 +502,7 @@ const ModalAddPenjualanOffice = (props) => {
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Artikel</p>
                 <Input
                   value={article}
-                  disable={false}
+                  disable={pi_no == "" ? false : true}
                   // type='date'
                   onKeyPress={(e) => getArticle(e)}
                   // label={'Artikel'}
@@ -393,12 +512,14 @@ const ModalAddPenjualanOffice = (props) => {
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Tipe</p>
                 <Input
                   value={detail?.type_name}
+                  disable={pi_no == "" ? false : true}
                   readOnly={true}
                   style={{ width: "100%" }}
                 />
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Kategori</p>
                 <Input
                   value={detail?.nama_kategori}
+                  disable={pi_no == "" ? false : true}
                   readOnly={true}
                   style={{ width: "100%" }}
                 />
@@ -407,6 +528,7 @@ const ModalAddPenjualanOffice = (props) => {
                 </p>
                 <Input
                   value={detail?.nama_barang}
+                  disable={pi_no == "" ? false : true}
                   readOnly={true}
                   style={{ width: "100%" }}
                 />
@@ -415,6 +537,7 @@ const ModalAddPenjualanOffice = (props) => {
                 <p style={{ textColor: "gray", fontSize: "13px" }}>Kuantitas</p>
                 <Input
                   value={kuantitas}
+                  disable={pi_no == "" ? false : true}
                   onChange={(v) => setKuantitas(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
@@ -423,6 +546,7 @@ const ModalAddPenjualanOffice = (props) => {
                 </p>
                 <Input
                   value={harga_satuan_barang}
+                  disable={pi_no == "" ? false : true}
                   onChange={(v) => setHarga_satuan_barang(v?.target?.value)}
                   style={{ width: "100%" }}
                 />
@@ -431,7 +555,7 @@ const ModalAddPenjualanOffice = (props) => {
                 </p>
                 <Input
                   value={diskonSatuan}
-                  disable={false}
+                  disable={pi_no == "" ? false : true}
                   type="number"
                   onChange={(v) => setDiskonSatuan(v?.target?.value)}
                   style={{ width: "100%" }}
@@ -453,7 +577,11 @@ const ModalAddPenjualanOffice = (props) => {
             <div
               style={{ marginTop: 10, justifyContent: "end", display: "flex" }}
             >
-              <Button onClick={() => addDetailProduk()} variant="contained">
+              <Button
+                onClick={() => addDetailProduk()}
+                variant="contained"
+                disabled={pi_no == "" ? false : true}
+              >
                 Save Produk detail
               </Button>
             </div>
@@ -645,6 +773,7 @@ const ModalAddPenjualanOffice = (props) => {
                     detail_penjualan: listDetail,
                     tanggal_transaksi:
                       moment(tanggal_transaksi).format("YYYY-MM-DD"),
+                    pi_no,
                     id_office,
                     id_karyawan: convertKaryawan(karyawan)?.id,
                     nama_karyawan: convertKaryawan(karyawan)?.nama_karyawan,
@@ -656,6 +785,7 @@ const ModalAddPenjualanOffice = (props) => {
                     ekspedisi,
                     diskon,
                     diskon_remark,
+                    dp,
                     metode_pembayaran: check ? "NON TUNAI" : "TUNAI",
                     bank_name: check ? convertBank(bank)?.bank_name : "",
                     no_rek: check ? convertBank(bank)?.acc_number : "",

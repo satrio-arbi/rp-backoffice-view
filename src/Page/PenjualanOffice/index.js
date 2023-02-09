@@ -298,6 +298,8 @@ export default function Pembelian() {
       ekspedisi: v?.ekspedisi,
       diskon: v?.diskon,
       diskon_remark: v?.diskon_remark,
+      dp: v?.dp,
+      pi_no: v?.pi_no,
       metode_pembayaran: v?.metode_pembayaran,
       bank_name: v?.bank_name,
       no_rek: v?.no_rek,

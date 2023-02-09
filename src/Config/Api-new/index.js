@@ -2265,12 +2265,25 @@ export const getProformaInvoice = async () => {
   return res;
 };
 export const getProformaInvoiceSearch = async (search) => {
-  const res = await NET("GET", `proformaInvoice/search?keyword=${search}`, {});
+  const res = await NET(
+    "GET",
+    `proformaInvoice/search?keyword=${search ? search : ""}`,
+    {}
+  );
 
   return res;
 };
 export const getProformaInvoiceItem = async (pi_no) => {
   const res = await NET("GET", `proformaInvoice/getPi?pi_no=${pi_no}`, {});
+
+  return res;
+};
+export const getProformaInvoiceItemUpdate = async (pi_no) => {
+  const res = await NET(
+    "GET",
+    `proformaInvoice/getPiUpdate?pi_no=${pi_no}`,
+    {}
+  );
 
   return res;
 };

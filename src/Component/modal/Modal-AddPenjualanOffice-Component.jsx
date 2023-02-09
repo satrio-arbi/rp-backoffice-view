@@ -121,19 +121,13 @@ const ModalAddPenjualanOffice = (props) => {
       if (res.status) {
         setOngkos_kirim(res?.data?.ongkos_kirim);
         setPajak(res?.data?.pajak_biaya);
-        setTanggal_transaksi(
-          moment(res?.data?.tanggal_transaksi).format("YYYY-MM-DD")
-        );
         setId_office(res?.data?.id_office);
         setDp(res?.data?.dp);
         setEkspedisi(res?.data?.ekspedisi);
         setDiskon(res?.data?.diskon);
         setDiskon_remark(res?.data?.diskon_remark);
-
         setListDetail(res?.data?.detail_proforma_invoice);
-
         setId_pelanggan(convertPelangganFromHp(res?.data?.no_hp_pelanggan));
-        setBank(res?.data?.bank_name);
         setKaryawan(convertKaryawanFromId(res?.data?.id_karyawan));
       } else {
         alert("PI tidak ada!");
@@ -245,7 +239,6 @@ const ModalAddPenjualanOffice = (props) => {
             {/* <p>Tanggal Pengiriman</p> */}
             <Input
               value={tanggal_transaksi}
-              disable={pi_no == "" ? false : true}
               type="date"
               label={"Tanggal Penjualan"}
               onChange={(v) => setTanggal_transaksi(v?.target?.value)}
@@ -406,9 +399,7 @@ const ModalAddPenjualanOffice = (props) => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  disable={pi_no == "" ? false : true}
                   value={bank}
-                  label="Select Toko Tujuan"
                   onChange={(v) => {
                     setBank(v?.target?.value);
                   }}
@@ -710,6 +701,7 @@ const ModalAddPenjualanOffice = (props) => {
                     detail_penjualan: listDetail,
                     tanggal_transaksi:
                       moment(tanggal_transaksi).format("YYYY-MM-DD"),
+                    pi_no,
                     id_office,
                     id_karyawan: convertKaryawan(karyawan)?.id,
                     nama_karyawan: convertKaryawan(karyawan)?.nama_karyawan,
