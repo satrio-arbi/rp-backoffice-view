@@ -258,7 +258,7 @@ export default function ProformaInvoice() {
   const downloadInvoice = async (v) => {
     let res = await getDownloadProformaInvoice({
       office: v?.id_office,
-      trx: v?.id_transaksi,
+      trx: v?.pi_no,
     });
   };
   const deleteData = async () => {
