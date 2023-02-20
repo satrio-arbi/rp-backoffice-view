@@ -69,52 +69,17 @@ const ModalCetakBarcode = (props) => {
                 marginLeft: "auto",
               }}
             >
-              <Barcode
-                value={props?.artikel_product}
-                width={1}
-                height={15}
-                textMargin={1}
-                fontSize={5}
-                marginBottom={1}
-              />
-              <table>
+              <table style={{ marginLeft: 5, marginRight: 5 }}>
                 <tr>
-                  <td>
-                    <p
-                      style={{
-                        marginTop: 0,
-                        marginBottom: 0,
-                        marginLeft: 5,
-                        fontSize: 5,
-                        textAlign: "left",
-                      }}
-                    >
-                      Name
-                    </p>
-                  </td>
-                  <td>
-                    <p
-                      style={{
-                        marginTop: 0,
-                        marginBottom: 0,
-                        fontSize: 5,
-                        textAlign: "left",
-                      }}
-                    >
-                      :
-                    </p>
-                  </td>
-                  <td>
-                    <p
-                      style={{
-                        marginTop: 0,
-                        marginBottom: 0,
-                        fontSize: 5,
-                        textAlign: "left",
-                      }}
-                    >
-                      {props?.nama_product}
-                    </p>
+                  <td align="center" colSpan={3}>
+                    <Barcode
+                      value={props?.artikel_product}
+                      width={1.1}
+                      height={19}
+                      textMargin={1}
+                      fontSize={9}
+                      marginBottom={1}
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -124,11 +89,11 @@ const ModalCetakBarcode = (props) => {
                         marginTop: 0,
                         marginBottom: 0,
                         marginLeft: 5,
-                        fontSize: 5,
+                        fontSize: 7,
                         textAlign: "left",
                       }}
                     >
-                      Type
+                      <b>Name</b>
                     </p>
                   </td>
                   <td>
@@ -136,11 +101,11 @@ const ModalCetakBarcode = (props) => {
                       style={{
                         marginTop: 0,
                         marginBottom: 0,
-                        fontSize: 5,
+                        fontSize: 7,
                         textAlign: "left",
                       }}
                     >
-                      :
+                      <b>:</b>
                     </p>
                   </td>
                   <td>
@@ -148,11 +113,11 @@ const ModalCetakBarcode = (props) => {
                       style={{
                         marginTop: 0,
                         marginBottom: 0,
-                        fontSize: 5,
+                        fontSize: 7,
                         textAlign: "left",
                       }}
                     >
-                      {props?.type_name}
+                      <b>{props?.nama_product}</b>
                     </p>
                   </td>
                 </tr>
@@ -162,46 +127,49 @@ const ModalCetakBarcode = (props) => {
                       style={{
                         marginTop: 1,
                         marginLeft: 5,
-                        fontSize: 5,
+                        fontSize: 7,
                         textAlign: "left",
                       }}
                     >
-                      Price
+                      <b>Price</b>
                     </p>
                   </td>
                   <td>
                     <p
                       style={{
                         marginTop: 1,
-                        fontSize: 5,
+                        fontSize: 7,
                         textAlign: "left",
                       }}
                     >
-                      :
+                      <b>:</b>
                     </p>
                   </td>
                   <td>
                     <p
                       style={{
                         marginTop: 1,
-                        fontSize: 6,
+                        fontSize: 7,
                         textAlign: "left",
                       }}
                     >
-                      Rp
-                      {numberWithCommas(props?.harga_jual)}
+                      <b>Rp {numberWithCommas(props?.harga_jual)}</b>
                     </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" colSpan={3}>
+                    <Barcode
+                      value={props?.sku_code}
+                      width={1.1}
+                      height={19}
+                      textMargin={1}
+                      fontSize={9}
+                      marginBottom={1}
+                    />
                   </td>
                 </tr>
               </table>
-              <Barcode
-                value={props?.sku_code}
-                width={1}
-                height={15}
-                textMargin={1}
-                fontSize={6}
-                marginBottom={1}
-              />
             </div>
 
             <ReactToPrint
