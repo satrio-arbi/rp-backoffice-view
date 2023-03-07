@@ -2195,6 +2195,27 @@ export const geReportSalesByOffice = async (start, end, id) => {
   document.body.appendChild(link);
   link.click();
 };
+
+export const geReportSalesByStore = async (start, end, id) => {
+  const res = await NET(
+    "GET",
+    `report/salesByStore?date_from=${start}&date_to=${end}&id_store=${id}`,
+    {},
+    "",
+    "",
+    "",
+    "blob"
+  );
+  let a = res?.data;
+
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", `sales_by_store_${start}_${end}.pdf`); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+};
+
 export const geReportStockOpname = async (start, end) => {
   const res = await NET(
     "GET",

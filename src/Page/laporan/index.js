@@ -23,6 +23,7 @@ import {
   geReportPurchaseStoreByArticle,
   geReportPurchaseStoreBySummary,
   geReportSalesByOffice,
+  geReportSalesByStore,
   geReportStockOpname,
   geReportStockOpnameStore,
 } from "../../Config/Api-new";
@@ -51,6 +52,7 @@ export default function MasterKatgori() {
     { l: "Report Sales By Office", v: "MM-46" },
     { l: "Report Stock Opname", v: "MM-47" },
     { l: "Report Stock Opname Store", v: "MM-57" },
+    { l: "Report Sales By Store", v: "MM-59" },
   ];
 
   React.useEffect(() => {
@@ -117,6 +119,9 @@ export default function MasterKatgori() {
     }
     if (modal.i === 15) {
       await geReportStockOpnameStore(v?.idStore, v?.start, v?.end);
+    }
+    if (modal.i === 16) {
+      await geReportSalesByStore(v?.start, v?.end, v?.idStore);
     }
   };
   return (

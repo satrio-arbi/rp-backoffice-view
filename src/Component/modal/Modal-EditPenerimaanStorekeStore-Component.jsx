@@ -1,50 +1,51 @@
-import { Modal, Box, Button } from '@mui/material';
+import { Modal, Box, Button } from "@mui/material";
 
-import React, { useState, useEffect } from 'react';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CloseIcon from '@mui/icons-material/Close';
-import moment from 'moment';
-import Input from '../../Component/input';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import React, { useState, useEffect } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
+import moment from "moment";
+import Input from "../../Component/input";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import {
   getPengirimanStorekeStoreSearch,
   getProdukByArtikel,
-} from '../../Config/Api-new';
+} from "../../Config/Api-new";
 import {
   FormControl,
   InputAdornment,
   InputLabel,
   OutlinedInput,
-} from '@mui/material';
+} from "@mui/material";
 const ModalPenerimaanAddStorekeStore = (props) => {
   // const [detail_pengiriman,setDetail_pengiriman] = useState([])
   const [tanggal_pengiriman, setTanggal_pengiriman] = useState(
-    moment(new Date()).format('YYYY-MM-DD')
+    moment(new Date()).format("YYYY-MM-DD")
   );
-  const [id_store_asal, setId_store_asal] = useState('');
-  const [pengiriman, setPengiriman] = useState('');
-  const [ukuran, setUkuran] = useState('');
-  const [kuantitas, setKuantitas] = useState('');
-  const [id_store_tujuan, setId_store_tujuan] = useState('');
-  const [article, setArticle] = useState('');
-  const [detail, setDetail] = useState('');
+  const [id_store_asal, setId_store_asal] = useState("");
+  const [pengiriman, setPengiriman] = useState("");
+  const [ukuran, setUkuran] = useState("");
+  const [kuantitas, setKuantitas] = useState("");
+  const [id_store_tujuan, setId_store_tujuan] = useState("");
+  const [article, setArticle] = useState("");
+  const [detail, setDetail] = useState("");
   const [listDetail, setListDetail] = useState([]);
   const data = props?.data;
   useEffect(() => {
     console.log({ data });
     setTanggal_pengiriman(
-      moment(new Date(data?.tanggal_penerimaan)).format('YYYY-MM-DD')
+      moment(new Date(data?.tanggal_penerimaan)).format("YYYY-MM-DD")
     );
     setId_store_asal(data?.id_store_asal);
     setPengiriman(data?.pengiriman_code);
-    setUkuran('');
+    setUkuran("");
     setListDetail(data?.detailPenerimaanList);
-    setDetail('');
-    setArticle('');
+    setDetail("");
+    setArticle("");
     setId_store_tujuan(data?.id_store_tujuan);
-    setKuantitas('');
+    setKuantitas("");
   }, [props?.open]);
+
   const getSKU = async (e) => {
     if (e.charCode === 13) {
       e.preventDefault();
@@ -57,7 +58,7 @@ const ModalPenerimaanAddStorekeStore = (props) => {
       let arr = [];
       res?.data[0]?.detailPengirimanList?.map((d, i) => {
         arr.push({
-          id: d?.id,
+          id: null,
           sku_code: d?.sku_code,
           artikel: d?.artikel,
           harga_jual: d?.harga_jual,
@@ -72,7 +73,7 @@ const ModalPenerimaanAddStorekeStore = (props) => {
           type: d?.type,
           type_name: d?.type_name,
           ukuran: d?.ukuran,
-          keterangan: '',
+          keterangan: "",
         });
       });
       // console.log({arr})
@@ -85,10 +86,10 @@ const ModalPenerimaanAddStorekeStore = (props) => {
   const convertToko = (v) => {
     let idx = props?.store?.findIndex((a) => a.id == v);
 
-    return props?.store ? props?.store[idx]?.store_name : '';
+    return props?.store ? props?.store[idx]?.store_name : "";
   };
   const convertImage = (v) => {
-    return 'data:image/png;base64,' + v;
+    return "data:image/png;base64," + v;
   };
   const changeTabel = (type, i, v) => {
     let datas = [...listDetail];
@@ -130,22 +131,22 @@ const ModalPenerimaanAddStorekeStore = (props) => {
       >
         <Box
           sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            overflow: 'hidden',
-            overflowY: 'scroll',
-            transform: 'translate(-50%, -50%)',
-            width: '90%',
-            height: '90%',
-            bgcolor: 'background.paper',
-            border: '2px solid #000',
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            overflow: "hidden",
+            overflowY: "scroll",
+            transform: "translate(-50%, -50%)",
+            width: "90%",
+            height: "90%",
+            bgcolor: "background.paper",
+            border: "2px solid #000",
             boxShadow: 24,
             p: 4,
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <h2 style={{ width: '100%' }} id="parent-modal-title">
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <h2 style={{ width: "100%" }} id="parent-modal-title">
               Edit Penerimaan Store from Store
             </h2>
             <CloseIcon onClick={() => props?.onClickOpen()} />
@@ -157,20 +158,20 @@ const ModalPenerimaanAddStorekeStore = (props) => {
               disable={false}
               // type='date'
               onKeyPress={(e) => getSKU(e)}
-              label={'Kode Pengiriman'}
+              label={"Kode Pengiriman"}
               onChange={(v) => setPengiriman(v?.target?.value)}
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
             />
             <Input
               value={tanggal_pengiriman}
               disable={false}
               type="date"
-              label={'Tanggal Pengiriman'}
+              label={"Tanggal Pengiriman"}
               onChange={(v) => setTanggal_pengiriman(v?.target?.value)}
-              style={{ width: '100%', marginTop: 20 }}
+              style={{ width: "100%", marginTop: 20 }}
             />
             <FormControl
-              sx={{ marginTop: 2, width: '100%' }}
+              sx={{ marginTop: 2, width: "100%" }}
               variant="outlined"
             >
               <InputLabel id="demo-simple-select-label">Toko Asal</InputLabel>
@@ -193,7 +194,7 @@ const ModalPenerimaanAddStorekeStore = (props) => {
               </Select>
             </FormControl>
             <FormControl
-              sx={{ marginTop: 2, width: '100%' }}
+              sx={{ marginTop: 2, width: "100%" }}
               variant="outlined"
             >
               <InputLabel id="demo-simple-select-label">Toko Tujuan</InputLabel>
@@ -216,12 +217,12 @@ const ModalPenerimaanAddStorekeStore = (props) => {
               </Select>
             </FormControl>
 
-            <div style={{ overflowX: 'auto', marginTop: 20 }}>
+            <div style={{ overflowX: "auto", marginTop: 20 }}>
               <tabel
                 style={{
                   // borderCollapse: 'collapse',
                   // borderSpacing: 0,
-                  width: '100%',
+                  width: "100%",
                   // overflow:'hidden',
                   // border: '1px solid #ddd'
                 }}
@@ -229,54 +230,54 @@ const ModalPenerimaanAddStorekeStore = (props) => {
                 <tr>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
                     No
                   </th>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
                     SKU CODE
                   </th>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
                     Artikel
                   </th>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
-                    Nama Barang{' '}
+                    Nama Barang{" "}
                   </th>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
                     Kuantitas
                   </th>
                   <th
                     style={{
-                      textAlign: 'left',
-                      padding: '8px',
-                      border: '1px solid #ddd',
+                      textAlign: "left",
+                      padding: "8px",
+                      border: "1px solid #ddd",
                     }}
                   >
                     Keterangan
@@ -288,9 +289,9 @@ const ModalPenerimaanAddStorekeStore = (props) => {
                       <tr key={i}>
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           {i + 1}
@@ -298,18 +299,18 @@ const ModalPenerimaanAddStorekeStore = (props) => {
 
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           {d?.sku_code}
                         </td>
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           {d?.artikel}
@@ -317,23 +318,23 @@ const ModalPenerimaanAddStorekeStore = (props) => {
 
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           {d?.nama_barang}
                         </td>
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           <input
                             onChange={(v) =>
-                              changeTabel('kuantitas', i, v?.target?.value)
+                              changeTabel("kuantitas", i, v?.target?.value)
                             }
                             value={d?.kuantitas}
                           />
@@ -341,14 +342,14 @@ const ModalPenerimaanAddStorekeStore = (props) => {
                         </td>
                         <td
                           style={{
-                            textAlign: 'left',
-                            padding: '8px',
-                            border: '1px solid #ddd',
+                            textAlign: "left",
+                            padding: "8px",
+                            border: "1px solid #ddd",
                           }}
                         >
                           <input
                             onChange={(v) =>
-                              changeTabel('keterangan', i, v?.target?.value)
+                              changeTabel("keterangan", i, v?.target?.value)
                             }
                             value={d?.keterangan}
                           />
@@ -365,7 +366,7 @@ const ModalPenerimaanAddStorekeStore = (props) => {
                 onClick={() =>
                   props?.submit(
                     listDetail,
-                    moment(tanggal_pengiriman).format('YYYY-MM-DD'),
+                    moment(tanggal_pengiriman).format("YYYY-MM-DD"),
                     id_store_asal,
                     convertToko(id_store_asal),
                     id_store_tujuan,

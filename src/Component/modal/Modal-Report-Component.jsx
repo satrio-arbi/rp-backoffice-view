@@ -39,6 +39,8 @@ const ModalAddBank = (props) => {
       props?.submit({ start, end });
     } else if (d?.i === 15) {
       props?.submit({ idStore, start, end });
+    } else if (d?.i === 16) {
+      props?.submit({ idStore, start, end });
     }
   };
   return (
@@ -117,7 +119,7 @@ const ModalAddBank = (props) => {
                 </Select>
               </FormControl>
             ) : null}
-            {d?.i === 1 || d?.i === 15 ? (
+            {d?.i === 1 || d?.i === 15 || d?.i === 16 ? (
               <FormControl
                 sx={{ marginTop: 2, width: "100%" }}
                 variant="outlined"
