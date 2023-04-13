@@ -338,7 +338,11 @@ export default function MasterKatgori() {
     });
     setData(res?.data);
     setMenu(arr);
-    setStore(res2?.data);
+    setStore(
+      res2?.data.filter((el) => {
+        return el.id != 8;
+      })
+    );
     setOffice(res3?.data);
   };
   const checkSingle = (d, i) => {

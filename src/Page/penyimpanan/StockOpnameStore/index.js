@@ -323,7 +323,11 @@ export default function BarangMasuk() {
     let res = await getStockOpnameStoreMasuk();
     let res1 = await getOffice();
     let res2 = await getStore();
-    setDataToko(res2?.data);
+    setDataToko(
+      res2?.data.filter((el) => {
+        return el.id != 8;
+      })
+    );
     setData(res?.data);
     setOffice(res1?.data);
   };

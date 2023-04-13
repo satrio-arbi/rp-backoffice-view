@@ -65,7 +65,11 @@ export default function MasterKatgori() {
     let resPel = await getPelanggan();
     setOffice(resOffice?.data);
     setProduct(resProd?.data);
-    setStore(resStore?.data);
+    setStore(
+      resStore?.data.filter((el) => {
+        return el.id != 8;
+      })
+    );
     setPelanggan(resPel?.data);
   };
   const showModal = (st, i, v) => {

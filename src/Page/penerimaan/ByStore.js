@@ -335,7 +335,11 @@ export default function PengirimanStoreStore() {
     let res1 = await getStore();
     let res2 = await getUkuran();
     // let res3 = await getOffice()
-    setDataToko(res1?.data);
+    setDataToko(
+      res1?.data.filter((el) => {
+        return el.id != 8;
+      })
+    );
     setData(res?.data);
     let arr = [...detailToko];
     res?.data?.map((d) => {

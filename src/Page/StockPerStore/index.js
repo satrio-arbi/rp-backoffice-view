@@ -278,7 +278,11 @@ export default function MasterKatgori() {
   }, []);
   const getDataStore = async () => {
     let res = await getStore();
-    setStore(res?.data);
+    setStore(
+      res?.data.filter((el) => {
+        return el.id != 8;
+      })
+    );
   };
   const getDataPerStore = async () => {
     let res = await getStockPerStore();

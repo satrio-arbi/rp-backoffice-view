@@ -333,7 +333,11 @@ export default function PengirimanStoreStore() {
     let res = await getPengirimanStorekeStore();
     let res1 = await getStore();
     let res2 = await getUkuran();
-    setDataToko(res1?.data);
+    setDataToko(
+      res1?.data.filter((el) => {
+        return el.id != 8;
+      })
+    );
     setData(res?.data);
     let arr = [...detailToko];
     res?.data?.map((d) => {
