@@ -144,6 +144,7 @@ const ModaEditReturGudang = (props) => {
     let idx = listDetail.findIndex((a) => a.id == updateDetail?.id);
     datas[idx][type] = v;
     datas[idx]["rowstatus"] = 1;
+    console.log({ datas });
     setListDetail(datas);
   };
   return (

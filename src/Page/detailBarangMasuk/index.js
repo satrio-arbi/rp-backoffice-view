@@ -1,28 +1,33 @@
-import { Dialog, DialogContent, Typography } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  Typography,
+} from "@mui/material";
 import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useState } from "react";
 import Gap from "../../Component/gap";
 import Input from "../../Component/input";
 import Button from "../../Component/button";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ErrorIcon from "@mui/icons-material/Error";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
 import { useDispatch } from "react-redux";
 import { addStockOpname, getPenyimpananMasuk } from "../../Config/Redux/action";
 
 function FormPembelian(props) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const dataDetailOffice = props?.data;
-  const [detailDisable, setDetailDisable] = React.useState(true);
-  const [openModals, setOpenModals] = useState(false);
-  const [error, setError] = useState(false);
-  console.log(dataDetailOffice);
+  const [detailDisable, setDetailDisable] = React.useState(true)
+  const [openModals, setOpenModals] = useState(false)
+  const [error, setError] = useState(false)
+  console.log(dataDetailOffice)
   useEffect(() => {
     if (dataDetailOffice === undefined) {
-      setDetailDisable(false);
+      setDetailDisable(false)
+      console.log("yes")
     } else {
-      setDetailDisable(true);
+      setDetailDisable(true)
     }
-  }, [dataDetailOffice]);
+  }, [dataDetailOffice])
   const loginForm = (
     <Formik
       initialValues={{
@@ -36,8 +41,8 @@ function FormPembelian(props) {
         hpp: dataDetailOffice?.hpp,
         hargaJual: dataDetailOffice?.harga_jual,
         Keterangan: dataDetailOffice?.keterangan,
-        Tanggal_masuk: dataDetailOffice?.tanggal_masuk,
-        id: dataDetailOffice?.id,
+        Tanggal_masuk : dataDetailOffice?.tanggal_masuk,
+        id: dataDetailOffice?.id
       }}
       enableReinitialize={true}
       validate={(values) => {
@@ -72,47 +77,48 @@ function FormPembelian(props) {
         return errors;
       }}
       onSubmit={async (values, { setSubmitting }) => {
-        let formData = new FormData(); //formdata object
+        let formData = new FormData();    //formdata object
 
-        formData.append("artikel", values.article); //append the values with key, value pair
-        formData.append("harga_jual", values.hargaJual); //append the values with key, value pair
-        formData.append("hpp", values.hpp);
-        formData.append("kategori", values.kategori); //append the values with key, value pair
-        formData.append("keterangan", values.Keterangan);
-        formData.append("kuantitas", values.kuantitas); //append the values with key, value pair
-        formData.append("nama_barang", values.namaBarang);
-        formData.append("nama_kategori", values.kategori);
-        formData.append("type", values.tipe);
-        formData.append("type_name", values.tipe);
-        formData.append("ukuran", values.ukuran);
-        formData.append("tanggal_masuk", values.Tanggal_masuk);
-        formData.append("id", values.id);
-        console.log(formData);
-
-        if (dataDetailOffice === undefined) {
-          const resp = await dispatch(addStockOpname("add", formData));
+        formData.append('artikel', values.article);   //append the values with key, value pair
+        formData.append('harga_jual', values.hargaJual);  //append the values with key, value pair
+        formData.append('hpp', values.hpp);
+        formData.append('kategori', values.kategori);   //append the values with key, value pair
+        formData.append('keterangan', values.Keterangan);
+        formData.append('kuantitas', values.kuantitas);   //append the values with key, value pair
+        formData.append('nama_barang', values.namaBarang);
+        formData.append('nama_kategori', values.kategori);
+        formData.append('type', values.tipe);
+        formData.append('type_name', values.tipe);
+        formData.append('ukuran', values.ukuran);
+        formData.append('tanggal_masuk', values.Tanggal_masuk);
+        formData.append('id',values.id)
+        console.log(formData)
+        
+        
+        if (dataDetailOffice === undefined){
+          const resp = await dispatch(addStockOpname('add',formData))
           if (resp.type === "POST_STOCK_OPNAME_SUCCESSS") {
-            props.onClose();
-            dispatch(getPenyimpananMasuk());
-            setError(false);
-            setOpenModals(true);
+            props.onClose()
+            dispatch(getPenyimpananMasuk())
+            setError(false)
+            setOpenModals(true)
           } else {
-            setError(true);
-            setOpenModals(true);
+            setError(true)
+            setOpenModals(true)
           }
-        } else {
-          const resp = await dispatch(addStockOpname("update", formData));
-          if (resp.type === "POST_STOCK_OPNAME_SUCCESSS") {
-            props.onClose();
-            dispatch(getPenyimpananMasuk());
-            setError(false);
-            setOpenModals(true);
-          } else {
-            setError(true);
-            setOpenModals(true);
+        }else{
+          const resp = await dispatch(addStockOpname('update',formData))
+          if(resp.type === "POST_STOCK_OPNAME_SUCCESSS"){
+            props.onClose()
+            dispatch(getPenyimpananMasuk())
+            setError(false)
+            setOpenModals(true)
+          }else{
+            setError(true)
+            setOpenModals(true)
           }
         }
-
+        
         setSubmitting(false);
       }}
     >
@@ -174,35 +180,31 @@ function FormPembelian(props) {
                       //   background: '#4C4E5B',
                     }}
                   />
-                  <div
-                    style={
-                      dataDetailOffice === undefined || detailDisable === false
-                        ? { display: "none" }
-                        : {}
-                    }
+                  <div style={dataDetailOffice === undefined || detailDisable === false ? {display:"none"}:{
+                  }}>
+                     <Typography
+                    style={{
+                      fontSize: "20px",
+                      fontWeight: "bold",
+                      color: "#717171",
+                    }}
                   >
-                    <Typography
-                      style={{
-                        fontSize: "20px",
-                        fontWeight: "bold",
-                        color: "#717171",
-                      }}
-                    >
-                      Tanggal Masuk
-                    </Typography>
-                    <Input
-                      error={errors.Tanggal_masuk}
-                      helperText={errors.Tanggal_masuk}
-                      value={values.Tanggal_masuk}
-                      onChange={handleChange("Tanggal_masuk")}
-                      // label="Masukan "
-                      disable={true}
-                      style={{
-                        width: "100%",
-                        borderRadius: "4px",
-                        //   background: '#4C4E5B',
-                      }}
-                    />
+                    Tanggal Masuk
+                  </Typography>
+                  <Input
+                    error={errors.Tanggal_masuk}
+                    helperText={errors.Tanggal_masuk}
+
+                    value={values.Tanggal_masuk}
+                    onChange={handleChange("Tanggal_masuk")}
+                    // label="Masukan "
+                    disable={true}
+                    style={{
+                      width: "100%",
+                      borderRadius: "4px",
+                      //   background: '#4C4E5B',
+                    }}
+                  />
                   </div>
                   <Typography
                     style={{
@@ -216,6 +218,7 @@ function FormPembelian(props) {
                   <Input
                     error={errors.tipe}
                     helperText={errors.tipe}
+
                     value={values.tipe}
                     onChange={handleChange("tipe")}
                     // label="Masukan "
@@ -232,6 +235,7 @@ function FormPembelian(props) {
                       fontWeight: "bold",
                       color: "#717171",
                     }}
+
                   >
                     Kategori
                   </Typography>
@@ -384,60 +388,56 @@ function FormPembelian(props) {
                     }}
                   />
                   <Gap height={35} />
-                  <div
-                    style={detailDisable === true ? { display: "none" } : {}}
-                  >
+                  <div style={
+                    detailDisable === true ? { display: 'none' } :
+                      {}}>
                     <Button
                       onClick={handleSubmit}
                       label="Submit"
                       style={
-                        detailDisable === true
-                          ? { display: "none" }
-                          : {
-                              width: "100%",
-                              padding: "0.5em",
-                              background: "rgb(81 94 193)",
-                              borderRadius: "15px",
-                              color: "white",
-                              fontSize: "20px",
-                              textTransform: "capitalize",
-                              marginBottom: "25px",
-                              // padding:"1em"
-                            }
-                      }
+                        detailDisable === true ? { display: 'none' } :
+                          {
+                            width: "100%",
+                            padding: "0.5em",
+                            background: "rgb(81 94 193)",
+                            borderRadius: "15px",
+                            color: "white",
+                            fontSize: "20px",
+                            textTransform: "capitalize",
+                            marginBottom: "25px",
+                            // padding:"1em"
+                          }}
                     />
                   </div>
-                  <div
-                    style={detailDisable === true ? { display: "none" } : {}}
-                  >
+                  <div style={
+                    detailDisable === true ? { display: 'none' } :
+                      {}}>
                     <Button
                       onClick={() => {
-                        setDetailDisable(true);
+                        setDetailDisable(true)
                       }}
                       label="Kembali"
                       style={
-                        detailDisable === true
-                          ? { display: "none" }
-                          : {
-                              width: "100%",
-                              padding: "0.5em",
-                              background: "rgb(81 94 193)",
-                              borderRadius: "15px",
-                              color: "white",
-                              fontSize: "20px",
-                              textTransform: "capitalize",
-                              marginBottom: "25px",
-                              // padding:"1em"
-                            }
-                      }
+                        detailDisable === true ? { display: 'none' } :
+                          {
+                            width: "100%",
+                            padding: "0.5em",
+                            background: "rgb(81 94 193)",
+                            borderRadius: "15px",
+                            color: "white",
+                            fontSize: "20px",
+                            textTransform: "capitalize",
+                            marginBottom: "25px",
+                            // padding:"1em"
+                          }}
                     />
                   </div>
-                  <div
-                    style={detailDisable === false ? { display: "none" } : {}}
-                  >
+                  <div style={
+                    detailDisable === false ? { display: 'none' } :
+                      {}}>
                     <Button
                       onClick={() => {
-                        setDetailDisable(false);
+                        setDetailDisable(false)
                       }}
                       label="Edit"
                       style={{
@@ -464,60 +464,55 @@ function FormPembelian(props) {
   return (
     <>
       <div>{loginForm}</div>
-      <Dialog
-        open={openModals}
-        onClose={() => {
-          setOpenModals(false);
-        }}
-      >
+      <Dialog open={openModals} onClose={() => {
+        setOpenModals(false)
+      }}>
         <DialogContent
           style={{
             width: "100%",
-            borderRadius: "15px",
+            borderRadius:"15px"
           }}
         >
           <div align="center">
-            {error === false ? (
+          {
+            error === false ? (
               <>
                 <CheckCircleIcon
-                  style={{
-                    color: "#1572A1",
-                    fontSize: "50px",
-                  }}
+                    style={{
+                      color:"#1572A1",
+                      fontSize:"50px"
+                    }}
                 />
               </>
-            ) : (
-              <>
-                <ErrorIcon
-                  style={{
-                    color: "#FF5959",
-                    fontSize: "50px",
-                  }}
-                />
-              </>
-            )}
-            <Typography>
-              {error === false
-                ? "Data Penyimpanan Barang Masuk Tersimpan"
-                : "Tambah Penyimpanan Barang Gagal"}
-            </Typography>
-            <Gap height={25} />
-            <Button
-              onClick={() => {
-                setOpenModals(false);
-              }}
-              label="Ok"
-              style={{
-                width: "100%",
-                padding: "0.5em",
-                background: "rgb(81 94 193)",
-                borderRadius: "15px",
-                color: "white",
-                fontSize: "20px",
-                textTransform: "capitalize",
-                // padding:"1em"
-              }}
-            />
+              ):(
+                  <>
+                     <ErrorIcon style={{
+                      color:"#FF5959",
+                      fontSize:"50px"
+                    }}/>
+                </>
+              )
+          }
+          <Typography>
+            {error === false ? 'Data Penyimpanan Barang Masuk Tersimpan' : 'Tambah Penyimpanan Barang Gagal'}
+          </Typography>
+          <Gap height={25}/>
+          <Button
+            onClick={() => {
+              setOpenModals(false)
+            }}
+            label="Ok"
+            style={{
+              width: "100%",
+              padding: "0.5em",
+              background: "rgb(81 94 193)",
+              borderRadius: "15px",
+              color: "white",
+              fontSize: "20px",
+              textTransform: "capitalize",
+              // padding:"1em"
+            }}
+          />
           </div>
         </DialogContent>
       </Dialog>

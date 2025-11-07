@@ -14,7 +14,7 @@ import logo from "../../assets/logo.png";
 import Gap from "../../Component/gap";
 import Input from "../../Component/input";
 import Button from "../../Component/button";
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -47,17 +47,17 @@ function FormPembelian(props) {
   const detailProps = props;
   const dataDetailOffice = detailProps?.data;
   const detailPembelian = props?.data?.detail_pembelian;
-  console.log(dataDetailOffice, "data detail");
-  const [detailDisable, setDetailDisable] = React.useState(true);
-  const [dataTable, setDataTable] = useState([]);
+  console.log(dataDetailOffice, 'data detail')
+  const [detailDisable, setDetailDisable] = React.useState(true)
+  const [dataTable, setDataTable] = useState([])
   useEffect(() => {
-    setDataTable(detailPembelian);
-  }, [detailPembelian]);
-  console.log(dataTable, "ini data tabel");
+    setDataTable(detailPembelian)
+  }, [detailPembelian])
+  console.log(dataTable, 'ini data tabel')
   const history = useHistory();
   const fileInput = useRef(null);
   const forceUpdate = useForceUpdate();
-  useEffect((e) => {
+  useEffect(e => {
     window.addEventListener("keyup", clickFileInput);
     return () => window.removeEventListener("keyup", clickFileInput);
   });
@@ -117,7 +117,7 @@ function FormPembelian(props) {
         const user = {
           user: values.username,
         };
-
+        console.log("login");
         localStorage.setItem("rdprjt");
         setSubmitting(false);
       }}
@@ -147,8 +147,8 @@ function FormPembelian(props) {
             <div>
               <div
                 style={{
-                  minWidth: "600px",
-                  maxWidth: "900px",
+                  minWidth:"600px",
+                  maxWidth:"900px",
                   width: "850px",
                   background: "#FFF",
                 }}
@@ -160,33 +160,17 @@ function FormPembelian(props) {
                     margin: "25px",
                   }}
                 >
-                  <Typography
-                    style={{ fontWeight: "bolder", fontSize: "20px" }}
-                  >
-                    Nama Supplier
-                  </Typography>
+                  <Typography style={{fontWeight:"bolder", fontSize:"20px"}}>Nama Supplier</Typography>
                   <Typography>{dataDetailOffice.nama_supplier}</Typography>
-                  <Gap height={20} />
-                  <Typography
-                    style={{ fontWeight: "bolder", fontSize: "20px" }}
-                  >
-                    Kode Pembelian
-                  </Typography>
+                  <Gap height={20}/>
+                  <Typography style={{fontWeight:"bolder", fontSize:"20px"}}>Kode Pembelian</Typography>
                   <Typography>{dataDetailOffice.pembelian_code}</Typography>
-                  <Gap height={20} />
-                  <Typography
-                    style={{ fontWeight: "bolder", fontSize: "20px" }}
-                  >
-                    Tanggal Transaksi
-                  </Typography>
+                  <Gap height={20}/>
+                  <Typography style={{fontWeight:"bolder", fontSize:"20px"}}>Tanggal Transaksi</Typography>
                   <Typography>{dataDetailOffice.tanggal_transaksi}</Typography>
-                  <Gap height={25} />
-                  <Typography
-                    style={{ fontWeight: "bolder", fontSize: "20px" }}
-                  >
-                    Detail Pembelian
-                  </Typography>
-                  <Gap height={20} />
+                  <Gap height={25}/>
+                  <Typography style={{fontWeight:"bolder", fontSize:"20px"}}>Detail Pembelian</Typography>
+                  <Gap height={20}/>
                   <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 700 }} aria-label="customized table">
                       <TableHead>
@@ -201,72 +185,73 @@ function FormPembelian(props) {
                           <StyledTableCell align="left">
                             Pembelian Kode
                           </StyledTableCell>
-                          <StyledTableCell align="left">Ukuran</StyledTableCell>
+                          <StyledTableCell align="left">
+                            Ukuran
+                          </StyledTableCell>
                           <StyledTableCell align="left">
                             Total HPP
                           </StyledTableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {dataDetailOffice?.detail_pembelian &&
-                          dataDetailOffice?.detail_pembelian.map(
-                            (row, index) => {
-                              let number = index + 1;
-                              return (
-                                <StyledTableRow key={row.id}>
-                                  <StyledTableCell component="th" scope="row">
-                                    {number}
-                                  </StyledTableCell>
-                                  <StyledTableCell
-                                    align="left"
-                                    style={{
-                                      display: "flow",
-                                    }}
-                                  >
-                                    <div>
-                                      Artikel : {row.artikel}
-                                      <br />
-                                      Nama Barang {row.nama_barang} (
-                                      {row.kategori})
-                                      <br />
-                                      Rp {row.hpp} x {row.kuantitas}
-                                    </div>
-                                  </StyledTableCell>
-                                  <StyledTableCell align="left">
-                                    {row.artikel}
-                                  </StyledTableCell>
-                                  <StyledTableCell align="left">
-                                    {row.pembelian_code}
-                                  </StyledTableCell>
-                                  <StyledTableCell align="left">
-                                    {row.ukuran}
-                                  </StyledTableCell>
-                                  <StyledTableCell align="left">
-                                    Rp {row.total_hpp}
-                                  </StyledTableCell>
-                                </StyledTableRow>
-                              );
-                            }
-                          )}
+                        {dataDetailOffice?.detail_pembelian && dataDetailOffice?.detail_pembelian.map((row,index) => {
+                          let number = index + 1
+                          return (
+                            <StyledTableRow key={row.id}>
+                              <StyledTableCell component="th" scope="row">
+                                {number}
+                              </StyledTableCell>
+                              <StyledTableCell
+                                align="left"
+                                style={{
+                                  display: "flow",
+                                }}
+                              >
+                                <div>
+                                  Artikel : {row.artikel}
+                                  <br />
+                                  Nama Barang {row.nama_barang} ({row.kategori})
+                                  <br/>
+                                  Rp {row.hpp} x {row.kuantitas}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell align="left">
+                                {row.artikel}
+                              </StyledTableCell>
+                              <StyledTableCell align="left">
+                                {row.pembelian_code}
+                              </StyledTableCell>
+                              <StyledTableCell align="left">
+                                {row.ukuran}
+                              </StyledTableCell>
+                              <StyledTableCell align="left">
+                                Rp {row.total_hpp}
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          );
+                        })}
                       </TableBody>
                     </Table>
                   </TableContainer>
                   <Gap height={35} />
                   <Button
-                    onClick={props.onClose}
-                    label="Kembali"
-                    style={{
-                      width: "100%",
-                      padding: "0.5em",
-                      background: "rgb(81 94 193)",
-                      borderRadius: "15px",
-                      color: "white",
-                      fontSize: "20px",
-                      textTransform: "capitalize",
-                      marginBottom: "25px",
-                      // padding:"1em"
-                    }}
-                  />
+                      onClick={
+                        props.onClose
+                      }
+                      label="Kembali"
+                      style={
+                          {
+                            width: "100%",
+                            padding: "0.5em",
+                            background: "rgb(81 94 193)",
+                            borderRadius: "15px",
+                            color: "white",
+                            fontSize: "20px",
+                            textTransform: "capitalize",
+                            marginBottom: "25px",
+                            // padding:"1em"
+                          }}
+                    />
                 </div>
               </div>
             </div>

@@ -13,7 +13,7 @@ export const logoutEvent = () => {
 
 export const NET = async (tipe, url, data, token, pin, isMultipart, isStream) => {
   const storedCreds = JSON.parse(localStorage.getItem("rd-prjt"));
-  const BASE_URL ='http://localhost:8282/'
+  const BASE_URL ='http://141.136.42.87:8282/'
   tipe = (tipe||"GET")
   url = (url||"")
   data = (data||{})

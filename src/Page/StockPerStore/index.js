@@ -148,14 +148,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        {/* <TableCell
-            key={'check'}
-            // align="center"
-            // padding={'normal'}
-            // sortDirection={orderBy === headCell.id ? order : false}
-          >
-           <input type="checkbox" checked={check} onClick={()=>checkAll()} />
-          </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}

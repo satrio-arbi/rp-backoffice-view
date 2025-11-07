@@ -220,6 +220,18 @@ export default function PersistentDrawerLeft() {
                 />
                 <Typography>Stock per store</Typography>
               </ListItem>
+              <ListItem
+                Button
+                onClick={() => {
+                  history.push("/stock-office");
+                }}
+              >
+                <Icon
+                  icon="bx:bxs-dashboard"
+                  style={{ fontSize: "25px", marginRight: "5px" }}
+                />
+                <Typography>Stock Office</Typography>
+              </ListItem>
               {usr?.akses_modul?.includes("MM-1") ? (
                 <Accordion>
                   <div style={{ position: "relative", width: "100%" }}>

@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import React, { useState, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import Input from "../../Component/input";
+import Input from "../input";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,11 +16,11 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import Button from "../../Component/button";
+import Button from "../button";
 import {
-  getStockPerStoreStockAkhir,
-  getStockPerStoreKeluar,
-  getStockPerStoreMasuk,
+  getStockOfficeAkhir,
+  getStockOfficeKeluar,
+  getStockOfficeMasuk,
 } from "../../Config/Api-new";
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -52,7 +52,6 @@ function stableSort(array, comparator) {
   console.log({ stabilizedThis });
   return stabilizedThis.map((el) => el[0]);
 }
-
 const headCells = [
   {
     id: "No",
@@ -268,7 +267,8 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
-const ModalStorePerStock = (props) => {
+
+const ModalStockOffice = (props) => {
   const [dense, setDense] = React.useState(false);
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -292,13 +292,13 @@ const ModalStorePerStock = (props) => {
   }, [tipe, str, end]);
   const getDataDetail = async () => {
     let res = { data: [] };
-    if (dataStore?.id_store) {
+    if (dataStore?.id_office) {
       if (tipe === 0) {
-        res = await getStockPerStoreStockAkhir(dataStore?.id_store);
+        res = await getStockOfficeAkhir(dataStore?.id_office);
       } else if (tipe === 1) {
-        res = await getStockPerStoreMasuk(dataStore?.id_store, str, end);
+        res = await getStockOfficeMasuk(dataStore?.id_office, str, end);
       } else if (tipe === 2) {
-        res = await getStockPerStoreKeluar(dataStore?.id_store, str, end);
+        res = await getStockOfficeKeluar(dataStore?.id_office, str, end);
       }
     }
     setData(res?.data);
@@ -417,27 +417,27 @@ const ModalStorePerStock = (props) => {
             }}
           >
             {/* <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Cari</InputLabel>
-          <OutlinedInput
-            value={search}
-            onChange={handleChangeSearch}
-             onKeyUp={(e)=>{
-              searching(e,'enter')
-            }}
-            id="outlined-adornment-password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  edge="end"
-                >
-                 <SearchIcon onClick={()=>searching('','klik')}/>
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Cari"
-          />
-        </FormControl> */}
+            <InputLabel htmlFor="outlined-adornment-password">Cari</InputLabel>
+            <OutlinedInput
+              value={search}
+              onChange={handleChangeSearch}
+               onKeyUp={(e)=>{
+                searching(e,'enter')
+              }}
+              id="outlined-adornment-password"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    edge="end"
+                  >
+                   <SearchIcon onClick={()=>searching('','klik')}/>
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Cari"
+            />
+          </FormControl> */}
             <Button
               style={{
                 background: tipe === 0 ? "#faa59d" : "#f51905",
@@ -541,14 +541,14 @@ const ModalStorePerStock = (props) => {
                       );
                     })}
                   {/* {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )} */}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -567,4 +567,4 @@ const ModalStorePerStock = (props) => {
     </>
   );
 };
-export default ModalStorePerStock;
+export default ModalStockOffice;

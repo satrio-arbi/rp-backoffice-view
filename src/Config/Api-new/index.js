@@ -228,8 +228,41 @@ export const getStockPerStoreMasuk = async (id, str, end) => {
 
   return res;
 };
+export const getStockOfficeAkhir = async (id) => {
+  const res = await NET(
+    "GET",
+    `stockOffice/allStockOffice?id_office=${id}`,
+    {}
+  );
+
+  return res;
+};
+export const getStockOfficeKeluar = async (id, str, end) => {
+  const res = await NET(
+    "GET",
+    `stockOffice/storeKeluar?id_office=${id}&date_from=${str}&date_to=${end}`,
+    {}
+  );
+
+  return res;
+};
+export const getStockOfficeMasuk = async (id, str, end) => {
+  const res = await NET(
+    "GET",
+    `stockOffice/storeMasuk?id_office=${id}&date_from=${str}&date_to=${end}`,
+    {}
+  );
+
+  return res;
+};
 export const getStockPerStore = async () => {
   const res = await NET("GET", `stockPerStore/allStock`, {});
+
+  return res;
+};
+
+export const getStockOffice = async () => {
+  const res = await NET("GET", `stockOffice/allStock`, {});
 
   return res;
 };
@@ -240,6 +273,12 @@ export const searchStockPerStore = async (search) => {
     `stockPerStore/searchStock?keyword=${search}`,
     {}
   );
+
+  return res;
+};
+
+export const searchStockOffice = async (search) => {
+  const res = await NET("GET", `stockOffice/searchStock?keyword=${search}`, {});
 
   return res;
 };
@@ -337,6 +376,7 @@ export const getStore = async () => {
 
   return res;
 };
+
 export const getStoreSearch = async (search) => {
   const res = await NET("GET", `master/store/search?keyword=${search}`, {});
 
@@ -2276,6 +2316,30 @@ export const geStockStoreExcel = async () => {
   var datestring =
     d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
   link.setAttribute("download", "Stock Store_" + datestring + ".xlsx");
+  document.body.appendChild(link);
+  link.click();
+};
+
+export const getStockOfficeExcel = async () => {
+  const res = await NET(
+    "GET",
+    `stockOffice/downloadStock`,
+    {},
+    "",
+    "",
+    "",
+    "blob"
+  );
+  let a = res?.data;
+
+  const url = window.URL.createObjectURL(new Blob([a]));
+  const link = document.createElement("a");
+  link.href = url; //or any other extension
+  var d = new Date();
+
+  var datestring =
+    d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+  link.setAttribute("download", "Stock Office_" + datestring + ".xlsx");
   document.body.appendChild(link);
   link.click();
 };

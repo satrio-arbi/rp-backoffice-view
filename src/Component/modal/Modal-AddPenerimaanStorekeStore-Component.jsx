@@ -47,7 +47,7 @@ const ModalPenerimaanAddStorekeStore =(props)=>{
         let arr = []
         res?.data[0]?.detailPengirimanList?.map((d,i)=>{
           arr.push({
-            id:d?.id,
+            id:null,
             sku_code:d?.sku_code,
             artikel:d?.artikel,
             harga_jual:d?.harga_jual,
